@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+set -vx
+
+bundle install
+
+#
+# Additional automated setup steps follow
+#
+
+# install git pre-commit hook to generate Gemfile.lock.ci files
+git config core.hooksPath .githooks

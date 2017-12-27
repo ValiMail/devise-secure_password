@@ -1,0 +1,8 @@
+en:
+  dppe:
+    password_content_enforcement:
+      errors:
+        messages:
+          unknown_characters: "Password contains %{count} invalid %{subject}"
+          minimum_characters: "Password must contain at least %{count} %{type} %{subject}"
+          maximum_characters: "Password must contain less than %{count} %{type} %{subject}"

@@ -1,0 +1,84 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.4.2
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies (twice because we have TWO bundles)
+      - restore_cache:
+          keys:
+          - valimail-dppe-rails-app-gems-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
+          - valimail-dppe-rails-app-gems-
+
+      - restore_cache:
+          keys:
+          - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
+          - valimail-dppe-gems-
+
+      - run:
+          name: install dependencies
+          command: |
+            pushd . && cd spec/rails-app
+            gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
+            cp Gemfile.lock Gemfile.lock.ci
+            popd
+            gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
+            cp Gemfile.lock Gemfile.lock.ci
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: valimail-dppe-rails-app-gems-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
+
+
+      # Database setup
+      # - run: bundle exec rake db:create
+      # - run: bundle exec rake db:schema:load
+
+      #
+      # Run tests
+      #
+      - run:
+          name: create test metadata directory
+          command: mkdir /tmp/test-results
+
+      - run:
+          name: run rspec
+          command: |
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+
+            bundle exec rspec --format progress \
+                              --format RspecJunitFormatter \
+                              --out /tmp/test-results/rspec.xml \
+                              ${TEST_FILES}
+
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
+      - run:
+          name: run ruby linter (rubocop)
+          command: |
+            bundle exec rubocop

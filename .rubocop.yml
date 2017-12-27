@@ -1,0 +1,59 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'db/data/**/*'
+    - 'db/schema.rb'
+    - 'spec/rails-app/**/*'
+    - 'vendor/bundle/**/*'
+    - 'node_modules/**/*'
+  TargetRubyVersion: 2.4
+
+Metrics/LineLength:
+  Enabled: false
+Rails:
+  Enabled: true
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+Lint/UselessAssignment:
+  Exclude:
+    - 'db/**/*'
+Metrics/AbcSize:
+  Exclude:
+    - 'db/**/*'
+Metrics/BlockLength:
+  Exclude:
+    - '*.gemspec'
+    - 'app/models/concerns/**/*'
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'spec/**/*'
+Metrics/ClassLength:
+  Exclude:
+    - 'db/**/*'
+Metrics/MethodLength:
+  Exclude:
+    - 'db/**/*'
+Rails/HttpPositionalArguments:
+  Include:
+    - 'spec/**/*'
+Rails/NotNullColumn:
+  Exclude:
+    - 'db/**/*'
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'spec/**/*'
+Style/FormatStringToken:
+  EnforcedStyle: template
+  SupportedStyles:
+    - annotated
+    - template
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%i': '()'
+    '%w': '()'

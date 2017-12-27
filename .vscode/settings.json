@@ -1,0 +1,6 @@
+{
+  "markdown.styles": [
+    // "https://rawgit.com/thewazir/50486310d50fb2d6da2c8ab91d26756a/raw/1760755deb7bff05fadcaf6927c4950d256e6838/visualStudioCodeMarkdownStyles.css"
+    ".vscode/markdown.styles.css"
+  ]
+}
