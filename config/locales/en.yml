@@ -6,3 +6,7 @@ en:
           unknown_characters: "Password contains %{count} invalid %{subject}"
           minimum_characters: "Password must contain at least %{count} %{type} %{subject}"
           maximum_characters: "Password must contain less than %{count} %{type} %{subject}"
+    password_frequent_reuse_prevention:
+      errors:
+        messages:
+          password_is_recent: "Last %{count} passwords may not be reused"

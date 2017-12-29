@@ -29,15 +29,21 @@ gem 'devise_password_policy_extension', '~> 1.0.0'
 
 And then execute:
 
+```shell
 prompt> bundle
+```
 
 Or install it yourself as:
 
+```shell
 prompt> gem install devise_password_policy_extension
+```
 
 Finally, run the generator:
 
+```shell
 prompt> rails generate devise_password_policy_extension:install
+```
 
 ## Usage
 
@@ -56,24 +62,64 @@ Devise.setup do |config|
   # minimum and maximum length refer to the Devise config.password_length
   # standard configuration parameter.
 
-  # Passwords consist of at least one uppercase letter (latin A-Z)
+  # Passwords consist of at least one uppercase letter (latin A-Z):
   # config.password_required_uppercase_count = 1
 
-  # Passwords consist of at least one lowercase characters (latin a-z)
+  # Passwords consist of at least one lowercase characters (latin a-z):
   # config.password_required_lowercase_count = 1
 
-  # Passwords consist of at least one number (0-9)
+  # Passwords consist of at least one number (0-9):
   # config.password_required_number_count = 1
 
-  # Passwords consist of at least one special character (!@#$%^&*()_+-=[]{}|')
+  # Passwords consist of at least one special character (!@#$%^&*()_+-=[]{}|'):
   # config.password_required_special_character_count = 1
+
+  # ==> Configuration for the Devise Password Policy Extension (DPPE)
+  #     DPPE Module: password_frequent_reuse_prevention
+  #
+  # Passwords cannot be reused. A user's last 24 password hashes are saved:
+  # config.password_previously_used_count = 24
 end
 ```
 
 Enable the __Devise Password Policy Extension__ enforcement in your Devise model(s):
 
 ```ruby
-devise :password_content_enforcement
+devise :password_content_enforcement, :password_frequent_reuse_prevention
+```
+
+### Database migration
+
+The following database migration needs to be applied:
+
+```shell
+prompt> rails generate migration create_previous_passwords salt:string encrypted_password:string user:references
+```
+
+Edit the resulting file to disallow null values for the hash and to add indexes for both hash and user_id fields:
+
+```ruby
+class CreatePreviousPasswords < ActiveRecord::Migration[5.1]
+  def change
+    create_table :previous_passwords do |t|
+      t.string :salt, null: false
+      t.string :encrypted_password, null: false
+      t.references :user, foreign_key: true
+
+      t.timestamps
+    end
+
+    add_index :previous_passwords, :encrypted_password
+    add_index :previous_passwords, [:user_id, :created_at]
+  end
+end
+
+```
+
+And then:
+
+```shell
+prompt> rails db:migrate
 ```
 
 ## Development
