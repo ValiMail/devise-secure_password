@@ -1,4 +1,4 @@
-# lib/support/math.rb
+# lib/support/math/integer.rb
 #
 module Support
   module Math

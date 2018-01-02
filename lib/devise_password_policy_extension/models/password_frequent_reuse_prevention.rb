@@ -9,10 +9,11 @@ module Devise
       LocaleTools = ::Support::String::LocaleTools
 
       included do
-        has_many :previous_passwords, class_name: 'Devise::Models::PreviousPassword', dependent: :destroy
+        # we need to specify the foreign_key here to support the use of subclasses in tests
+        has_many :previous_passwords, class_name: 'Devise::Models::PreviousPassword', foreign_key: 'user_id', dependent: :destroy
         validate :validate_password_frequent_reuse
 
-        set_callback(:save, :before, :before_resource_saved, if: :dirty_password?)
+        set_callback(:save, :before, :before_resource_saved)
         set_callback(:save, :after, :after_resource_saved, if: :dirty_password?)
       end
 
@@ -34,7 +35,7 @@ module Devise
 
       def after_resource_saved
         salt = ::BCrypt::Password.new(encrypted_password).salt
-        previous_password = previous_passwords.build(salt: salt, encrypted_password: encrypted_password)
+        previous_password = previous_passwords.build(user_id: id, salt: salt, encrypted_password: encrypted_password)
         previous_password.save!
         purge_previous_passwords(self, self.class.password_previously_used_count)
       end

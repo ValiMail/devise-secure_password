@@ -2,20 +2,18 @@ require 'spec_helper'
 require 'support/string/locale_tools'
 
 RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
-  LocaleTools = ::Support::String::LocaleTools
-
   describe 'config' do
-    subject { User }
+    subject { UserFrequentReuse }
     it { is_expected.to respond_to(:password_previously_used_count) }
   end
 
   describe 'associations' do
-    subject { User.new }
+    subject { UserFrequentReuse.new }
     it { is_expected.to have_many(:previous_passwords) }
   end
 
   describe 'validations' do
-    let(:user) { User.new(email: 'fred@flintstone.com', password: 'Bubb1234@#$!') }
+    let(:user) { UserFrequentReuse.new(email: 'fred@flintstone.com', password: 'Bubb1234@#$!') }
     subject { user }
 
     context 'when password has been used recently' do
@@ -32,7 +30,7 @@ RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
       end
 
       context 'and it is a different user' do
-        let(:other_user) { User.new(email: 'wilma@flintstone.com', password: user.password) }
+        let(:other_user) { UserFrequentReuse.new(email: 'wilma@flintstone.com', password: user.password) }
         subject { other_user }
         it { is_expected.to be_valid }
       end
@@ -45,8 +43,8 @@ RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
   end
 
   describe 'password updates' do
-    let(:user) { User.new(email: 'fred@flintstone.com', password: 'Bubb1234@#$!') }
-    let(:max_count) { User.password_previously_used_count }
+    let(:user) { UserFrequentReuse.new(email: 'fred@flintstone.com', password: 'Bubb1234@#$!') }
+    let(:max_count) { UserFrequentReuse.password_previously_used_count }
     let(:passwords) { (0..max_count).map { |c| user.password + c.to_s } }
 
     context 'when maximum number of passwords has not been reached' do

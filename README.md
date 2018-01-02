@@ -1,9 +1,17 @@
 # Devise Password Policy Extension
 
+[![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
+
 The __Devise Password Policy Extension__ (or __DPPE__) is a user account password policy enforcement gem that can be
 added to a Rails project to enforce password policies. The gem is implemented as an extension to the Rails
 [devise](https://github.com/plataformatec/devise) authentication solution gem and requires that __devise__ is installed
 as well.
+
+## Build Status
+
+| Service    | rails 4.2.10 | rails 5.1.4 |
+|:-----------|:------------:|:-----------:|
+| Circle CI  | [![Build Status](https://img.shields.io/badge/build-none-lightgrey.svg)]() | [![Circle CI](https://circleci.com/gh/ValiMail/devise_password_policy_extension/tree/master.svg?style=shield&circle-token=a752164d3935bb6ad865ef67012c2c0099730d30)]() |
 
 ## Overview
 
@@ -79,6 +87,13 @@ Devise.setup do |config|
   #
   # Passwords cannot be reused. A user's last 24 password hashes are saved:
   # config.password_previously_used_count = 24
+
+  # ==> Configuration for the Devise Password Policy Extension (DPPE)
+  #     DPPE Module: password_frequent_change_prevention
+  #     *Requires* password_frequent_reuse_prevention module
+  #
+  # Passwords cannot be changed more frequently than once per day:
+  # config.password_minimum_age = 1.day
 end
 ```
 
@@ -152,28 +167,42 @@ prompt> git config core.hooksPath .githooks
 
 With the hook in place, each time you make a commit additional `Gemfile.lock.ci` files will be generated when necessary.
 
+<a name="running-tests"></a>
+
 ## Running Tests
 
-Outside of a [functioning ruby install](https://rvm.io/), you will need the [Bundler](https://github.com/bundler/bundler/)
-gem:
-
-```bash
-prompt> gem install bundler
-```
+This document assumes that you already have a [functioning ruby install](https://rvm.io/).
 
 To prepare the tests run the following commands:
 
 ```bash
 prompt> cd spec/rails-app
-prompt> bundle install
+prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
 prompt> RAILS_ENV=test bundle exec rake db:migrate
 ```
 
 Now on the project root run the following commands:
 
 ```bash
+prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
 prompt> bundle exec rspec spec/
 ```
+
+## Docker
+
+This repository includes a [Dockerfile](https://docs.docker.com/engine/reference/builder/) to facilitate testing in and
+using [Docker](https://www.docker.com/).
+
+To start the container simply build and launch the image:
+
+```bash
+prompt> docker build -t dppe-dev .
+prompt> docker run --rm -it dppe-dev /bin/bash
+```
+
+The above `docker run` command will start the container, connect you to the command line within the project home
+directory where you can issue the tests as documented in the [Running Test](#running-tests) section above. When you exit
+the shell, the container will be removed.
 
 ## Contributing
 

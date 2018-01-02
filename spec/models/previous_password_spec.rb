@@ -12,7 +12,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   end
 
   describe 'persistence' do
-    let(:user) { User.new(email: 'wilma@flintstone.com', password: 'Bubb1234%$#!') }
+    let(:user) { UserFrequentReuse.new(email: 'wilma@flintstone.com', password: 'Bubb1234%$#!') }
     context 'when creating a user' do
       it 'increases number of previous passwords' do
         expect { user.save }.to change { user.previous_passwords.count }.by(1)
