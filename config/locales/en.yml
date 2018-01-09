@@ -3,9 +3,9 @@ en:
     password_content_enforcement:
       errors:
         messages:
-          unknown_characters: "Password contains %{count} invalid %{subject}"
-          minimum_characters: "Password must contain at least %{count} %{type} %{subject}"
-          maximum_characters: "Password must contain less than %{count} %{type} %{subject}"
+          unknown_characters: "contains %{count} invalid %{subject}"
+          minimum_characters: "must contain at least %{count} %{type} %{subject}"
+          maximum_characters: "must contain less than %{count} %{type} %{subject}"
     password_frequent_reuse_prevention:
       errors:
         messages:
@@ -14,6 +14,13 @@ en:
       errors:
         messages:
           password_is_recent: "Password cannot be changed more than once per %{timeframe}"
+    password_regular_update_enforcement:
+      alerts:
+        messages:
+          password_updated: "Your password has been updated."
+      errors:
+        messages:
+          password_expired: "Your password has expired. Passwords must be changed every %{timeframe}"
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:
     distance_in_words:

@@ -19,6 +19,9 @@ Style/FrozenStringLiteralComment:
 Rails/HttpPositionalArguments:
   Enabled: false
 
+Layout/ExtraSpacing:
+  Exclude:
+    - 'Gemfile'
 Lint/UselessAssignment:
   Exclude:
     - 'db/**/*'

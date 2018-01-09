@@ -94,6 +94,14 @@ Devise.setup do |config|
   #
   # Passwords cannot be changed more frequently than once per day:
   # config.password_minimum_age = 1.day
+
+  # ==> Configuration for the Devise Password Policy Extension (DPPE)
+  #     DPPE Module: password_regular_update_prevention
+  #     *Requires* password_frequent_reuse_prevention module
+  #
+  # Passwords must be changed every 60 days:
+  # config.password_maximum_age = 60.days
+
 end
 ```
 
@@ -187,6 +195,43 @@ Now on the project root run the following commands:
 prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
 prompt> bundle exec rspec spec/
 ```
+
+### Testing with Headless Chrome
+
+You will need to install the [ChromeDriver >= v2.3.4](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+for testing.
+
+```bash
+prompt> brew install chromedriver
+```
+
+>NOTE: __ChromeDriver < 2.33 has a bug for testing clickable targets; therefore, install >= 2.3.4.
+
+You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
+unpacking into the `/usr/local/bin` directory.
+
+### Testing inside the spec/rails-app
+
+To debug from inside of the dummy rails-app you will need to first install the rails bin stubs and then perform a db
+migration:
+
+```bash
+prompt> cd spec/rails-app
+prompt> rake app:update:bin
+prompt> RAILS_ENV=development bundle exec rake db:migrate
+```
+
+Remember, the dummy app is not meant to be a full featured rails app: there is just enough functionality to test the
+gem feature set.
+
+### Screenshots
+
+Failing tests that invoke the JavaScript driver will result in both the failing html along with a screenshot of the
+page output to be saved in the `spec/rails-app/tmp/capybara` snapshot directory.
+
+>NOTE: On __circleci__ the snapshots will be captured as artifacts.
+
+The snapshot directory will be pruned automatically between runs.
 
 ## Docker
 

@@ -18,7 +18,7 @@ module Devise
       end
 
       def validate_password_frequent_reuse
-        if previous_password?(password)
+        if encrypted_password_changed? && previous_password?(password)
           error_string = LocaleTools.replace_macros(
             I18n.translate('dppe.password_frequent_reuse_prevention.errors.messages.password_is_recent'),
             count: self.class.password_previously_used_count
@@ -54,7 +54,7 @@ module Devise
 
       def purge_previous_passwords(user, count)
         return unless (diff = user.previous_passwords.count - (count + 1)).positive?
-        user.previous_passwords.last(diff).map(&:destroy!)
+        user.previous_passwords.unscoped.first(diff).map(&:destroy!)
       end
 
       def dirty_password?

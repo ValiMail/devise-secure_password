@@ -11,7 +11,7 @@
 # NOTE: The order in which you run 'bundle install' in spec/rails and then in
 # the top directory is important.
 #
-FROM circleci/ruby:2.4.2
+FROM circleci/ruby:2.4.2-browsers
 LABEL maintainer="Mark Eissler <mark.eissler@valimail.com>"
 
 ENV BUILD_HOME='/dppe-gem'
@@ -27,5 +27,16 @@ COPY . ./
 # Fix permissions on /gem directory
 RUN set -x \
     && sudo chown -R circleci:circleci ${BUILD_HOME}
+
+# Start xvfb automatically
+ENV DISPLAY :99
+
+# Update docker-entrypoint.sh
+RUN set -x \
+    && cp docker-entrypoint.sh /docker-entrypoint.sh \
+    && chmod 755 /docker-entrypoint.sh \
+    && chown circleci:circleci /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["/bin/bash"]

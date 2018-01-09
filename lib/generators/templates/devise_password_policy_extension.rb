@@ -26,4 +26,18 @@ Devise.setup do |config|
   #
   # Passwords cannot be reused. A user's last 24 password hashes are saved:
   # config.password_previously_used_count = 24
+
+  # ==> Configuration for the Devise Password Policy Extension (DPPE)
+  #     DPPE Module: password_frequent_change_prevention
+  #     *Requires* password_frequent_reuse_prevention module
+  #
+  # Passwords cannot be changed more frequently than once per day:
+  # config.password_minimum_age = 1.day
+
+  # ==> Configuration for the Devise Password Policy Extension (DPPE)
+  #     DPPE Module: password_regular_update_prevention
+  #     *Requires* password_frequent_reuse_prevention module
+  #
+  # Passwords must be changed every 60 days:
+  # config.password_maximum_age = 60.days
 end

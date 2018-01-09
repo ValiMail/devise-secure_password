@@ -59,8 +59,10 @@ Gemfile.lock
 .rspec_status
 /spec/reports/
 /spec/examples.txt
-/spec/**/db/*.sqlite3
-/spec/**/log/*.log
+/spec/rails-app/db/*.sqlite3
+/spec/rails-app/log/*.log
+/spec/rails-app/bin/
+/spec/rails-app/tmp/
 
 # Ignore other unneeded files
 *.swp

@@ -20,7 +20,7 @@ module Devise
       end
 
       def validate_password_frequent_change
-        if fresh_password?
+        if encrypted_password_changed? && fresh_password?
           error_string = LocaleTools.replace_macros(
             I18n.translate('dppe.password_frequent_change_prevention.errors.messages.password_is_recent'),
             timeframe: distance_of_time_in_words(self.class.password_minimum_age)
@@ -48,13 +48,13 @@ module Devise
         ERROR
       end
 
-      # def after_resource_initialized; end
       def after_resource_initialized
-        raise ConfigurationError unless self.class.password_minimum_age.is_a?(::ActiveSupport::Duration)
+        raise ConfigurationError, 'invalid type for password_minimum_age' \
+          unless self.class.password_minimum_age.is_a?(::ActiveSupport::Duration)
       end
 
       def fresh_password?
-        last_password = previous_passwords.select(:created_at).last
+        last_password = previous_passwords.unscoped.select(:created_at).last
         unless last_password.nil?
           return !Comparator.time_delay_expired?(last_password.created_at, self.class.password_minimum_age)
         end

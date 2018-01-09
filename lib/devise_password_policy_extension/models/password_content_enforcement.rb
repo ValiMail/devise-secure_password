@@ -11,18 +11,30 @@ module Devise
 
       included do
         validate :validate_password_content
+        validate :validate_password_confirmation_content
       end
 
       def validate_password_content
-        ::Support::String::CharacterCounter.new.count(password).each do |type, dict|
+        self.password ||= ''
+        validate_password_content_for(:password)
+        errors[:password].count.zero?
+      end
+
+      def validate_password_confirmation_content
+        self.password_confirmation ||= ''
+        validate_password_content_for(:password_confirmation)
+        errors[:password_confirmation].count.zero?
+      end
+
+      def validate_password_content_for(attr)
+        return unless respond_to?(attr) && !(password_obj = send(attr)).nil?
+        ::Support::String::CharacterCounter.new.count(password_obj).each do |type, dict|
           error_string =  case type
                           when :unknown then validate_unknown(dict)
                           else validate_type(type, dict)
                           end
-          errors.add(:base, error_string) if error_string.present?
+          errors.add(attr, error_string) if error_string.present?
         end
-
-        errors.count.zero?
       end
 
       protected
@@ -79,7 +91,7 @@ module Devise
       end
 
       def dict_for_type(type)
-        character_counter = Support::String::CharacterCounter.new
+        character_counter = ::Support::String::CharacterCounter.new
 
         case type
         when :special, :unknown then "(#{character_counter.count_hash[type].keys.join('')})"
