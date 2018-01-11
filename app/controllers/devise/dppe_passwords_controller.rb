@@ -1,5 +1,5 @@
 module Devise
-  class PasswordRegularUpdateEnforcementController < DeviseController
+  class DppePasswordsController < DeviseController
     before_action :authenticate_scope!
 
     LocaleTools = ::Support::String::LocaleTools

@@ -33,7 +33,7 @@ module DevisePasswordPolicyExtension
 
           if signed_in?(scope_name) && warden.session(scope_name)[:dppe_password_expired]
             save_controller_state
-            redirect_to edit_user_password_regular_update_enforcement_url, alert: "#{error_string_for_password_expired}."
+            redirect_to edit_user_dppe_password_url, alert: "#{error_string_for_password_expired}."
             return true
           end
 

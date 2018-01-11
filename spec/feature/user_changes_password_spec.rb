@@ -15,7 +15,7 @@ RSpec.describe 'User changes password', type: :feature do
     before do
       user.save
       login_as(user, scope: :user)
-      visit '/users/password_regular_update_enforcement/edit'
+      visit '/users/change_password/edit'
     end
 
     scenario 'remains on page and displays error messages' do
@@ -40,7 +40,7 @@ RSpec.describe 'User changes password', type: :feature do
       last_password.created_at = Time.zone.now - 2.days
       last_password.save
       login_as(user, scope: :user)
-      visit '/users/password_regular_update_enforcement/edit'
+      visit '/users/change_password/edit'
     end
 
     scenario 'redirects to home page and displays success message' do

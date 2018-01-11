@@ -14,7 +14,7 @@ module DevisePasswordPolicyExtension
       # Redirect to password change page if password needs to be changed.
       def pending_password_expired_redirect!
         return unless skip_current_controller? && redirected_in_session? && warden.session && warden.session['dppe_password_expired']
-        redirect_to edit_user_password_regular_update_enforcement_url, alert: "#{error_string_for_password_expired}."
+        redirect_to edit_user_dppe_password_url, alert: "#{error_string_for_password_expired}."
       end
 
       def redirected_in_session?
@@ -24,8 +24,8 @@ module DevisePasswordPolicyExtension
       def skip_current_controller?
         exclusion_list = [
           'Devise::SessionsController',
-          'Devise::PasswordRegularUpdateEnforcementController#edit',
-          'Devise::PasswordRegularUpdateEnforcementController#update'
+          'Devise::DppePasswordsController#edit',
+          'Devise::DppePasswordsController#update'
         ]
         exclusion_list.select { |e| e == "#{self.class.name}#" + action_name || e == self.class.name.to_s }.empty?
       end

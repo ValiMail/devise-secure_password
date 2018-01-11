@@ -61,4 +61,4 @@ Devise.add_module :password_frequent_reuse_prevention, model: 'devise_password_p
 Devise.add_module :password_frequent_change_prevention, model: 'devise_password_policy_extension/models/password_frequent_change_prevention'
 Devise.add_module :password_regular_update_enforcement,
                   model: 'devise_password_policy_extension/models/password_regular_update_enforcement',
-                  controller: :password_regular_update_enforcement, route: :password_regular_update_enforcement
+                  controller: :dppe_passwords, route: :dppe_passwords
