@@ -17,14 +17,23 @@ as well.
 
 The __Devise Password Policy Extension__ is composed of the following modules:
 
-- __password_content_enforcement__: require that passwords consist of a specific number of letters, numbers, and special 
-  characters (symbols)
+- __password_content_enforcement__: require that passwords consist of a specific number (configurable) of letters,
+  numbers, and special characters (symbols)
+- __password_frequent_reuse_prevention__: prevent the reuse of a number (configurable) of previous passwords when a user
+  changes their password
+- __password_frequent_change_prevention__: prevent the user from changing their password more than once within a time
+  duration (configurable)
+- __password_regular_update_enforcement__: require that a user change their password following a time duration
+  (configurable)
 
-The following additional modules are currently under development:
+## Compatibility
 
-- __password_frequent_reuse_prevention__
-- __password_frequent_change_prevention__
-- __password_regular_update_enforcement__
+The goal of this project is to provide compatibility for officially supported stable releases of [Ruby](https://www.ruby-lang.org/en/downloads/)
+and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
+are currently supported by the __Devise Password Policy Extension__:
+
+* Ruby on Rails: __5.1.Z__ (stable, bug fix releases)
+* Ruby: __2.5.0__, __2.4.3__, __2.3.6__
 
 ## Installation
 
@@ -108,8 +117,28 @@ end
 Enable the __Devise Password Policy Extension__ enforcement in your Devise model(s):
 
 ```ruby
-devise :password_content_enforcement, :password_frequent_reuse_prevention
+devise :password_content_enforcement, :password_frequent_reuse_prevention,
+       :password_frequent_change_prevention, :password_regular_update_enforcement
 ```
+
+Usually, you would append these after your selection of Devise modules. So your configuration will more likely look like
+the following:
+
+```ruby
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :password_content_enforcement, :password_frequent_reuse_prevention,
+         :password_frequent_change_prevention, :password_regular_update_enforcement
+   ...
+   <YOUR USER MODEL CONTENT FOLLOWS>
+end
+```
+
+>NOTE: Both `:password_frequent_change_prevention` and `:password_regular_update_enforcement` are dependent upon the
+ previous passwords memorization implemented by the `:password_frequent_reuse_prevention` module.
 
 ### Database migration
 
@@ -181,7 +210,25 @@ With the hook in place, each time you make a commit additional `Gemfile.lock.ci`
 
 This document assumes that you already have a [functioning ruby install](https://rvm.io/).
 
-To prepare the tests run the following commands:
+### Selecting a Rails target
+
+The __Devise Password Policy Extension__ provides compatibility for officially supported stable releases of Ruby on Rails.
+Before you can run any tests you will need to reconfigure the build for a target:
+
+```bash
+prompt> gem install bundler
+prompt> rake -T config
+rake config:rails_5_0  # Reconfigure Gemfiles for Rails 5.0
+rake config:rails_5_1  # Reconfigure Gemfiles for Rails 5.1
+rake config:reset      # Reset Gemfile for default Rails target
+
+prompt>rake config:rails_5_1
+Reconfiguring build for: Rails 5.1
+Copying: rails_5_1.gemfile to Gemfile
+Copying: rails_5_1.gemfile to spec/rails-app/Gemfile
+```
+
+Prepare the test dummy rails-app:
 
 ```bash
 prompt> cd spec/rails-app
@@ -189,14 +236,26 @@ prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path ../../ve
 prompt> RAILS_ENV=test bundle exec rake db:migrate
 ```
 
-Now on the project root run the following commands:
+Change to the project root, install additional dependencies and then run the tests:
 
 ```bash
+prompt> cd ../../
 prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
 prompt> bundle exec rspec spec/
 ```
 
-### Testing with Headless Chrome
+### Resetting the build
+
+You will need to reset the build if you have already run a `bundle install` and then wish to switch to a different
+configuration:
+
+```bash
+prompt> rake config:reset
+prompt> rake config:rails_5_0
+...
+```
+
+### Testing with headless Chrome
 
 You will need to install the [ChromeDriver >= v2.3.4](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 for testing.
@@ -257,21 +316,25 @@ This project is intended to be a safe, welcoming space for collaboration, and co
 
 ### Basic guidelines for contributors
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1 Fork it
 
->NOTE: Contributions should always be based on the `develop` branch. You may be asked to [rebase](https://git-scm.com/docs/git-rebase)
-your contributions on the tip of the `develop` branch, this is normal and is to be expected if the `develop` branch has
+2 Create your feature branch (`git checkout -b my-new-feature`)
+
+3 Commit your changes (`git commit -am 'Add some feature'`)
+
+4 Push to the branch (`git push origin my-new-feature`)
+
+5 Create new Pull Request
+
+>NOTE: Contributions should always be based on the `master` branch. You may be asked to [rebase](https://git-scm.com/docs/git-rebase)
+your contributions on the tip of the `master` branch, this is normal and is to be expected if the `master` branch has
 moved ahead since your pull request was opened, discussed, and accepted.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The __Devise Password Policy Extension__ gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
-Everyone interacting in the DevisePasswordPolicyExtension project’s codebases, issue trackers, chat rooms and mailing
-lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/devise_password_policy_extension/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the __Devise Password Policy Extension__ project’s codebases and issue trackers is expected to
+follow the [code of conduct](https://github.com/[USERNAME]/devise_password_policy_extension/blob/master/CODE_OF_CONDUCT.md).

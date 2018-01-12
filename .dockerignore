@@ -1,6 +1,76 @@
 .git
 .dockerignore
-.byebug_history
+
+### Ruby ###
+*.gem
+*.rbc
+/.config
+/coverage/
+/pkg/
+/tmp/
+
+# Used by dotenv library to load environment variables.
+# .env
+
+# Ignore files that may need to be redacted:
+/config/database.yml
+/config/initializers/secret_token.rb
+
+# Database files
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/.yardopts/
+/doc/
+/rdoc/
+
+## Environment normalization:
+/.bundle/
+/vendor/bundle
+/lib/bundler/man/
+
+# Editor workspace files
+#
+# Only ignore user-centric settings and not broad project settings. The .vscode
+# directory, for instance, only contains broad project settings; likewise, the
+# .sublime-project file defines a project but .sublime-workspace contains user-
+# specific temp settings (like which files were last open)--checkin the former
+# but ignore the latter.
+#
+.sublime-workspace
+.atom/packages/
+.atom/storage/
+
+# macOS cruft
+.DS_Store
+.DS_Store?
+
+# Ignore files that could cause trouble when deploying gems
+Gemfile.lock
+.ruby-version
+.ruby-gemset
+
+# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
+.rvmrc
+
+# RSpec temporary files
 .rspec_status
-log/*
-tmp/*
+/spec/reports/
+/spec/examples.txt
+/spec/rails-app/Gemfile.lock
+/spec/rails-app/db/*.sqlite3
+/spec/rails-app/log/*.log
+/spec/rails-app/bin/
+/spec/rails-app/tmp/
+
+# Ignore other unneeded files
+*.swp
+*~
+.project
+.DS_Store
+.DS_Store?
+.byebug_history
+/node_modules/

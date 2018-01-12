@@ -10,5 +10,10 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// Rails 5.0
+// require jquery
+// require jquery_ujs
+//
+// Rails 5.1
 //= require rails-ujs
 //= require_tree .

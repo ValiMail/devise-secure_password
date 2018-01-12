@@ -8,4 +8,3 @@ source 'https://rubygems.org'
 #   prompt> bundle install
 #
 
-gemspec
