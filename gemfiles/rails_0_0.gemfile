@@ -3,8 +3,7 @@ source 'https://rubygems.org'
 #
 # Configure the build:
 #
-#   prompt> gem install bundler
+#   prompt> gem install bundler flay ruby2ruby rspec rubocop
 #   prompt> rake config:rails_5_1
 #   prompt> bundle install
 #
-

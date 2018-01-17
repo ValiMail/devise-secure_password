@@ -7,9 +7,9 @@
 #   prompt> rake config:rails_5_1
 #   prompt> bundle install
 #
-require 'rake'
 require 'fileutils'
 require 'open3'
+require 'rake'
 
 ROOT_DIR = File.expand_path('../../../', __FILE__)
 GEMFILES = Dir.glob("#{ROOT_DIR}/gemfiles/*.gemfile").map { |e| File.basename(e).gsub(/.gemfile$/, '') if File.file? e }
@@ -80,17 +80,6 @@ def gemlock_purge_spec
   target_path = File.join(ROOT_DIR, RAILSAPP_SPEC, 'Gemfile.lock')
   FileUtils.rm(target_path) if File.exist?(target_path)
 end
-
-if Gem::Specification.find_all_by_name('rails').any?
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new(:spec) do |t|
-    t.pattern = 'spec/**/*_spec.rb'
-    t.verbose = false
-  end
-end
-
-desc 'Run tests'
-task default: :spec
 
 namespace :config do
   GEMFILES.each do |version|

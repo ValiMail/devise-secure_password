@@ -216,7 +216,7 @@ The __Devise Password Policy Extension__ provides compatibility for officially s
 Before you can run any tests you will need to reconfigure the build for a target:
 
 ```bash
-prompt> gem install bundler
+prompt> gem install bundler flay ruby2ruby rspec rubocop
 prompt> rake -T config
 rake config:rails_5_0  # Reconfigure Gemfiles for Rails 5.0
 rake config:rails_5_1  # Reconfigure Gemfiles for Rails 5.1
@@ -241,7 +241,7 @@ Change to the project root, install additional dependencies and then run the tes
 ```bash
 prompt> cd ../../
 prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-prompt> bundle exec rspec spec/
+prompt> bundle exec rake test:spec
 ```
 
 ### Resetting the build
@@ -255,6 +255,17 @@ prompt> rake config:rails_5_0
 ...
 ```
 
+### Testing with code coverage (SimpleCov)
+
+SimpleCov tests are enabled by defining the `COVERAGE` environment variable before running tests:
+
+```bash
+prompt> COVERAGE=1 bundle exec rake test:spec
+```
+
+A brief summary will be output at the end of the run but a more extensive eport will be saved in the `coverage`
+directory (under the top-level project directory).
+
 ### Testing with headless Chrome
 
 You will need to install the [ChromeDriver >= v2.3.4](https://sites.google.com/a/chromium.org/chromedriver/downloads)
@@ -264,7 +275,7 @@ for testing.
 prompt> brew install chromedriver
 ```
 
->NOTE: __ChromeDriver < 2.33 has a bug for testing clickable targets; therefore, install >= 2.3.4.
+>NOTE: __ChromeDriver__ < 2.33 has a bug for testing clickable targets; therefore, install >= 2.3.4.
 
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.

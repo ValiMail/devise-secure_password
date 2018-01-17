@@ -1,5 +1,27 @@
 ENV['RAILS_ENV'] ||= 'test'
 
+#
+# Simplecov configuration (COVERAGE=true bundle exec rspec spec/)
+#
+if ENV['COVERAGE']
+  require 'simplecov'
+  require 'simplecov-console'
+  SimpleCov.start
+  root_dir = File.expand_path('../../', __FILE__)
+  SimpleCov.coverage_dir(File.join(root_dir, 'coverage'))
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
+    [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::Console
+    ]
+  )
+  SimpleCov.add_filter do |f|
+    !f.filename.match? %r{lib/devise_password_policy_extension|lib/support}
+  end
+  SimpleCov.add_group 'devise_password_policy_extension', 'lib/devise_password_policy_extension'
+  SimpleCov.add_group 'support', 'lib/support'
+end
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
@@ -95,7 +117,7 @@ Capybara.javascript_driver = :selenium_chrome_headless
 require 'capybara-screenshot/rspec'
 
 Capybara.asset_host = 'http://localhost:3000'
-Capybara.save_path = ENV.fetch('CIRCLE_ARTIFACTS', Rails.root.join('tmp', 'capybara')).to_s
+Capybara.save_path = Rails.root.join('tmp', 'capybara')
 Capybara::Screenshot.register_filename_prefix_formatter(:rspec) do |example|
   "screenshot_#{example.description.tr(' ', '-').gsub(%r{^.*\/spec\/}, '')}"
 end

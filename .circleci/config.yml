@@ -24,7 +24,7 @@ jobs:
       - run:
           name: reconfigure for Rails target
           command: |
-            gem install bundler
+            gem install bundler flay ruby2ruby rspec rubocop
             rake config:rails_5_1
 
       - run:
@@ -41,7 +41,12 @@ jobs:
       - run:
           name: run ruby linter (rubocop)
           command: |
-            bundle exec rubocop
+            bundle exec rake test:rubocop
+
+      - run:
+          name: run code coverage (flay)
+          command: |
+            bundle exec rake test:flay
 
   rails_5_1-job:
     <<: *defaults
@@ -62,7 +67,7 @@ jobs:
       - run:
           name: reconfigure for Rails target
           command: |
-            gem install bundler
+            gem install bundler flay ruby2ruby rspec rubocop
             rake config:rails_5_1
 
       - run:
@@ -101,11 +106,12 @@ jobs:
           command: mkdir /tmp/test-results
 
       - run:
-          name: run rspec
+          name: run rspec with simplecov
           command: |
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
-            bundle exec rspec --format progress \
+            COVERAGE=true bundle exec rspec \
+                              --format progress \
                               --format RspecJunitFormatter \
                               --out /tmp/test-results/rspec.xml \
                               ${TEST_FILES}
@@ -115,6 +121,9 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
   rails_5_0-job:
     <<: *defaults
@@ -135,7 +144,7 @@ jobs:
       - run:
           name: reconfigure for Rails target
           command: |
-            gem install bundler
+            gem install bundler flay ruby2ruby rspec rubocop
             rake config:rails_5_0
 
       - run:
@@ -175,11 +184,12 @@ jobs:
           command: mkdir /tmp/test-results
 
       - run:
-          name: run rspec
+          name: run rspec with simplecov
           command: |
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
-            bundle exec rspec --format progress \
+            COVERAGE=true bundle exec rspec \
+                              --format progress \
                               --format RspecJunitFormatter \
                               --out /tmp/test-results/rspec.xml \
                               ${TEST_FILES}
@@ -189,6 +199,9 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+      - store_artifacts:
+          path: coverage
+          destination: coverage
 
 workflows:
     version: 2
