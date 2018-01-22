@@ -7,7 +7,8 @@ require 'bundler'
 require 'rake'
 
 unless Gem::Specification.find_all_by_name('rubocop').any?
-  abort 'Rubocop gem is missing. Install it.'
+  puts 'Rubocop gem is missing. Install it.'
+  return
 end
 require 'rubocop/rake_task'
 

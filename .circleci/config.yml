@@ -3,41 +3,70 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2
-defaults: &defaults
-  docker:
-    # specify the version you desire here
-    - image: circleci/ruby:2.4.2-browsers
-  working_directory: ~/repo
+aliases:
+  - &defaults
+    working_directory: ~/repo
+    docker:
+      - image: circleci/ruby:2.5.0-browsers
+
+  - &step_restore_root_cache
+    restore_cache:
+      keys:
+      - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
+      - valimail-dppe-gems-
+
+  - &step_install_root_dependencies
+    run:
+      name: install root dependencies
+      command: |
+        gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
+        cp Gemfile.lock Gemfile.lock.ci
+
+  - &step_save_root_cache
+    save_cache:
+      paths:
+        - ./vendor/bundle
+      key: valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
+
+  - &step_make_test_output_directory
+    run:
+      name: create test metadata directory
+      command: mkdir /tmp/test-results
+
+  - &step_run_rspec_tests
+    run:
+      name: run rspec with simplecov
+      command: |
+        TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+
+        COVERAGE=true bundle exec rspec \
+                          --format progress \
+                          --format RspecJunitFormatter \
+                          --out /tmp/test-results/rspec.xml \
+                          ${TEST_FILES}
+
+  - &step_store_test_results
+    store_test_results:
+      path: /tmp/test-results
+
+  - &step_store_test_artifacts
+    store_artifacts:
+      path: /tmp/test-results
+      destination: test-results
+
+  - &step_store_coverage_artifacts
+    store_artifacts:
+      path: coverage
+      destination: coverage
 
 jobs:
   code-quality-job:
     <<: *defaults
     steps:
       - checkout
-
-      # Download and cache dependencies (twice because we have TWO bundles)
-      - restore_cache:
-          keys:
-          - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
-          - valimail-dppe-gems-
-
-      - run:
-          name: reconfigure for Rails target
-          command: |
-            gem install bundler flay ruby2ruby rspec rubocop
-            rake config:rails_5_1
-
-      - run:
-          name: install dependencies
-          command: |
-            gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-            cp Gemfile.lock Gemfile.lock.ci
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: valimail-dppe-gems-rails_5_1-{{ checksum "Gemfile.lock.ci" }}
-
+      - *step_restore_root_cache
+      - *step_install_root_dependencies
+      - *step_save_root_cache
       - run:
           name: run ruby linter (rubocop)
           command: |
@@ -48,164 +77,93 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  rails_5_1-job:
+  rails_5_1-job: &rails_5_1_job
     <<: *defaults
+    environment:
+      RAILS_TARGET: 5.1.4
     steps:
       - checkout
-
-      # Download and cache dependencies (twice because we have TWO bundles)
       - restore_cache:
           keys:
-          - valimail-dppe-app-gems-rails_5_1-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
+          - valimail-dppe-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
           - valimail-dppe-app-gems-rails_5_1-
-
-      - restore_cache:
-          keys:
-          - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
-          - valimail-dppe-gems-
-
+      - *step_restore_root_cache
       - run:
-          name: reconfigure for Rails target
+          name: install dummy dependencies
           command: |
-            gem install bundler flay ruby2ruby rspec rubocop
-            rake config:rails_5_1
-
-      - run:
-          name: install dependencies
-          command: |
-            pushd . && cd spec/rails-app
+            pushd . && cd spec/rails-app-5_1_4
             gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
             cp Gemfile.lock Gemfile.lock.ci
             popd
-            gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-            cp Gemfile.lock Gemfile.lock.ci
-
+      - *step_install_root_dependencies
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: valimail-dppe-rails-app-gems-rails_5_1-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: valimail-dppe-gems-rails_5_1-{{ checksum "Gemfile.lock.ci" }}
-
-      # Database setup
+          key: valimail-dppe-rails-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
+      - *step_save_root_cache
       - run:
           name: migrate and seed database
           command: |
-            pushd . && cd spec/rails-app
+            pushd . && cd spec/rails-app-5_1_4
             RAILS_ENV=test bundle exec rake db:migrate
             popd
+      - *step_make_test_output_directory
+      - *step_run_rspec_tests
+      - *step_store_test_results
+      - *step_store_test_artifacts
+      - *step_store_coverage_artifacts
 
-      #
-      # Run tests
-      #
-      - run:
-          name: create test metadata directory
-          command: mkdir /tmp/test-results
+  # build rails_5_1 with previous version of ruby
+  rails_5_1-prev-job:
+     <<: *rails_5_1_job
+     docker:
+         - image: circleci/ruby:2.4.3-browsers
 
-      - run:
-          name: run rspec with simplecov
-          command: |
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-            COVERAGE=true bundle exec rspec \
-                              --format progress \
-                              --format RspecJunitFormatter \
-                              --out /tmp/test-results/rspec.xml \
-                              ${TEST_FILES}
-
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
-      - store_artifacts:
-          path: coverage
-          destination: coverage
-
-  rails_5_0-job:
+  rails_5_0-job: &rails_5_0_job
     <<: *defaults
+    environment:
+      RAILS_TARGET: 5.0.6
     steps:
       - checkout
-
-      # Download and cache dependencies (twice because we have TWO bundles)
       - restore_cache:
           keys:
-          - valimail-dppe-app-gems-rails_5_0-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
+          - valimail-dppe-app-gems-rails_5_0-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
           - valimail-dppe-app-gems-rails_5_0-
-
-      - restore_cache:
-          keys:
-          - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
-          - valimail-dppe-gems-
-
+      - *step_restore_root_cache
       - run:
-          name: reconfigure for Rails target
+          name: install dummy dependencies
           command: |
-            gem install bundler flay ruby2ruby rspec rubocop
-            rake config:rails_5_0
-
-      - run:
-          name: install dependencies
-          command: |
-            pushd . && cd spec/rails-app
+            pushd . && cd spec/rails-app-5_0_6
             gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
             cp Gemfile.lock Gemfile.lock.ci
             popd
-            gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-            cp Gemfile.lock Gemfile.lock.ci
-
+      - *step_install_root_dependencies
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: valimail-dppe-rails-app-gems-rails_5_0-{{ checksum "spec/rails-app/Gemfile.lock.ci" }}
-
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: valimail-dppe-gems-rails_5_0-{{ checksum "Gemfile.lock.ci" }}
-
-
-      # Database setup
+          key: valimail-dppe-rails-app-gems-rails_5_0_6-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
+      - *step_save_root_cache
       - run:
           name: migrate and seed database
           command: |
-            pushd . && cd spec/rails-app
+            pushd . && cd spec/rails-app-5_0_6
             RAILS_ENV=test bundle exec rake db:migrate
             popd
+      - *step_make_test_output_directory
+      - *step_run_rspec_tests
+      - *step_store_test_results
+      - *step_store_test_artifacts
+      - *step_store_coverage_artifacts
 
-      #
-      # Run tests
-      #
-      - run:
-          name: create test metadata directory
-          command: mkdir /tmp/test-results
-
-      - run:
-          name: run rspec with simplecov
-          command: |
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-            COVERAGE=true bundle exec rspec \
-                              --format progress \
-                              --format RspecJunitFormatter \
-                              --out /tmp/test-results/rspec.xml \
-                              ${TEST_FILES}
-
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
-      - store_artifacts:
-          path: coverage
-          destination: coverage
+  # build rails_5_0 with previous version of ruby
+  rails_5_0-prev-job:
+     <<: *rails_5_0_job
+     docker:
+         - image: circleci/ruby:2.4.3-browsers
 
 workflows:
     version: 2
-    build-test-all:
+    build-test:
       jobs:
         - rails_5_1-job
         - rails_5_0-job:
@@ -214,3 +172,9 @@ workflows:
         - code-quality-job:
             requires:
               - rails_5_1-job # let primary job fetch all dependencies first
+    build-test-prev:
+      jobs:
+        - rails_5_1-prev-job
+        - rails_5_0-prev-job:
+            requires:
+              - rails_5_1-prev-job

@@ -30,6 +30,17 @@ RSpec.describe 'User logs in', type: :feature do
       within '#error_explanation' do
         expect(page).to have_content 'Your password has expired'
       end
+
+      expect(page).to have_selector('form.new_user')
+      within 'form.new_user' do
+        expect(page).to have_selector('label[for="user_current_password"]', text: /Current password/i)
+        expect(page).to have_selector('input[type="password"]#user_current_password')
+        expect(page).to have_selector('label[for="user_password"]', text: /New password/i)
+        expect(page).to have_selector('input[type="password"]#user_password')
+        expect(page).to have_selector('label[for="user_password_confirmation"]', text: /Confirm new password/i)
+        expect(page).to have_selector('input[type="password"]#user_password_confirmation')
+        expect(page).to have_selector('input[type="submit"][value="Change my password"]')
+      end
     end
   end
 

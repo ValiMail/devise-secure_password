@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/string/locale_tools'
 
 RSpec.describe Devise::Models::PasswordFrequentChangePrevention, type: :model do
   include ActionView::Helpers::DateHelper
@@ -42,8 +41,8 @@ RSpec.describe Devise::Models::PasswordFrequentChangePrevention, type: :model do
       it { is_expected.not_to be_valid }
 
       it 'has the correct error message' do
-        error_string = LocaleTools.replace_macros(
-          I18n.translate('dppe.password_frequent_change_prevention.errors.messages.password_is_recent'),
+        error_string = I18n.t(
+          'dppe.password_frequent_change_prevention.errors.messages.password_is_recent',
           timeframe: distance_of_time_in_words(user.class.password_minimum_age)
         )
         expect(user.errors.full_messages).to include error_string
@@ -61,6 +60,34 @@ RSpec.describe Devise::Models::PasswordFrequentChangePrevention, type: :model do
         user.password = user.password_confirmation = user.password + 'Z'
       end
       it { is_expected.to be_valid }
+    end
+  end
+
+  describe '#password_recent?' do
+    subject { user }
+
+    it { is_expected.to respond_to(:password_recent?) }
+
+    context 'when password is not recent' do
+      before do
+        user.save
+        # reset its previous_password record one day past minimum
+        last_password = user.previous_passwords.unscoped.last
+        last_password.created_at = Time.zone.now - Isolated::UserFrequentChange.password_minimum_age
+        last_password.save
+      end
+
+      it 'returns false' do
+        expect(user.password_recent?).to be false
+      end
+    end
+
+    context 'when password is recent' do
+      before { user.save }
+
+      it 'returns true' do
+        expect(user.password_recent?).to be true
+      end
     end
   end
 end

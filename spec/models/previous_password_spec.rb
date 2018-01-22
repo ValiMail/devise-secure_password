@@ -53,4 +53,46 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
       end
     end
   end
+
+  describe '#fresh?' do
+    it { is_expected.to respond_to(:fresh?) }
+
+    let(:previous_password) { user.previous_passwords.unscoped.last }
+
+    before { user.save }
+
+    context 'when a password is not recent' do
+      it 'returns false' do
+        previous_password.created_at = Time.zone.now - 1.day
+        expect(previous_password.fresh?(1.day)).to be false
+      end
+    end
+
+    context 'when a password is recent' do
+      it 'returns true' do
+        expect(previous_password.fresh?(1.day)).to be true
+      end
+    end
+  end
+
+  describe '#stale?' do
+    it { is_expected.to respond_to(:stale?) }
+
+    let(:previous_password) { user.previous_passwords.unscoped.last }
+
+    before { user.save }
+
+    context 'when a password is old' do
+      it 'returns true' do
+        previous_password.created_at = Time.zone.now - 1.day
+        expect(previous_password.stale?(1.day)).to be true
+      end
+    end
+
+    context 'when a password is new' do
+      it 'returns false' do
+        expect(previous_password.stale?(1.day)).to be false
+      end
+    end
+  end
 end

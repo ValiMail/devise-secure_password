@@ -5,15 +5,52 @@
 #
 require 'rake'
 
-SPEC_ROOT_DIR = File.expand_path('../../../', __FILE__)
+SPEC_ROOT_DIR = File.expand_path('../../../spec/', __FILE__)
 
 unless Gem::Specification.find_all_by_name('rspec').any?
-  abort 'Rspec gem is missing. Install it.'
+  puts 'Rspec gem is missing. Install it.'
+  return
 end
 require 'rspec/core/rake_task'
 
+def targets
+  Dir.glob("#{SPEC_ROOT_DIR}/rails-app-*").map { |f| File.basename(f).gsub(/^rails-app-/, '').tr('_', '.') if File.directory? f }
+end
+
+def default_target
+  targets.sort { |a, b| a.tr('.', '') <=> b.tr('.', '') }.last
+end
+
+def directory_for_target(target)
+  File.join(SPEC_ROOT_DIR, "rails-app-#{target.tr('.', '_')}")
+end
+
+def gemlock_purge_root
+  Dir.glob("#{SPEC_ROOT_DIR}/../Gemfile.lock").each { |f| FileUtils.rm(f) }
+end
+
+def gemlock_purge_spec
+  Dir.glob("#{SPEC_ROOT_DIR}/rails-app-*/Gemfile.lock").each { |f| FileUtils.rm(f) }
+end
+
+def available_targets_message
+  print <<~MESSAGE
+
+    Available Rails targets: #{targets.join(', ')}
+
+    Specify a target on the command line:
+
+      prompt> RAILS_TARGET=#{targets.first} bundle exec rake test:spec
+
+    The most-recent version number is automatically selected as the default
+    target and does not need to be specified on the command line or declared
+    as an environment variable.
+
+  MESSAGE
+end
+
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = "#{SPEC_ROOT_DIR}/spec/**/*_spec.rb"
+  t.pattern = FileList["#{SPEC_ROOT_DIR}/**/*_spec.rb"].exclude("#{SPEC_ROOT_DIR}/benchmarks/**/**_spec.rb")
   t.verbose = false
 end
 
@@ -24,8 +61,28 @@ task default: 'spec'
 # move spec task into test namespace for consistency
 Rake::Task[:spec].clear_comments
 namespace :test do
-  desc 'Run RSpec tests (Set COVERAGE=1 to enable SimpleCov)'
+  default_rails = default_target
+  desc 'Run RSpec tests (set Rails target with RAILS_TARGET=X.y.z)'
   task :spec do
+    ENV['RAILS_TARGET'] ||= default_rails
     Rake::Task[:spec].invoke
+  end
+  # add a task for each available rails target version
+  namespace :spec do
+    desc 'Run RSpec tests with code coverage (SimpleCov)'
+    task :coverage do
+      ENV['COVERAGE'] = 'true'
+      Rake::Task[:spec].invoke
+    end
+    desc 'List available Rails targets for RSpec tests'
+    task :targets do
+      available_targets_message
+    end
+  end
+  # purge all gemfile locks
+  desc 'Reset the build (when switching Rails targets)'
+  task :reset do
+    gemlock_purge_root
+    gemlock_purge_spec
   end
 end

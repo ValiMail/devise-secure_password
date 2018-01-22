@@ -3,8 +3,8 @@ module ActionDispatch
     class Mapper
       protected
 
-      def devise_dppe_passwords(mapping, controllers)
-        resource :dppe_password, only: %i(edit update), path: mapping.path_names[:change_password], controller: controllers[:dppe_passwords]
+      def devise_passwords_with_policy(mapping, controllers)
+        resource :password_with_policy, only: %i(edit update), path: mapping.path_names[:change_password], controller: controllers[:passwords_with_policy]
       end
     end
   end

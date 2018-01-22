@@ -1,9 +1,10 @@
 ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_TARGET'] ||= '5.1.4'
 
 #
 # Simplecov configuration (COVERAGE=true bundle exec rspec spec/)
 #
-if ENV['COVERAGE']
+if ENV['COVERAGE'] && Gem::Specification.find_all_by_name('simplecov').any?
   require 'simplecov'
   require 'simplecov-console'
   SimpleCov.start
@@ -22,10 +23,12 @@ if ENV['COVERAGE']
   SimpleCov.add_group 'support', 'lib/support'
 end
 
+rails_dummy = "rails-app-#{ENV['RAILS_TARGET'].tr('.', '_')}"
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'rails-app/config/environment'
+require "#{rails_dummy}/config/environment"
 require 'rspec/rails'
 require 'devise_password_policy_extension'
 require 'orm/active_record'
@@ -36,10 +39,6 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-
-# Setup constants for long method paths
-require 'support/string/locale_tools'
-LocaleTools = ::Support::String::LocaleTools
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

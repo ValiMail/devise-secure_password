@@ -1,11 +1,9 @@
 AllCops:
   Exclude:
     - 'bin/**/*'
-    - 'db/data/**/*'
     - 'db/schema.rb'
-    - 'spec/rails-app/**/*'
+    - 'spec/rails-app*/**/*'
     - 'vendor/bundle/**/*'
-    - 'node_modules/**/*'
   TargetRubyVersion: 2.4
 
 Metrics/LineLength:

@@ -9,9 +9,9 @@ as well.
 
 ## Build Status
 
-| Service    | rails 4.2.10 | rails 5.1.4 |
-|:-----------|:------------:|:-----------:|
-| Circle CI  | [![Build Status](https://img.shields.io/badge/build-none-lightgrey.svg)]() | [![Circle CI](https://circleci.com/gh/ValiMail/devise_password_policy_extension/tree/master.svg?style=shield&circle-token=a752164d3935bb6ad865ef67012c2c0099730d30)]() |
+| Service    | rails 5.1.4 |
+|:-----------|:-----------:|
+| Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise_password_policy_extension/tree/master.svg?style=shield&circle-token=a752164d3935bb6ad865ef67012c2c0099730d30)]() |
 
 ## Overview
 
@@ -32,8 +32,8 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Password Policy Extension__:
 
-* Ruby on Rails: __5.1.Z__ (stable, bug fix releases)
-* Ruby: __2.5.0__, __2.4.3__, __2.3.6__
+* Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
+* Ruby: __2.5.0__, __2.4.3__ (current and previous stable release)
 
 ## Installation
 
@@ -171,7 +171,7 @@ end
 And then:
 
 ```shell
-prompt> rails db:migrate
+prompt> bundle exec rake db:migrate
 ```
 
 ## Development
@@ -213,26 +213,33 @@ This document assumes that you already have a [functioning ruby install](https:/
 ### Selecting a Rails target
 
 The __Devise Password Policy Extension__ provides compatibility for officially supported stable releases of Ruby on Rails.
-Before you can run any tests you will need to reconfigure the build for a target:
+
+Install or update the [bundler](http://bundler.io/) along with a few basic dependencies:
 
 ```bash
-prompt> gem install bundler flay ruby2ruby rspec rubocop
-prompt> rake -T config
-rake config:rails_5_0  # Reconfigure Gemfiles for Rails 5.0
-rake config:rails_5_1  # Reconfigure Gemfiles for Rails 5.1
-rake config:reset      # Reset Gemfile for default Rails target
-
-prompt>rake config:rails_5_1
-Reconfiguring build for: Rails 5.1
-Copying: rails_5_1.gemfile to Gemfile
-Copying: rails_5_1.gemfile to spec/rails-app/Gemfile
+prompt> gem install flay ruby2ruby rubocop rspec
 ```
+
+To determine the Ruby on Rails versions supported by this release, run the following command:
+
+```bash
+prompt> rake test:spec:targets
+
+Available Rails targets: 5.0.6, 5.1.4
+
+Specify a target on the command line:
+
+  prompt> RAILS_TARGET=5.0.6 bundle exec rake test:spec
+```
+
+>NOTE: The most-recent version number is automatically selected as the default target. If you want to select the default
+target you can skip declaring the `RAILS_TARGET` environment variable.
 
 Prepare the test dummy rails-app:
 
 ```bash
-prompt> cd spec/rails-app
-prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
+prompt> cd spec/rails-app-5_0_6
+prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
 prompt> RAILS_ENV=test bundle exec rake db:migrate
 ```
 
@@ -240,8 +247,8 @@ Change to the project root, install additional dependencies and then run the tes
 
 ```bash
 prompt> cd ../../
-prompt> gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-prompt> bundle exec rake test:spec
+prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path vendor/bundle
+prompt> RAILS_TARGET=5.0.6 bundle exec rake test:spec
 ```
 
 ### Resetting the build
@@ -250,8 +257,7 @@ You will need to reset the build if you have already run a `bundle install` and 
 configuration:
 
 ```bash
-prompt> rake config:reset
-prompt> rake config:rails_5_0
+prompt> rake test:spec:reset
 ...
 ```
 
@@ -280,13 +286,13 @@ prompt> brew install chromedriver
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.
 
-### Testing inside the spec/rails-app
+### Testing inside the spec/rails-app-X_y_z
 
 To debug from inside of the dummy rails-app you will need to first install the rails bin stubs and then perform a db
 migration:
 
 ```bash
-prompt> cd spec/rails-app
+prompt> cd spec/rails-app-X_y_z
 prompt> rake app:update:bin
 prompt> RAILS_ENV=development bundle exec rake db:migrate
 ```
@@ -294,10 +300,21 @@ prompt> RAILS_ENV=development bundle exec rake db:migrate
 Remember, the dummy app is not meant to be a full featured rails app: there is just enough functionality to test the
 gem feature set.
 
+### Running benchmarks
+
+Available benchmarks can be run as follows:
+
+```bash
+prompt> bundle exec rake test:benchmark
+```
+
+Benchmarks are run within an RSpec context but are not run along with other tests as benchmarks merely seek to measure
+performance and not enforce set performance targets.
+
 ### Screenshots
 
 Failing tests that invoke the JavaScript driver will result in both the failing html along with a screenshot of the
-page output to be saved in the `spec/rails-app/tmp/capybara` snapshot directory.
+page output to be saved in the `spec/rails-app-X_y_z/tmp/capybara` snapshot directory.
 
 >NOTE: On __circleci__ the snapshots will be captured as artifacts.
 
@@ -312,11 +329,11 @@ To start the container simply build and launch the image:
 
 ```bash
 prompt> docker build -t dppe-dev .
-prompt> docker run --rm -it dppe-dev /bin/bash
+prompt> docker run -it --rm dppe-dev /bin/bash
 ```
 
 The above `docker run` command will start the container, connect you to the command line within the project home
-directory where you can issue the tests as documented in the [Running Test](#running-tests) section above. When you exit
+directory where you can issue the tests as documented in the [Running Tests](#running-tests) section above. When you exit
 the shell, the container will be removed.
 
 ## Contributing

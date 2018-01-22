@@ -4,11 +4,6 @@ module Devise
       extend ActiveSupport::Concern
 
       require 'devise_password_policy_extension/hooks/password_regular_update_enforcement'
-      require 'support/time/comparator'
-      require 'support/string/locale_tools'
-
-      Comparator = ::Support::Time::Comparator
-      LocaleTools = ::Support::String::LocaleTools
 
       class ConfigurationError < RuntimeError; end
 
@@ -19,7 +14,7 @@ module Devise
 
       def password_expired?
         last_password = previous_passwords.unscoped.last
-        insane_password?(last_password) || stale_password?(last_password)
+        inconsistent_password?(last_password) || last_password.stale?(self.class.password_maximum_age)
       end
 
       protected
@@ -47,18 +42,10 @@ module Devise
       # Check if current password is out of sync with last_password
       #
       # @param last_password [PreviousPassword] Password to compare with current password
-      # @return [Boolean] True if password is out of sync, otherwise false
+      # @return [Boolean] True if password is nil or out of sync, otherwise false
       #
-      def insane_password?(last_password = nil)
+      def inconsistent_password?(last_password = nil)
         last_password.nil? || (encrypted_password != last_password.encrypted_password)
-      end
-
-      def stale_password?(last_password = nil)
-        unless last_password.nil? || insane_password?(last_password)
-          return Comparator.time_delay_expired?(last_password.created_at, self.class.password_maximum_age)
-        end
-
-        true
       end
 
       module ClassMethods

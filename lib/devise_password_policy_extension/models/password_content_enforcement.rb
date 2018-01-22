@@ -4,10 +4,8 @@ module Devise
       extend ActiveSupport::Concern
 
       require 'support/string/character_counter'
-      require 'support/string/locale_tools'
-      require 'support/math/integer'
 
-      LocaleTools = ::Support::String::LocaleTools
+      LENGTH_MAX = 255
 
       included do
         validate :validate_password_content
@@ -41,50 +39,36 @@ module Devise
 
       def validate_unknown(dict)
         type_total = dict.values.reduce(0, :+)
-        return if type_total <= self.class.config[:REQUIRED_CHAR_COUNTS][:unknown][:max]
+        return if type_total <= required_char_counts_for_type(:unknown)[:max]
 
         error_string_for_unknown_chars(type_total, dict.keys)
       end
 
       def validate_type(type, dict)
         type_total = dict.values.reduce(0, :+)
-        error_string = if type_total < self.class.config[:REQUIRED_CHAR_COUNTS][type][:min]
-                         error_string_for_minimum_chars(type, type_total)
-                       else
-                         error_string_for_maximum_chars(type, type_total)
+        error_string = if type_total < required_char_counts_for_type(type)[:min]
+                         error_string_for_length(type, :min)
+                       elsif type_total > required_char_counts_for_type(type)[:max]
+                         error_string_for_length(type, :max)
                        end
         error_string
       end
 
-      def error_string_for_minimum_chars(type, total)
-        count_min = self.class.config[:REQUIRED_CHAR_COUNTS][type][:min]
+      def error_string_for_length(type, threshold = :min)
+        lang_key = case threshold
+                   when :min then 'dppe.password_content_enforcement.errors.messages.minimum_characters'
+                   when :max then 'dppe.password_content_enforcement.errors.messages.maximum_characters'
+                   else return ''
+                   end
 
-        return '' if total >= count_min
-
-        LocaleTools.replace_macros(
-          I18n.translate('dppe.password_content_enforcement.errors.messages.minimum_characters'),
-          count: count_min,
-          type: type.to_s,
-          subject: 'character'.pluralize(count_min)
-        ) + ' ' + dict_for_type(type)
-      end
-
-      def error_string_for_maximum_chars(type, total)
-        count_max = self.class.config[:REQUIRED_CHAR_COUNTS][type][:max]
-
-        return '' if total <= count_max
-
-        LocaleTools.replace_macros(
-          I18n.translate('dppe.password_content_enforcement.errors.messages.maximum_characters'),
-          count: count_max,
-          type: type.to_s,
-          subject: 'character'.pluralize(count_max)
-        ) + ' ' + dict_for_type(type)
+        count = required_char_counts_for_type(type)[threshold]
+        error_string = I18n.t(lang_key, count: count, type: type.to_s, subject: 'character'.pluralize(count))
+        error_string + ' ' + dict_for_type(type)
       end
 
       def error_string_for_unknown_chars(total, chars = [])
-        LocaleTools.replace_macros(
-          I18n.translate('dppe.password_content_enforcement.errors.messages.unknown_characters'),
+        I18n.t(
+          'dppe.password_content_enforcement.errors.messages.unknown_characters',
           count: total,
           subject: 'character'.pluralize(total)
         ) + " (#{chars.join('')})"
@@ -98,6 +82,10 @@ module Devise
         else
           "(#{character_counter.count_hash[type].keys.first}..#{character_counter.count_hash[type].keys.last})"
         end
+      end
+
+      def required_char_counts_for_type(type)
+        self.class.config[:REQUIRED_CHAR_COUNTS][type]
       end
 
       module ClassMethods
@@ -115,19 +103,19 @@ module Devise
             REQUIRED_CHAR_COUNTS: {
               uppercase: {
                 min: password_required_uppercase_count,
-                max: Support::Math::Integer::MAX
+                max: LENGTH_MAX
               },
               lowercase: {
                 min: password_required_lowercase_count,
-                max: Support::Math::Integer::MAX
+                max: LENGTH_MAX
               },
               number: {
                 min: password_required_number_count,
-                max: Support::Math::Integer::MAX
+                max: LENGTH_MAX
               },
               special: {
                 min: password_required_special_count,
-                max: Support::Math::Integer::MAX
+                max: LENGTH_MAX
               },
               unknown: {
                 min: 0,

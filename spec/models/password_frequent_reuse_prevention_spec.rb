@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/string/locale_tools'
 
 RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
   let(:password) { 'Bubb1234@#$!' }
@@ -38,8 +37,8 @@ RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
       it { is_expected.not_to be_valid }
 
       it 'has the correct error message' do
-        error_string = LocaleTools.replace_macros(
-          I18n.translate('dppe.password_frequent_reuse_prevention.errors.messages.password_is_recent'),
+        error_string = I18n.t(
+          'dppe.password_frequent_reuse_prevention.errors.messages.password_is_recent',
           count: user.class.password_previously_used_count
         )
         expect(user.errors.full_messages).to include error_string
@@ -107,16 +106,18 @@ RSpec.describe Devise::Models::PasswordFrequentReusePrevention, type: :model do
         end
       end
 
-      it 'does not change the number of previous passwords' do
+      # NOTE: These tests are to prevent regression from a change in strategy
+      # after commit ccd2e51 up to which point old passwords were purged.
+      it 'increases the number of previous passwords (all old passwords are preserved)' do
         user.password = user.password_confirmation = passwords.last + 'Z'
-        expect { user.save }.to change { Devise::Models::PreviousPassword.count }.by(0)
+        expect { user.save }.to change { Devise::Models::PreviousPassword.count }.by(1)
       end
 
-      it 'destroys the oldest previous password' do
+      it 'preserves the oldest previous password (all old passwords are preserved)' do
         oldest_password = user.previous_passwords.unscoped.first
         user.password = user.password_confirmation = passwords.last + 'Z'
         user.save
-        expect(user.previous_passwords.find_by(id: oldest_password.id)).to be_nil
+        expect(user.previous_passwords.find_by(id: oldest_password.id)).not_to be_nil
       end
     end
   end

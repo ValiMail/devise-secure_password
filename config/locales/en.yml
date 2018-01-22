@@ -21,6 +21,17 @@ en:
       errors:
         messages:
           password_expired: "Your password has expired. Passwords must be changed every %{timeframe}"
+  devise:
+    passwords_with_policy:
+      edit:
+        titles:
+          section_title: "Change your password"
+        labels:
+          current_password: "Current password"
+          new_password: "New password"
+          confirm_new_password: "Confirm new password"
+        buttons:
+          change_my_password: "Change my password"
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:
     distance_in_words:

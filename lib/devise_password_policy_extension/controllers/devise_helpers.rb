@@ -3,10 +3,6 @@ module DevisePasswordPolicyExtension
     module DeviseHelpers
       extend ActiveSupport::Concern
 
-      require 'support/string/locale_tools'
-
-      LocaleTools = ::Support::String::LocaleTools
-
       # rubocop:disable Style/ClassAndModuleChildren
       class ::DeviseController
         alias old_require_no_authentication require_no_authentication
@@ -33,7 +29,7 @@ module DevisePasswordPolicyExtension
 
           if signed_in?(scope_name) && warden.session(scope_name)[:dppe_password_expired]
             save_controller_state
-            redirect_to edit_user_dppe_password_url, alert: "#{error_string_for_password_expired}."
+            redirect_to edit_user_password_with_policy_url, alert: "#{error_string_for_password_expired}."
             return true
           end
 
@@ -54,8 +50,8 @@ module DevisePasswordPolicyExtension
 
         def error_string_for_password_expired
           class_obj = scope_name.to_s.camelize.constantize
-          LocaleTools.replace_macros(
-            I18n.translate('dppe.password_regular_update_enforcement.errors.messages.password_expired'),
+          I18n.t(
+            'dppe.password_regular_update_enforcement.errors.messages.password_expired',
             timeframe: distance_of_time_in_words(class_obj.password_maximum_age)
           )
         end

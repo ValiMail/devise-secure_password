@@ -53,7 +53,7 @@ RSpec.describe Devise::Models::PasswordRegularUpdateEnforcement, type: :model do
     context 'when password has not expired' do
       before { user.save }
 
-      it 'returns true' do
+      it 'returns false' do
         expect(user.password_expired?).to be false
       end
     end
