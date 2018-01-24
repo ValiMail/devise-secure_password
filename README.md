@@ -11,7 +11,7 @@ as well.
 
 | Service    | rails 5.1.4 |
 |:-----------|:-----------:|
-| Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise_password_policy_extension/tree/master.svg?style=shield&circle-token=a752164d3935bb6ad865ef67012c2c0099730d30)]() |
+| Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
 
 ## Overview
 
