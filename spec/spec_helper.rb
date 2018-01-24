@@ -17,9 +17,9 @@ if ENV['COVERAGE'] && Gem::Specification.find_all_by_name('simplecov').any?
     ]
   )
   SimpleCov.add_filter do |f|
-    !f.filename.match? %r{lib/devise_password_policy_extension|lib/support}
+    !f.filename.match? %r{lib/devise/secure_password|lib/support}
   end
-  SimpleCov.add_group 'devise_password_policy_extension', 'lib/devise_password_policy_extension'
+  SimpleCov.add_group 'secure_password', 'lib/devise/secure_password'
   SimpleCov.add_group 'support', 'lib/support'
 end
 
@@ -30,7 +30,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require "#{rails_dummy}/config/environment"
 require 'rspec/rails'
-require 'devise_password_policy_extension'
+require 'devise/secure_password'
 require 'orm/active_record'
 require 'database_cleaner'
 

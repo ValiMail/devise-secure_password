@@ -1,20 +1,20 @@
 en:
-  dppe:
-    password_content_enforcement:
+  secure_password:
+    password_has_required_content:
       errors:
         messages:
           unknown_characters: "contains %{count} invalid %{subject}"
           minimum_characters: "must contain at least %{count} %{type} %{subject}"
           maximum_characters: "must contain less than %{count} %{type} %{subject}"
-    password_frequent_reuse_prevention:
+    password_disallows_frequent_reuse:
       errors:
         messages:
           password_is_recent: "Last %{count} passwords may not be reused"
-    password_frequent_change_prevention:
+    password_disallows_frequent_changes:
       errors:
         messages:
           password_is_recent: "Password cannot be changed more than once per %{timeframe}"
-    password_regular_update_enforcement:
+    password_requires_regular_updates:
       alerts:
         messages:
           password_updated: "Your password has been updated."

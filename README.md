@@ -1,8 +1,8 @@
-# Devise Password Policy Extension
+# Devise Secure Password Extension
 
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
-The __Devise Password Policy Extension__ (or __DPPE__) is a user account password policy enforcement gem that can be
+The __Devise Secure Extension__ is a user account password policy enforcement gem that can be
 added to a Rails project to enforce password policies. The gem is implemented as an extension to the Rails
 [devise](https://github.com/plataformatec/devise) authentication solution gem and requires that __devise__ is installed
 as well.
@@ -15,33 +15,33 @@ as well.
 
 ## Overview
 
-The __Devise Password Policy Extension__ is composed of the following modules:
+The __Devise Secure Password Extension__ is composed of the following modules:
 
-- __password_content_enforcement__: require that passwords consist of a specific number (configurable) of letters,
+- __password_has_reqjuired_content__: require that passwords consist of a specific number (configurable) of letters,
   numbers, and special characters (symbols)
-- __password_frequent_reuse_prevention__: prevent the reuse of a number (configurable) of previous passwords when a user
+- __password_disallows_frequent_reuse__: prevent the reuse of a number (configurable) of previous passwords when a user
   changes their password
-- __password_frequent_change_prevention__: prevent the user from changing their password more than once within a time
+- __password_disallows_frequent_changes__: prevent the user from changing their password more than once within a time
   duration (configurable)
-- __password_regular_update_enforcement__: require that a user change their password following a time duration
+- __password_requires_regular_updates__: require that a user change their password following a time duration
   (configurable)
 
 ## Compatibility
 
 The goal of this project is to provide compatibility for officially supported stable releases of [Ruby](https://www.ruby-lang.org/en/downloads/)
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
-are currently supported by the __Devise Password Policy Extension__:
+are currently supported by the __Devise Secure Password Extension__:
 
-* Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
-* Ruby: __2.5.0__, __2.4.3__ (current and previous stable release)
+- Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
+- Ruby: __2.5.0__, __2.4.3__ (current and previous stable release)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise',                           '~> 4.2'
-gem 'devise_password_policy_extension', '~> 1.0.0'
+gem 'devise',                 '~> 4.2'
+gem 'devise-secure_password', '~> 1.0.0'
 ```
 
 And then execute:
@@ -53,26 +53,26 @@ prompt> bundle
 Or install it yourself as:
 
 ```shell
-prompt> gem install devise_password_policy_extension
+prompt> gem install devise-secure_password
 ```
 
 Finally, run the generator:
 
 ```shell
-prompt> rails generate devise_password_policy_extension:install
+prompt> rails generate devise:secure_password:install
 ```
 
 ## Usage
 
 ### Configuration
 
-The __Devise Password Policy Extension__ exposes configuration parameters as outlined below. Commented out configuration
+The __Devise Secure Password Extension__ exposes configuration parameters as outlined below. Commented out configuration
 parameters reflect the default settings.
 
 ```ruby
 Devise.setup do |config|
-  # ==> Configuration for the Devise Password Policy Extension (DPPE)
-  #     DPPE Module: password_content_enforcement
+  # ==> Configuration for the Devise Secure Password extension
+  #     Module: password_has_required_content
   #
   # Configure password content requirements including the number of uppercase,
   # lowercase, number, and special characters that are required. To configure the
@@ -91,34 +91,33 @@ Devise.setup do |config|
   # Passwords consist of at least one special character (!@#$%^&*()_+-=[]{}|'):
   # config.password_required_special_character_count = 1
 
-  # ==> Configuration for the Devise Password Policy Extension (DPPE)
-  #     DPPE Module: password_frequent_reuse_prevention
+  # ==> Configuration for the Devise Secure Password extension
+  #     Module: password_disallows_frequent_reuse
   #
   # Passwords cannot be reused. A user's last 24 password hashes are saved:
   # config.password_previously_used_count = 24
 
-  # ==> Configuration for the Devise Password Policy Extension (DPPE)
-  #     DPPE Module: password_frequent_change_prevention
-  #     *Requires* password_frequent_reuse_prevention module
+  # ==> Configuration for the Devise Secure Password extension
+  #     Module: password_disallows_frequent_changes
+  #     *Requires* password_disallows_frequent_reuse
   #
   # Passwords cannot be changed more frequently than once per day:
   # config.password_minimum_age = 1.day
 
-  # ==> Configuration for the Devise Password Policy Extension (DPPE)
-  #     DPPE Module: password_regular_update_prevention
-  #     *Requires* password_frequent_reuse_prevention module
+  # ==> Configuration for the Devise Secure Password extension
+  #     Module: password_requires_regular_updates
+  #     *Requires* password_disallows_frequent_reuse
   #
   # Passwords must be changed every 60 days:
   # config.password_maximum_age = 60.days
-
 end
 ```
 
-Enable the __Devise Password Policy Extension__ enforcement in your Devise model(s):
+Enable the __Devise Secure Password Extension__ enforcement in your Devise model(s):
 
 ```ruby
-devise :password_content_enforcement, :password_frequent_reuse_prevention,
-       :password_frequent_change_prevention, :password_regular_update_enforcement
+devise :password_has_required_content, :password_disallows_frequent_reuse,
+       :password_disallows_frequent_changes, :password_requires_regular_updates
 ```
 
 Usually, you would append these after your selection of Devise modules. So your configuration will more likely look like
@@ -130,15 +129,15 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :password_content_enforcement, :password_frequent_reuse_prevention,
-         :password_frequent_change_prevention, :password_regular_update_enforcement
+         :password_has_required_content, :password_disallows_frequent_reuse,
+         :password_disallows_frequent_changes, :password_requires_regular_updates
    ...
    <YOUR USER MODEL CONTENT FOLLOWS>
 end
 ```
 
->NOTE: Both `:password_frequent_change_prevention` and `:password_regular_update_enforcement` are dependent upon the
- previous passwords memorization implemented by the `:password_frequent_reuse_prevention` module.
+>NOTE: Both `:password_disallows_frequent_changes` and `:password_requires_regular_updates` are dependent upon the
+previous passwords memorization implemented by the `:password_disallows_frequent_reuse` module.
 
 ### Database migration
 
@@ -194,7 +193,7 @@ push git commits and tags, and push the `.gem` file to [rubygems.org](https://ru
 
 ### Git hooks intallation
 
-Development of the __Devise Password Policy Extension__ relies on a continuous integration environment provided by
+Development of the __Devise Secure Password Extension__ relies on a continuous integration environment provided by
 [circleci](https://circleci.com/). To enable caching of build resources, checksums are calculated from a lock file. To
 enable this functionality a [git pre-commit hook](https://git-scm.com/docs/githooks) must be enabled in your local repo:
 
@@ -212,7 +211,8 @@ This document assumes that you already have a [functioning ruby install](https:/
 
 ### Selecting a Rails target
 
-The __Devise Password Policy Extension__ provides compatibility for officially supported stable releases of Ruby on Rails.
+The __Devise Secure Password Extension__ provides compatibility for officially supported stable releases of Ruby on
+Rails.
 
 Install or update the [bundler](http://bundler.io/) along with a few basic dependencies:
 
@@ -254,12 +254,16 @@ prompt> RAILS_TARGET=5.0.6 bundle exec rake test:spec
 ### Resetting the build
 
 You will need to reset the build if you have already run a `bundle install` and then wish to switch to a different
-configuration:
+configuration. For instance, if the previous build tested 5.1.4 and now you want to test 5.0.6:
 
 ```bash
 prompt> rake test:spec:reset
+prompt> cd spec/rails-app-5_0_6
+prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
 ...
 ```
+
+After the reset command you follow the same instructions as detailed in the previous section.
 
 ### Testing with code coverage (SimpleCov)
 
@@ -328,8 +332,8 @@ using [Docker](https://www.docker.com/).
 To start the container simply build and launch the image:
 
 ```bash
-prompt> docker build -t dppe-dev .
-prompt> docker run -it --rm dppe-dev /bin/bash
+prompt> docker build -t secure-password-dev .
+prompt> docker run -it --rm secure-password-dev /bin/bash
 ```
 
 The above `docker run` command will start the container, connect you to the command line within the project home
@@ -338,8 +342,8 @@ the shell, the container will be removed.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/valimail/devise_password_policy_extension.
-This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the
+Bug reports and pull requests are welcome on GitHub at https://github.com/valimail/devise-secure_password. This project
+is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the
 [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ### Basic guidelines for contributors
@@ -360,9 +364,9 @@ moved ahead since your pull request was opened, discussed, and accepted.
 
 ## License
 
-The __Devise Password Policy Extension__ gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The __Devise Secure Password Extension__ gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
-Everyone interacting in the __Devise Password Policy Extension__ project’s codebases and issue trackers is expected to
-follow the [code of conduct](https://github.com/[USERNAME]/devise_password_policy_extension/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the __Devise Secure Password Extension__ project’s codebases and issue trackers is expected to
+follow the [code of conduct](https://github.com/valimail/devise-secure_password/blob/master/CODE_OF_CONDUCT.md).

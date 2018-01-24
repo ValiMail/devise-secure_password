@@ -12,8 +12,8 @@ aliases:
   - &step_restore_root_cache
     restore_cache:
       keys:
-      - valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
-      - valimail-dppe-gems-
+      - valimail-secure-password-gems-{{ checksum "Gemfile.lock.ci" }}
+      - valimail-secure-password-gems-
 
   - &step_install_root_dependencies
     run:
@@ -26,7 +26,7 @@ aliases:
     save_cache:
       paths:
         - ./vendor/bundle
-      key: valimail-dppe-gems-{{ checksum "Gemfile.lock.ci" }}
+      key: valimail-secure-password-gems-{{ checksum "Gemfile.lock.ci" }}
 
   - &step_make_test_output_directory
     run:
@@ -85,8 +85,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - valimail-dppe-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
-          - valimail-dppe-app-gems-rails_5_1-
+          - valimail-secure-password-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
+          - valimail-secure-password-app-gems-rails_5_1-
       - *step_restore_root_cache
       - run:
           name: install dummy dependencies
@@ -99,7 +99,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: valimail-dppe-rails-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
+          key: valimail-secure-password-rails-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
       - *step_save_root_cache
       - run:
           name: migrate and seed database
@@ -127,8 +127,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - valimail-dppe-app-gems-rails_5_0-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
-          - valimail-dppe-app-gems-rails_5_0-
+          - valimail-secure-password-app-gems-rails_5_0-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
+          - valimail-secure-password-app-gems-rails_5_0-
       - *step_restore_root_cache
       - run:
           name: install dummy dependencies
@@ -141,7 +141,7 @@ jobs:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: valimail-dppe-rails-app-gems-rails_5_0_6-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
+          key: valimail-secure-password-rails-app-gems-rails_5_0_6-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
       - *step_save_root_cache
       - run:
           name: migrate and seed database

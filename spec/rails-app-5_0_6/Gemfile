@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'coffee-rails', '~> 4.2'
 gem 'devise',       '~> 4.0'
-gem 'devise_password_policy_extension', path: '../..'
+gem 'devise-secure_password', path: '../..'
 gem 'jquery-rails', '~> 4.3.1'
 gem 'rails',        '~> 5.0.6'
 gem 'rake',         '~> 12.3'

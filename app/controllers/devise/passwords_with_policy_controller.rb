@@ -4,7 +4,7 @@ module Devise
 
     def edit
       self.resource = resource_class.new
-      if warden.session(scope_name)['dppe_password_expired']
+      if warden.session(scope_name)['secure_password_expired']
         resource.errors.add(:base, "#{error_string_for_password_expired}.")
       end
       render :edit
@@ -28,13 +28,13 @@ module Devise
     end
 
     def alert_string_for_password_updated
-      I18n.t('dppe.password_regular_update_enforcement.alerts.messages.password_updated')
+      I18n.t('secure_password.password_requires_regular_updates.alerts.messages.password_updated')
     end
 
     def error_string_for_password_expired
       return 'password expired' unless warden.user.class.respond_to?(:password_maximum_age)
       I18n.t(
-        'dppe.password_regular_update_enforcement.errors.messages.password_expired',
+        'secure_password.password_requires_regular_updates.errors.messages.password_expired',
         timeframe: distance_of_time_in_words(warden.user.class.password_maximum_age)
       )
     end
@@ -44,7 +44,7 @@ module Devise
     end
 
     def prepare_for_redirect
-      warden.session(scope_name)[:dppe_password_expired] = false
+      warden.session(scope_name)[:secure_password_expired] = false
       flash[:notice] = alert_string_for_password_updated
       bypass_sign_in resource, scope: scope_name
     end

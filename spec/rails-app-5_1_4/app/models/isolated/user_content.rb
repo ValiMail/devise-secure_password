@@ -6,6 +6,6 @@ module Isolated
     # :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable, :validatable,
-           :password_content_enforcement
+           :password_has_required_content
   end
 end

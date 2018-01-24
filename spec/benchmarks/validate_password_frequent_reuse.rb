@@ -25,7 +25,7 @@ end
 puts 'Running benchmark (validate_password_frequent_reuse)...'
 puts "-> validating User new password against #{max_count} previous passwords\n\n"
 
-# benchmark the password_frequent_reuse_prevention::previous_password? method
+# benchmark the password_disallows_frequent_reuse::previous_password? method
 Benchmark.bmbm(20) do |bm|
   # make sure we check the very first password used, which will appear at the
   # end of the results, so that we cycle through all salts (previous_password?
