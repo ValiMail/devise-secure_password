@@ -2,7 +2,7 @@
 
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
-The __Devise Secure Extension__ is a user account password policy enforcement gem that can be
+The __Devise Secure Password Extension__ is a user account password policy enforcement gem that can be
 added to a Rails project to enforce password policies. The gem is implemented as an extension to the Rails
 [devise](https://github.com/plataformatec/devise) authentication solution gem and requires that __devise__ is installed
 as well.
@@ -17,7 +17,7 @@ as well.
 
 The __Devise Secure Password Extension__ is composed of the following modules:
 
-- __password_has_reqjuired_content__: require that passwords consist of a specific number (configurable) of letters,
+- __password_has_required_content__: require that passwords consist of a specific number (configurable) of letters,
   numbers, and special characters (symbols)
 - __password_disallows_frequent_reuse__: prevent the reuse of a number (configurable) of previous passwords when a user
   changes their password
