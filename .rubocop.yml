@@ -14,12 +14,10 @@ Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
-Rails/HttpPositionalArguments:
-  Enabled: false
-
 Layout/ExtraSpacing:
   Exclude:
     - 'Gemfile'
+    - '*.gemspec'
 Lint/UselessAssignment:
   Exclude:
     - 'db/**/*'

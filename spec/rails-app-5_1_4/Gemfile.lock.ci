@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    devise_password_policy_extension (0.9.3)
+    devise-secure_password (0.9.4)
       devise (>= 4.0.0, < 5.0.0)
       railties (>= 5.0.0, < 6.0.0)
 
@@ -207,7 +207,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 4.2)
   devise (~> 4.0)
-  devise_password_policy_extension!
+  devise-secure_password!
   flay (~> 2.10.0)
   rails (~> 5.1.4)
   rake (~> 12.3)

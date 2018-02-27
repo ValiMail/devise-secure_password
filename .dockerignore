@@ -61,10 +61,13 @@ Gemfile.lock
 /spec/reports/
 /spec/examples.txt
 /spec/rails-app*/Gemfile.lock
-/spec/rails-app*/db/*.sqlite3
 /spec/rails-app*/log/*.log
 /spec/rails-app*/bin/
 /spec/rails-app*/tmp/
+
+# NOTE: Commit test.sqlite3 file for automated testing. Ignore all others.
+/spec/rails-app*/db/*.sqlite3
+!/spec/rails-app*/db/test.sqlite3
 
 # Ignore other unneeded files
 *.swp
