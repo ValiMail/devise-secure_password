@@ -12,21 +12,39 @@ aliases:
   - &step_restore_root_cache
     restore_cache:
       keys:
-      - valimail-secure-password-gems-{{ checksum "Gemfile.lock.ci" }}
+      - valimail-secure-password-gems-{{ checksum "Gemfile" }}
       - valimail-secure-password-gems-
+
+  # regardless of target, generate a predictable gemfile for a cache checksum
+  - &step_generate_cache_app-gemfile
+    run:
+      name: generate app-gems-cache checksum
+      command: |
+        cp "gemfiles/${TARGET_GEMFILE_NAME}.gemfile" "gemfiles/rails-target.gemfile"
+
+  - &step_restore_cache_app-gems-rails
+    restore_cache:
+      keys:
+        - valimail-secure-password-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
+        - valimail-secure-password-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}
 
   - &step_install_root_dependencies
     run:
       name: install root dependencies
       command: |
         gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
-        cp Gemfile.lock Gemfile.lock.ci
+
+  - &step_save_cache_app-gems-rails
+    save_cache:
+      paths:
+        - ./vendor/bundle
+      key: valimail-secure-password-rails-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
 
   - &step_save_root_cache
     save_cache:
       paths:
         - ./vendor/bundle
-      key: valimail-secure-password-gems-{{ checksum "Gemfile.lock.ci" }}
+      key: valimail-secure-password-gems-{{ checksum "Gemfile" }}
 
   - &step_make_test_output_directory
     run:
@@ -77,104 +95,57 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  rails_5_1-job: &rails_5_1_job
+  rails_5_X-job: &rails_5_X_job
     <<: *defaults
     environment:
-      RAILS_TARGET: 5.1.4
+      BUNDLE_GEMFILE_PATH: gemfiles/rails-5_1_4.gemfile
+      TARGET_GEMFILE_NAME: rails-5_1_4
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - valimail-secure-password-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
-          - valimail-secure-password-app-gems-rails_5_1-
+      - *step_generate_cache_app-gemfile
+      - *step_restore_cache_app-gems-rails
       - *step_restore_root_cache
-      - run:
-          name: install dummy dependencies
-          command: |
-            pushd . && cd spec/rails-app-5_1_4
-            gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
-            cp Gemfile.lock Gemfile.lock.ci
-            popd
       - *step_install_root_dependencies
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: valimail-secure-password-rails-app-gems-rails_5_1-{{ checksum "spec/rails-app-5_1_4/Gemfile.lock.ci" }}
+      - *step_save_cache_app-gems-rails
       - *step_save_root_cache
-      - run:
-          name: migrate and seed database
-          command: |
-            pushd . && cd spec/rails-app-5_1_4
-            RAILS_ENV=test bundle exec rake db:migrate
-            popd
       - *step_make_test_output_directory
       - *step_run_rspec_tests
       - *step_store_test_results
       - *step_store_test_artifacts
       - *step_store_coverage_artifacts
 
-  # build rails_5_1 with previous version of ruby
-  rails_5_1-prev-job:
-     <<: *rails_5_1_job
+  # build rails_5_X with previous version of ruby
+  rails_5_X-prev-job:
+     <<: *rails_5_X_job
      docker:
          - image: circleci/ruby:2.4.3-browsers
 
   rails_5_0-job: &rails_5_0_job
-    <<: *defaults
+    <<: *rails_5_X_job
     environment:
-      RAILS_TARGET: 5.0.6
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - valimail-secure-password-app-gems-rails_5_0-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
-          - valimail-secure-password-app-gems-rails_5_0-
-      - *step_restore_root_cache
-      - run:
-          name: install dummy dependencies
-          command: |
-            pushd . && cd spec/rails-app-5_0_6
-            gem install bundler && bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
-            cp Gemfile.lock Gemfile.lock.ci
-            popd
-      - *step_install_root_dependencies
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: valimail-secure-password-rails-app-gems-rails_5_0_6-{{ checksum "spec/rails-app-5_0_6/Gemfile.lock.ci" }}
-      - *step_save_root_cache
-      - run:
-          name: migrate and seed database
-          command: |
-            pushd . && cd spec/rails-app-5_0_6
-            RAILS_ENV=test bundle exec rake db:migrate
-            popd
-      - *step_make_test_output_directory
-      - *step_run_rspec_tests
-      - *step_store_test_results
-      - *step_store_test_artifacts
-      - *step_store_coverage_artifacts
+      BUNDLE_GEMFILE_PATH: gemfiles/rails-5_0_6.gemfile
+      TARGET_GEMFILE_NAME: rails-5_0_6
 
   # build rails_5_0 with previous version of ruby
   rails_5_0-prev-job:
-     <<: *rails_5_0_job
-     docker:
-         - image: circleci/ruby:2.4.3-browsers
+    <<: *rails_5_0_job
+    docker:
+        - image: circleci/ruby:2.4.3-browsers
 
 workflows:
     version: 2
     build-test:
       jobs:
-        - rails_5_1-job
+        - rails_5_X-job
         - rails_5_0-job:
             requires:
-              - rails_5_1-job # let primary job fetch all dependencies first
+              - rails_5_X-job # let primary job fetch all dependencies first
         - code-quality-job:
             requires:
-              - rails_5_1-job # let primary job fetch all dependencies first
+              - rails_5_X-job # let primary job fetch all dependencies first
     build-test-prev:
       jobs:
-        - rails_5_1-prev-job
+        - rails_5_X-prev-job
         - rails_5_0-prev-job:
             requires:
-              - rails_5_1-prev-job
+              - rails_5_X-prev-job
