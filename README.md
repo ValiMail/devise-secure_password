@@ -178,9 +178,6 @@ prompt> bundle exec rake db:migrate
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can
 also run `bin/console` for an interactive prompt that will allow you to experiment.
 
->NOTE: The `bin/setup` command will install a git pre-commit hook. It is __absolutely critical__ that you install this
-hook. See [Git hooks installation](#git-hooks) to install the hook manually.
-
 ### Local installation
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the
@@ -188,20 +185,6 @@ version number in `version.rb`, and then run `bundle exec rake release`, which w
 push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 >WARNING: These instructions need to be vetted. Refer to `Running Tests` below for the current testing workflow.
-
-<a name="git-hooks"></a>
-
-### Git hooks intallation
-
-Development of the __Devise Secure Password Extension__ relies on a continuous integration environment provided by
-[circleci](https://circleci.com/). To enable caching of build resources, checksums are calculated from a lock file. To
-enable this functionality a [git pre-commit hook](https://git-scm.com/docs/githooks) must be enabled in your local repo:
-
-```shell
-prompt> git config core.hooksPath .githooks
-```
-
-With the hook in place, each time you make a commit additional `Gemfile.lock.ci` files will be generated when necessary.
 
 <a name="running-tests"></a>
 
