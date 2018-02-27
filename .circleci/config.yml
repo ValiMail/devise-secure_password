@@ -12,8 +12,8 @@ aliases:
   - &step_restore_root_cache
     restore_cache:
       keys:
-      - valimail-secure-password-gems-{{ checksum "Gemfile" }}
-      - valimail-secure-password-gems-
+      - valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
+      - valimail-secure-password-gems
 
   # regardless of target, generate a predictable gemfile for a cache checksum
   - &step_generate_cache_app-gemfile
@@ -25,8 +25,9 @@ aliases:
   - &step_restore_cache_app-gems-rails
     restore_cache:
       keys:
-        - valimail-secure-password-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
-        - valimail-secure-password-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}
+        - valimail-secure-password-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
+        - valimail-secure-password-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}
+        - valimail-secure-password-app-gems
 
   - &step_install_root_dependencies
     run:
@@ -38,13 +39,13 @@ aliases:
     save_cache:
       paths:
         - ./vendor/bundle
-      key: valimail-secure-password-rails-app-gems-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
+      key: valimail-secure-password-rails-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
 
   - &step_save_root_cache
     save_cache:
       paths:
         - ./vendor/bundle
-      key: valimail-secure-password-gems-{{ checksum "Gemfile" }}
+      key: valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
 
   - &step_make_test_output_directory
     run:
