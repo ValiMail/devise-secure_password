@@ -1,7 +1,8 @@
 #
 # Dockerfile for devise-secure_password
 #
-# prompt> docker run -it secure-password-dev
+# prompt> docker build -t secure-password-dev .
+# prompt> docker run -it secure-password-dev /bin/bash
 # prompt> pushd . && cd spec/rails-app-X_y_z
 # prompt> gem install bundler && RAILS_TARGET=X.y.z bundle install --jobs 20 --retry 5
 # prompt> RAILS_ENV='test' bundle exec rake db:migrate

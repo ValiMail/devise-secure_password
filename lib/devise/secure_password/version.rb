@@ -1,5 +1,5 @@
 module Devise
   module SecurePassword
-    VERSION = '0.9.4'.freeze
+    VERSION = '1.0.0'.freeze
   end
 end

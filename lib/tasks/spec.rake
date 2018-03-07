@@ -25,6 +25,10 @@ def directory_for_target(target)
   File.join(SPEC_ROOT_DIR, "rails-app-#{target.tr('.', '_')}")
 end
 
+def gemfile_for_target(target)
+  File.join("gemfiles/rails-#{target.tr('.', '_')}.gemfile")
+end
+
 def gemlock_purge_root
   Dir.glob("#{SPEC_ROOT_DIR}/../Gemfile.lock").each { |f| FileUtils.rm(f) }
 end
@@ -38,13 +42,12 @@ def available_targets_message
 
     Available Rails targets: #{targets.join(', ')}
 
-    Specify a target on the command line:
+    Reconfigure and test for a specific target:
 
-      prompt> RAILS_TARGET=#{targets.first} bundle exec rake test:spec
+      prompt> BUNDLE_GEMFILE=#{gemfile_for_target targets.first} bundle exec rake
 
-    The most-recent version number is automatically selected as the default
-    target and does not need to be specified on the command line or declared
-    as an environment variable.
+    The most-recent target is automatically selected as the default and does not
+    need to be specified on the command line.
 
   MESSAGE
 end

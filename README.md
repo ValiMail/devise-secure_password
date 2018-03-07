@@ -173,104 +173,48 @@ And then:
 prompt> bundle exec rake db:migrate
 ```
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can
-also run `bin/console` for an interactive prompt that will allow you to experiment.
-
->NOTE: The `bin/setup` command will install a git pre-commit hook. It is __absolutely critical__ that you install this
-hook. See [Git hooks installation](#git-hooks) to install the hook manually.
-
-### Local installation
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the
-version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version,
-push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
->WARNING: These instructions need to be vetted. Refer to `Running Tests` below for the current testing workflow.
-
-<a name="git-hooks"></a>
-
-### Git hooks intallation
-
-Development of the __Devise Secure Password Extension__ relies on a continuous integration environment provided by
-[circleci](https://circleci.com/). To enable caching of build resources, checksums are calculated from a lock file. To
-enable this functionality a [git pre-commit hook](https://git-scm.com/docs/githooks) must be enabled in your local repo:
-
-```shell
-prompt> git config core.hooksPath .githooks
-```
-
-With the hook in place, each time you make a commit additional `Gemfile.lock.ci` files will be generated when necessary.
-
 <a name="running-tests"></a>
 
 ## Running Tests
 
 This document assumes that you already have a [functioning ruby install](https://rvm.io/).
 
-### Selecting a Rails target
+### Default Rails target
 
 The __Devise Secure Password Extension__ provides compatibility for officially supported stable releases of Ruby on
-Rails.
-
-Install or update the [bundler](http://bundler.io/) along with a few basic dependencies:
+Rails. To configure and test the default target (the most-recent supported Rails release):
 
 ```bash
-prompt> gem install flay ruby2ruby rubocop rspec
+prompt> bundle
+prompt> bundle exec rake
 ```
 
-To determine the Ruby on Rails versions supported by this release, run the following command:
+### Selecting an alternate Rails target
+
+To determine the Ruby on Rails versions supported by this release, run the following commands:
 
 ```bash
+prompt> gem install flay ruby2ruby rubucop rspec
 prompt> rake test:spec:targets
 
 Available Rails targets: 5.0.6, 5.1.4
-
-Specify a target on the command line:
-
-  prompt> RAILS_TARGET=5.0.6 bundle exec rake test:spec
 ```
 
->NOTE: The most-recent version number is automatically selected as the default target. If you want to select the default
-target you can skip declaring the `RAILS_TARGET` environment variable.
-
-Prepare the test dummy rails-app:
+Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> cd spec/rails-app-5_0_6
-prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
-prompt> RAILS_ENV=test bundle exec rake db:migrate
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle exec rake
 ```
 
-Change to the project root, install additional dependencies and then run the tests:
-
-```bash
-prompt> cd ../../
-prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path vendor/bundle
-prompt> RAILS_TARGET=5.0.6 bundle exec rake test:spec
-```
-
-### Resetting the build
-
-You will need to reset the build if you have already run a `bundle install` and then wish to switch to a different
-configuration. For instance, if the previous build tested 5.1.4 and now you want to test 5.0.6:
-
-```bash
-prompt> rake test:spec:reset
-prompt> cd spec/rails-app-5_0_6
-prompt> gem install bundler && RAILS_TARGET=5.0.6 bundle install --jobs=4 --retry=3 --path ../../vendor/bundle
-...
-```
-
-After the reset command you follow the same instructions as detailed in the previous section.
+The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.
 
 ### Testing with code coverage (SimpleCov)
 
-SimpleCov tests are enabled by defining the `COVERAGE` environment variable before running tests:
+SimpleCov tests are enabled by defining the `test:spec:coverage` rake task:
 
 ```bash
-prompt> COVERAGE=1 bundle exec rake test:spec
+prompt> bundle exec rake test:spec:coverage
 ```
 
 A brief summary will be output at the end of the run but a more extensive eport will be saved in the `coverage`
@@ -339,6 +283,16 @@ prompt> docker run -it --rm secure-password-dev /bin/bash
 The above `docker run` command will start the container, connect you to the command line within the project home
 directory where you can issue the tests as documented in the [Running Tests](#running-tests) section above. When you exit
 the shell, the container will be removed.
+
+### Running tests in a Docker container
+
+The Docker container is derived from the latest [circleci/ruby](https://hub.docker.com/r/circleci/ruby/) image. It is
+critical that you update the bundler inside of the Docker image as the `circleci` user (i.e. the default user) before
+initiating any development work including tests.
+
+```bash
+prompt> gem update bundler
+```
 
 ## Contributing
 
