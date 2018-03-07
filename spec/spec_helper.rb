@@ -8,7 +8,7 @@ if ENV['COVERAGE'] && Gem::Specification.find_all_by_name('simplecov').any?
   require 'simplecov'
   require 'simplecov-console'
   SimpleCov.start
-  root_dir = File.expand_path('../../', __FILE__)
+  root_dir = File.expand_path('..', __dir__)
   SimpleCov.coverage_dir(File.join(root_dir, 'coverage'))
   SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
     [
