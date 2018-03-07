@@ -6,7 +6,7 @@ module Devise
       class InstallGenerator < Rails::Generators::Base
         LOCALES = %w(en).freeze
 
-        source_root File.expand_path('../../templates', __FILE__)
+        source_root File.expand_path('../templates', __dir__)
 
         desc 'Creates a Devise Secure Password extension initializer and copies locale files to your application.'
 
