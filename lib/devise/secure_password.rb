@@ -15,7 +15,7 @@ module Devise
   @password_required_uppercase_count = 1
   @password_required_lowercase_count = 1
   @password_required_number_count = 1
-  @password_required_special_count = 1
+  @password_required_special_character_count = 1
 
   # password_frequent_reuse_prevention configuration parameters
   @password_previously_used_count = 24
@@ -30,7 +30,7 @@ module Devise
     attr_accessor :password_required_uppercase_count
     attr_accessor :password_required_lowercase_count
     attr_accessor :password_required_number_count
-    attr_accessor :password_required_special_count
+    attr_accessor :password_required_special_character_count
     attr_accessor :password_previously_used_count
     attr_accessor :password_minimum_age
     attr_accessor :password_maximum_age

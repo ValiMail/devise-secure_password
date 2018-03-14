@@ -93,7 +93,7 @@ module Devise
           password_required_uppercase_count
           password_required_lowercase_count
           password_required_number_count
-          password_required_special_count
+          password_required_special_character_count
         )
         ::Devise::Models.config(self, *config_params)
 
@@ -114,7 +114,7 @@ module Devise
                 max: LENGTH_MAX
               },
               special: {
-                min: password_required_special_count,
+                min: password_required_special_character_count,
                 max: LENGTH_MAX
               },
               unknown: {
