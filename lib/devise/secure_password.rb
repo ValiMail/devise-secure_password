@@ -12,19 +12,19 @@ require 'devise/secure_password/models/password_requires_regular_updates'
 
 module Devise
   # password_content_enforcement configuration parameters
-  @password_required_uppercase_count = 1
-  @password_required_lowercase_count = 1
-  @password_required_number_count = 1
-  @password_required_special_character_count = 1
+  @password_required_uppercase_count = 0
+  @password_required_lowercase_count = 0
+  @password_required_number_count = 0
+  @password_required_special_character_count = 0
 
   # password_frequent_reuse_prevention configuration parameters
-  @password_previously_used_count = 24
+  @password_previously_used_count = 1
 
   # password_frequent_change_prevention configuration parameters
-  @password_minimum_age = 1.day
+  @password_minimum_age = 0.day
 
   # password_regular_update_enforcement configuration parameters
-  @password_maximum_age = 60.days
+  @password_maximum_age = 365.days
 
   class << self
     attr_accessor :password_required_uppercase_count

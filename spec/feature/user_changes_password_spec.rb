@@ -10,6 +10,14 @@ RSpec.describe 'User changes password', type: :feature do
     )
   end
 
+  before do
+    Devise.setup { |config| config.password_minimum_age = 1.day }
+  end
+
+  after do
+    Devise.setup { |config| config.password_minimum_age = 0.day }
+  end
+
   context 'with an invalid password', js: true do
     let(:bad_password) { 'a' * 12 }
     before do

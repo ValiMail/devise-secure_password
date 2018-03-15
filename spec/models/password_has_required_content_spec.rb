@@ -1,6 +1,24 @@
 require 'spec_helper'
 
 RSpec.describe Devise::Models::PasswordHasRequiredContent, type: :model do
+  before do
+    Devise.setup do |config|
+      config.password_required_uppercase_count = 1
+      config.password_required_lowercase_count = 1
+      config.password_required_number_count = 1
+      config.password_required_special_character_count = 1
+    end
+  end
+
+  after do
+    Devise.setup do |config|
+      config.password_required_uppercase_count = 0
+      config.password_required_lowercase_count = 0
+      config.password_required_number_count = 0
+      config.password_required_special_character_count = 0
+    end
+  end
+
   describe 'validations' do
     let(:user) { Isolated::UserContent.new(email: 'fred@flintstone.com', password: 'Bubb1234@#$!', password_confirmation: 'Bubb1234@#$!') }
     subject { user }

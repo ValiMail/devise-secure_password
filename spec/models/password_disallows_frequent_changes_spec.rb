@@ -30,6 +30,14 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
   end
 
   describe 'validations' do
+    before do
+      Devise.setup { |config| config.password_minimum_age = 1.day }
+    end
+
+    after do
+      Devise.setup { |config| config.password_minimum_age = 0.day }
+    end
+
     subject { user }
 
     context 'when password has been changed recently' do
@@ -65,6 +73,14 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
 
   describe '#password_recent?' do
     subject { user }
+
+    before do
+      Devise.setup { |config| config.password_minimum_age = 1.day }
+    end
+
+    after do
+      Devise.setup { |config| config.password_minimum_age = 0.day }
+    end
 
     it { is_expected.to respond_to(:password_recent?) }
 

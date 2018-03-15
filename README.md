@@ -79,37 +79,37 @@ Devise.setup do |config|
   # minimum and maximum length refer to the Devise config.password_length
   # standard configuration parameter.
 
-  # Passwords consist of at least one uppercase letter (latin A-Z):
-  # config.password_required_uppercase_count = 1
+  # The number of uppercase letters (latin A-Z) required in a password:
+  # config.password_required_uppercase_count = 0
 
-  # Passwords consist of at least one lowercase characters (latin a-z):
-  # config.password_required_lowercase_count = 1
+  # The number of lowercase letters (latin A-Z) required in a password:
+  # config.password_required_lowercase_count = 0
 
-  # Passwords consist of at least one number (0-9):
-  # config.password_required_number_count = 1
+  # The number of numbers (0-9) required in a password:
+  # config.password_required_number_count = 0
 
-  # Passwords consist of at least one special character (!@#$%^&*()_+-=[]{}|'):
-  # config.password_required_special_character_count = 1
+  # The number of special characters (!@#$%^&*()_+-=[]{}|') required in a password:
+  # config.password_required_special_character_count = 0
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_disallows_frequent_reuse
   #
-  # Passwords cannot be reused. A user's last 24 password hashes are saved:
-  # config.password_previously_used_count = 24
+  # The number of previously used passwords that can not be reused:
+  # config.password_previously_used_count = 1
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_disallows_frequent_changes
   #     *Requires* password_disallows_frequent_reuse
   #
-  # Passwords cannot be changed more frequently than once per day:
-  # config.password_minimum_age = 1.day
+  # The minimum time that must pass between password changes:
+  # config.password_minimum_age = 0.days
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_requires_regular_updates
   #     *Requires* password_disallows_frequent_reuse
   #
-  # Passwords must be changed every 60 days:
-  # config.password_maximum_age = 60.days
+  # The maximum allowed age of a password:
+  # config.password_maximum_age = 365.days
 end
 ```
 
