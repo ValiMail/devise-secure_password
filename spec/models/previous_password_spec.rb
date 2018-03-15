@@ -10,6 +10,14 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
     )
   end
 
+  before do
+    Devise.setup { |config| config.password_previously_used_count = 24 }
+  end
+
+  after do
+    Devise.setup { |config| config.password_previously_used_count = 1 }
+  end
+
   describe 'associations' do
     it { is_expected.to belong_to(:user) }
   end
