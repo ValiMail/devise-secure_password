@@ -35,7 +35,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
     end
 
     after do
-      Devise.setup { |config| config.password_minimum_age = 0.day }
+      Devise.setup { |config| config.password_minimum_age = 0.days }
     end
 
     subject { user }
@@ -79,7 +79,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
     end
 
     after do
-      Devise.setup { |config| config.password_minimum_age = 0.day }
+      Devise.setup { |config| config.password_minimum_age = 0.days }
     end
 
     it { is_expected.to respond_to(:password_recent?) }

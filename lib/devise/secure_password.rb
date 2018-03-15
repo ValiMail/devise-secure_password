@@ -21,7 +21,7 @@ module Devise
   @password_previously_used_count = 1
 
   # password_frequent_change_prevention configuration parameters
-  @password_minimum_age = 0.day
+  @password_minimum_age = 0.days
 
   # password_regular_update_enforcement configuration parameters
   @password_maximum_age = 365.days

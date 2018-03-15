@@ -15,7 +15,7 @@ RSpec.describe 'User changes password', type: :feature do
   end
 
   after do
-    Devise.setup { |config| config.password_minimum_age = 0.day }
+    Devise.setup { |config| config.password_minimum_age = 0.days }
   end
 
   context 'with an invalid password', js: true do
