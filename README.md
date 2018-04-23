@@ -147,7 +147,8 @@ The following database migration needs to be applied:
 prompt> rails generate migration create_previous_passwords salt:string encrypted_password:string user:references
 ```
 
-Edit the resulting file to disallow null values for the hash and to add indexes for both hash and user_id fields:
+Edit the resulting file to disallow null values for the hash,add indexes for both hash and user_id fields, and to also
+add the timestamp (created_at, updated_at) fields:
 
 ```ruby
 class CreatePreviousPasswords < ActiveRecord::Migration[5.1]
