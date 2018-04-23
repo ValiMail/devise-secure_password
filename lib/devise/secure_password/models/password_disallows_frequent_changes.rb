@@ -7,7 +7,7 @@ module Devise
 
       included do
         include ActionView::Helpers::DateHelper
-        validate :validate_password_frequent_change
+        validate :validate_password_frequent_change, if: :password_required?
 
         set_callback(:initialize, :before, :before_resource_initialized)
         set_callback(:initialize, :after, :after_resource_initialized)

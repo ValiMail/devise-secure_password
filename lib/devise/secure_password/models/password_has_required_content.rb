@@ -8,8 +8,8 @@ module Devise
       LENGTH_MAX = 255
 
       included do
-        validate :validate_password_content
-        validate :validate_password_confirmation_content
+        validate :validate_password_content, if: :password_required?
+        validate :validate_password_confirmation_content, if: :password_required?
       end
 
       def validate_password_content
