@@ -194,7 +194,7 @@ prompt> bundle exec rake
 To determine the Ruby on Rails versions supported by this release, run the following commands:
 
 ```bash
-prompt> gem install flay ruby2ruby rubucop rspec
+prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
 Available Rails targets: 5.0.6, 5.1.4
