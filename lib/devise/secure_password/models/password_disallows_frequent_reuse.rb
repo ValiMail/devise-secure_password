@@ -12,7 +12,7 @@ module Devise
                  class_name: 'Devise::Models::PreviousPassword',
                  foreign_key: 'user_id',
                  dependent: :destroy
-        validate :validate_password_frequent_reuse
+        validate :validate_password_frequent_reuse, if: :password_required?
 
         set_callback(:save, :before, :before_resource_saved)
         set_callback(:save, :after, :after_resource_saved, if: :dirty_password?)
@@ -53,6 +53,7 @@ module Devise
       end
 
       def dirty_password?
+        return false unless password_required?
         if Rails.version > '5.1'
           saved_change_to_encrypted_password?
         else
