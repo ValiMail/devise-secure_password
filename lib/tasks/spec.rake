@@ -18,7 +18,7 @@ def targets
 end
 
 def default_target
-  targets.sort { |a, b| a.tr('.', '') <=> b.tr('.', '') }.last
+  targets.max { |a, b| a.tr('.', '') <=> b.tr('.', '') }
 end
 
 def directory_for_target(target)
