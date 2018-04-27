@@ -42,11 +42,14 @@ module Devise
             warden.session(scope_name)[:secure_last_action] = action_name
           end
 
+          # Prevent infinite loops and allow specified controllers to bypass.
+          # @NOTE: The ability to extend this list may be made public, in the
+          # future if that functionality is needed.
           def skip_current_devise_controller?
             exclusion_list = [
               'Devise::SessionsController'
             ]
-            exclusion_list.select { |e| e == "#{self.class.name}#" + action_name || e == self.class.name.to_s }.empty?
+            !(exclusion_list.include?("#{self.class.name}#" + action_name) || (exclusion_list & self.class.ancestors.map(&:to_s)).any?)
           end
 
           def error_string_for_password_expired
