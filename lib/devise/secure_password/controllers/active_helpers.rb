@@ -18,13 +18,18 @@ module Devise
           warden.authenticated? && warden.session['secure_password_last_controller'] == 'Devise::SessionsController'
         end
 
+        # Prevent infinite loops and allow specified controllers to bypass.
+        # @NOTE: The ability to extend this list may be made public, in the
+        # future if that functionality is needed.
         def skip_current_controller?
           exclusion_list = [
             'Devise::SessionsController',
             'Devise::PasswordsWithPolicyController#edit',
-            'Devise::PasswordsWithPolicyController#update'
+            'Devise::PasswordsWithPolicyController#update',
+            'DeviseInvitable::RegistrationsController#edit',
+            'DeviseInvitable::RegistrationsController#update'
           ]
-          exclusion_list.select { |e| e == "#{self.class.name}#" + action_name || e == self.class.name.to_s }.empty?
+          !(exclusion_list.include?("#{self.class.name}#" + action_name) || (exclusion_list & self.class.ancestors.map(&:to_s)).any?)
         end
 
         def error_string_for_password_expired

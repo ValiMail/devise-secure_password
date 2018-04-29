@@ -45,7 +45,7 @@ RSpec.describe 'User changes password', type: :feature do
     before do
       user.save
       last_password = user.previous_passwords.unscoped.last
-      last_password.created_at = Time.zone.now - 2.days
+      last_password.created_at = last_password.updated_at = Time.zone.now - 2.days
       last_password.save
       login_as(user, scope: :user)
       visit '/users/change_password/edit'
