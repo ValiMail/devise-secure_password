@@ -25,7 +25,9 @@ module Devise
           exclusion_list = [
             'Devise::SessionsController',
             'Devise::PasswordsWithPolicyController#edit',
-            'Devise::PasswordsWithPolicyController#update'
+            'Devise::PasswordsWithPolicyController#update',
+            'DeviseInvitable::RegistrationsController#edit',
+            'DeviseInvitable::RegistrationsController#update'
           ]
           !(exclusion_list.include?("#{self.class.name}#" + action_name) || (exclusion_list & self.class.ancestors.map(&:to_s)).any?)
         end
