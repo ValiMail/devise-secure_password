@@ -9,11 +9,13 @@ module Devise
       validates :encrypted_password, presence: true
 
       def fresh?(minimum_age_duration, now = ::Time.zone.now)
-        now <= (created_at + minimum_age_duration)
+        # @NOTE fix for history = 1, use updated_at
+        now <= (updated_at + minimum_age_duration)
       end
 
       def stale?(maximum_age_duration, now = ::Time.zone.now)
-        now > (created_at + maximum_age_duration)
+        # @NOTE fix for history = 1, use updated_at
+        now > (updated_at + maximum_age_duration)
       end
     end
   end
