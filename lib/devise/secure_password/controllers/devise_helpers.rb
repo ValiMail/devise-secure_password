@@ -10,9 +10,9 @@ module Devise
 
           protected
 
-          # Override the devise require_no_authentication before callback so users
-          # have to prevent authenticated users with expired passwords from
-          # escaping to other pages without first updating their passwords.
+          # Override the devise require_no_authentication before callback to
+          # prevent authenticated users with expired passwords from escaping to
+          # other pages without first updating their passwords.
           def require_no_authentication
             return if check_password_expired_and_redirect!
 
