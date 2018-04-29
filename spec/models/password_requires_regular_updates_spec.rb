@@ -41,7 +41,7 @@ RSpec.describe Devise::Models::PasswordRequiresRegularUpdates, type: :model do
         user.save
         # reset its previous_password record to one day past maximum
         last_password = user.previous_passwords.unscoped.last
-        last_password.created_at = Time.zone.now - Isolated::UserRegularUpdates.password_maximum_age
+        last_password.created_at = last_password.updated_at = Time.zone.now - Isolated::UserRegularUpdates.password_maximum_age
         last_password.save
       end
 

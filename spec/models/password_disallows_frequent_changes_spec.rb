@@ -62,7 +62,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
         user.save
         # reset its previous_password record to one day before
         last_password = user.previous_passwords.unscoped.last
-        last_password.created_at = Time.zone.now - Isolated::UserFrequentChanges.password_minimum_age
+        last_password.created_at = last_password.updated_at = Time.zone.now - Isolated::UserFrequentChanges.password_minimum_age
         last_password.save
         # bypass frequent_reuse validator by changing password
         user.password = user.password_confirmation = user.password + 'Z'
@@ -89,7 +89,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
         user.save
         # reset its previous_password record one day past minimum
         last_password = user.previous_passwords.unscoped.last
-        last_password.created_at = Time.zone.now - Isolated::UserFrequentChanges.password_minimum_age
+        last_password.created_at = last_password.updated_at = Time.zone.now - Isolated::UserFrequentChanges.password_minimum_age
         last_password.save
       end
 
