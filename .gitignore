@@ -52,6 +52,9 @@ Gemfile.lock
 .ruby-version
 .ruby-gemset
 
+# Ignore gemfiles/*.gemfile.lock files
+/gemfiles/*.gemfile.lock
+
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
 
