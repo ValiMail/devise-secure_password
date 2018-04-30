@@ -29,6 +29,6 @@ module RailsApp514
     config.generators.system_tests = nil
 
     # Configure SQLite3Adapter to represent booleans as integers
-    config.active_record.sqlite3.represent_boolean_as_integer = true
+    config.active_record.sqlite3&.represent_boolean_as_integer = true
   end
 end
