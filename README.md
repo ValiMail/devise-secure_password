@@ -41,7 +41,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'devise',                 '~> 4.2'
-gem 'devise-secure_password', '~> 1.0.0'
+gem 'devise-secure_password', '~> 1.0.5'
 ```
 
 And then execute:
@@ -80,38 +80,43 @@ Devise.setup do |config|
   # standard configuration parameter.
 
   # The number of uppercase letters (latin A-Z) required in a password:
-  # config.password_required_uppercase_count = 0
+  # config.password_required_uppercase_count = 1
 
   # The number of lowercase letters (latin A-Z) required in a password:
-  # config.password_required_lowercase_count = 0
+  # config.password_required_lowercase_count = 1
 
   # The number of numbers (0-9) required in a password:
-  # config.password_required_number_count = 0
+  # config.password_required_number_count = 1
 
   # The number of special characters (!@#$%^&*()_+-=[]{}|') required in a password:
-  # config.password_required_special_character_count = 0
+  # config.password_required_special_character_count = 1
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_disallows_frequent_reuse
   #
   # The number of previously used passwords that can not be reused:
-  # config.password_previously_used_count = 1
+  # config.password_previously_used_count = 8
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_disallows_frequent_changes
   #     *Requires* password_disallows_frequent_reuse
   #
   # The minimum time that must pass between password changes:
-  # config.password_minimum_age = 0.days
+  # config.password_minimum_age = 1.days
 
   # ==> Configuration for the Devise Secure Password extension
   #     Module: password_requires_regular_updates
   #     *Requires* password_disallows_frequent_reuse
   #
   # The maximum allowed age of a password:
-  # config.password_maximum_age = 365.days
+  # config.password_maximum_age = 180.days
 end
 ```
+
+>NOTE: Password policy defaults have been selected as a middle-of-the-road combination based on published
+recommendations by [Microsoft](https://technet.microsoft.com/en-us/library/ff741764.aspx) and
+[Carnegie Mellon University](https://www.cmu.edu/iso/governance/guidelines/password-management.html). It is up to
+__YOU__ to verify the default settings and make adjustments where necessary.
 
 Enable the __Devise Secure Password Extension__ enforcement in your Devise model(s):
 
@@ -172,6 +177,31 @@ And then:
 
 ```shell
 prompt> bundle exec rake db:migrate
+```
+
+### Displaying errors
+
+You will likely want to display errors, produced as a result of secure password enforcement violations, to your users.
+Errors are available via the `User.errors` array and via the `devise_error_messages!` method. An example usage follows
+and is taken from the default password `edit.html.erb` page:
+
+```erb
+<%= form_for(resource, as: resource_name, url: [resource_name, :password_with_policy], html: { method: :put }) do |f| %>
+  <% if resource.errors.full_messages.count.positive? %>
+    <%= devise_error_messages! %>
+  <% end %>
+
+  <p><%= f.label :current_password, 'Current password' %><br />
+  <%= f.password_field :current_password %></p>
+
+  <p><%= f.label :password, 'New password' %><br />
+  <%= f.password_field :password %></p>
+
+  <p><%= f.label :password_confirmation, 'Password confirmation' %><br />
+  <%= f.password_field :password_confirmation %></p>
+
+  <p><%= f.submit 'Update' %></p>
+<% end %>
 ```
 
 <a name="running-tests"></a>
