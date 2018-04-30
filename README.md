@@ -174,6 +174,31 @@ And then:
 prompt> bundle exec rake db:migrate
 ```
 
+### Displaying errors
+
+You will likely want to display errors, produced as a result of secure password enforcement violations, to your users.
+Errors are available via the `User.errors` array and via the `devise_error_messages!` method. An example usage follows
+and is taken from the default password `edit.html.erb` page:
+
+```erb
+<%= form_for(resource, as: resource_name, url: [resource_name, :password_with_policy], html: { method: :put }) do |f| %>
+  <% if resource.errors.full_messages.count.positive? %>
+    <%= devise_error_messages! %>
+  <% end %>
+
+  <p><%= f.label :current_password, 'Current password' %><br />
+  <%= f.password_field :current_password %></p>
+
+  <p><%= f.label :password, 'New password' %><br />
+  <%= f.password_field :password %></p>
+
+  <p><%= f.label :password_confirmation, 'Password confirmation' %><br />
+  <%= f.password_field :password_confirmation %></p>
+
+  <p><%= f.submit 'Update' %></p>
+<% end %>
+```
+
 <a name="running-tests"></a>
 
 ## Running Tests
