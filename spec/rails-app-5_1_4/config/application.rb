@@ -27,5 +27,8 @@ module RailsApp514
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Configure SQLite3Adapter to represent booleans as integers
+    config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 end
