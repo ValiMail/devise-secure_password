@@ -14,7 +14,7 @@ RSpec.describe 'User logs in', type: :feature do
     before do
       user.save
       last_password = user.previous_passwords.unscoped.last
-      last_password.created_at = last_password.updated_at = Time.zone.now - User.password_maximum_age
+      last_password.created_at = Time.zone.now - User.password_maximum_age
       last_password.save
       visit '/users/sign_in'
     end
