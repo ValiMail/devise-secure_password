@@ -99,7 +99,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
     end
 
     context 'when previous passwords exist' do
-      let(:dates) { (max_count-1).downto(0).to_a.map { |c| c.days.ago } }
+      let(:dates) { (max_count - 1).downto(0).to_a.map { |c| c.days.ago } }
       @last_password = nil
 
       before do
