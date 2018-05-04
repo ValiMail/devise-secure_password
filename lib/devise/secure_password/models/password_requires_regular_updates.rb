@@ -13,7 +13,7 @@ module Devise
       end
 
       def password_expired?
-        last_password = previous_passwords.unscoped.last
+        last_password = previous_passwords.first
         inconsistent_password?(last_password) || last_password.stale?(self.class.password_maximum_age)
       end
 

@@ -65,7 +65,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   describe '#fresh?' do
     it { is_expected.to respond_to(:fresh?) }
 
-    let(:previous_password) { user.previous_passwords.unscoped.last }
+    let(:previous_password) { user.previous_passwords.first }
 
     before { user.save }
 
@@ -86,7 +86,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   describe '#stale?' do
     it { is_expected.to respond_to(:stale?) }
 
-    let(:previous_password) { user.previous_passwords.unscoped.last }
+    let(:previous_password) { user.previous_passwords.first }
 
     before { user.save }
 

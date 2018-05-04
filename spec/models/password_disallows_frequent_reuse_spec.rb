@@ -27,7 +27,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       before do
         # create a previous_password
         user.save(validate: false)
-        last_password = user.previous_passwords.unscoped.last
+        last_password = user.previous_passwords.first
         last_password.created_at = Time.zone.now - 2.days
         last_password.save
         user.password = user.password_confirmation = user.password
@@ -98,6 +98,42 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       end
     end
 
+    context 'when previous passwords exist for multiple users' do
+      let(:other_user) { Isolated::UserFrequentReuse.new(email: 'wilma@flintstone.com') }
+
+      let(:dates) { (max_count - 1).downto(0).to_a.map { |c| c.days.ago } }
+      @last_password = nil
+
+      before do
+        # add passwords for the target user
+        passwords[0..max_count - 1].each_with_index do |password, index|
+          user.password = user.password_confirmation = password
+          user.save!
+          previous_password = user.previous_passwords.first
+          previous_password.created_at = previous_password.updated_at = dates[index]
+          previous_password.save!
+          @last_password = previous_password
+        end
+        # then add passwords for the other_user, these will appear in the db
+        # most-recently based on id, which is what default_scope currently uses
+        # to sort results.
+        passwords[0..max_count - 1].each_with_index do |password, index|
+          other_user.password = other_user.password_confirmation = password
+          other_user.save!
+          previous_password = other_user.previous_passwords.first
+          previous_password.created_at = previous_password.updated_at = dates[index]
+          previous_password.save!
+        end
+      end
+
+      # NOTE: These tests are to prevent regression from an association scoping
+      # bug where password ages from one user were sometimes compared with those
+      # from another user.
+      it 'returns the most-recent password' do
+        expect(user.previous_passwords.first).to eq(@last_password)
+      end
+    end
+
     context 'when maximum number of passwords has been reached' do
       before do
         passwords[0..max_count].each do |password|
@@ -114,7 +150,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       end
 
       it 'preserves the oldest previous password (all old passwords are preserved)' do
-        oldest_password = user.previous_passwords.unscoped.first
+        oldest_password = user.previous_passwords.last
         user.password = user.password_confirmation = passwords.last + 'Z'
         user.save
         expect(user.previous_passwords.find_by(id: oldest_password.id)).not_to be_nil
