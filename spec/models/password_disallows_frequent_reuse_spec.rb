@@ -98,11 +98,14 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       end
     end
 
-    context 'when previous passwords exist' do
+    context 'when previous passwords exist for multiple users' do
+      let(:other_user) { Isolated::UserFrequentReuse.new(email: 'wilma@flintstone.com') }
+
       let(:dates) { (max_count - 1).downto(0).to_a.map { |c| c.days.ago } }
       @last_password = nil
 
       before do
+        # add passwords for the target user
         passwords[0..max_count - 1].each_with_index do |password, index|
           user.password = user.password_confirmation = password
           user.save!
@@ -111,8 +114,21 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
           previous_password.save!
           @last_password = previous_password
         end
+        # then add passwords for the other_user, these will appear in the db
+        # most-recently based on id, which is what default_scope currently uses
+        # to sort results.
+        passwords[0..max_count - 1].each_with_index do |password, index|
+          other_user.password = other_user.password_confirmation = password
+          other_user.save!
+          previous_password = other_user.previous_passwords.first
+          previous_password.created_at = previous_password.updated_at = dates[index]
+          previous_password.save!
+        end
       end
 
+      # NOTE: These tests are to prevent regression from an association scoping
+      # bug where password ages from one user were sometimes compared with those
+      # from another user.
       it 'returns the most-recent password' do
         expect(user.previous_passwords.first).to eq(@last_password)
       end
