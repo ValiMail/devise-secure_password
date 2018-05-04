@@ -1,5 +1,9 @@
 # Changelog: devise-secure_password
 
+## 1.0.6 / 2018-05-04
+
+* Fix scoping for previous passwords returned through associations.
+
 ## 1.0.5 / 2018-04-30
 
 * Update rails-app-5_1_4 config for SQLite3Adapter changes.
