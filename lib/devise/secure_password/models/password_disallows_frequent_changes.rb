@@ -26,7 +26,7 @@ module Devise
       end
 
       def password_recent?
-        last_password = previous_passwords.unscoped.last
+        last_password = previous_passwords.first
         last_password&.fresh?(self.class.password_minimum_age)
       end
 

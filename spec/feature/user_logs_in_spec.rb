@@ -13,7 +13,7 @@ RSpec.describe 'User logs in', type: :feature do
   context 'with a password older than password_maximum_age', js: true do
     before do
       user.save
-      last_password = user.previous_passwords.unscoped.last
+      last_password = user.previous_passwords.first
       last_password.created_at = Time.zone.now - User.password_maximum_age
       last_password.save
       visit '/users/sign_in'
