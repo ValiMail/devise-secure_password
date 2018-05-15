@@ -65,7 +65,7 @@ task default: 'spec'
 Rake::Task[:spec].clear_comments
 namespace :test do
   default_rails = default_target
-  desc 'Run RSpec tests (set Rails target with RAILS_TARGET=X.y.z)'
+  desc 'Run RSpec tests (set Rails target with RAILS_TARGET=X.y)'
   task :spec do
     ENV['RAILS_TARGET'] ||= default_rails
     Rake::Task[:spec].invoke

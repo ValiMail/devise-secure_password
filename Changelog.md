@@ -1,5 +1,8 @@
 # Changelog: devise-secure_password
 
+* Fix specs to use appropriate Rails version
+* Update configuration to not include patch version for Rails
+
 ## 1.0.6 / 2018-05-04
 
 * Fix scoping for previous passwords returned through associations.
