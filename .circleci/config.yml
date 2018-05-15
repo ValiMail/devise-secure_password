@@ -4,30 +4,27 @@
 #
 version: 2
 aliases:
+  - &rails_5_1_gemfile
+    gemfiles/rails-5_1_4.gemfile
+
+  - &rails_5_0_gemfile
+    gemfiles/rails-5_0_6.gemfile
+
+  - &ruby_2_5_image
+    circleci/ruby:2.5.1-browsers
+
+  - &ruby_2_4_image
+    circleci/ruby:2.4.4-browsers
+
   - &defaults
     working_directory: ~/repo
     docker:
-      - image: circleci/ruby:2.5.0-browsers
+      - image: *ruby_2_5_image
 
   - &step_restore_root_cache
     restore_cache:
       keys:
       - valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
-      - valimail-secure-password-gems
-
-  # regardless of target, generate a predictable gemfile for a cache checksum
-  - &step_generate_cache_app-gemfile
-    run:
-      name: generate app-gems-cache checksum
-      command: |
-        cp "gemfiles/${TARGET_GEMFILE_NAME}.gemfile" "gemfiles/rails-target.gemfile"
-
-  - &step_restore_cache_app-gems-rails
-    restore_cache:
-      keys:
-        - valimail-secure-password-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
-        - valimail-secure-password-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}
-        - valimail-secure-password-app-gems
 
   - &step_install_root_dependencies
     run:
@@ -96,19 +93,15 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  rails_5_X-job: &rails_5_X_job
-    <<: *defaults
-    environment:
-      BUNDLE_GEMFILE_PATH: gemfiles/rails-5_1_4.gemfile
-      TARGET_GEMFILE_NAME: rails-5_1_4
-    steps:
+  rails_5_X-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_2_5_image
+        environment:
+          BUNDLE_GEMFILE: *rails_5_1_gemfile
+    steps: &rails_steps
       - checkout
-      - *step_generate_cache_app-gemfile
-      - *step_restore_cache_app-gems-rails
-      - *step_restore_root_cache
       - *step_install_root_dependencies
-      - *step_save_cache_app-gems-rails
-      - *step_save_root_cache
       - *step_make_test_output_directory
       - *step_run_rspec_tests
       - *step_store_test_results
@@ -117,21 +110,29 @@ jobs:
 
   # build rails_5_X with previous version of ruby
   rails_5_X-prev-job:
-     <<: *rails_5_X_job
-     docker:
-         - image: circleci/ruby:2.4.3-browsers
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_2_5_image
+        environment:
+          BUNDLE_GEMFILE: *rails_5_0_gemfile
+    steps: *rails_steps
 
-  rails_5_0-job: &rails_5_0_job
-    <<: *rails_5_X_job
-    environment:
-      BUNDLE_GEMFILE_PATH: gemfiles/rails-5_0_6.gemfile
-      TARGET_GEMFILE_NAME: rails-5_0_6
+  rails_5_0-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_2_4_image
+        environment:
+          BUNDLE_GEMFILE: *rails_5_1_gemfile
+    steps: *rails_steps
 
   # build rails_5_0 with previous version of ruby
   rails_5_0-prev-job:
-    <<: *rails_5_0_job
+    working_directory: ~/repo
     docker:
-        - image: circleci/ruby:2.4.3-browsers
+      - image: *ruby_2_4_image
+        environment:
+          BUNDLE_GEMFILE: *rails_5_0_gemfile
+    steps: *rails_steps
 
 workflows:
     version: 2
