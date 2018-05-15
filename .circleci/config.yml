@@ -4,22 +4,22 @@
 #
 version: 2
 aliases:
-  - &rails_5_1_gemfile
-    gemfiles/rails-5_1_4.gemfile
+  - &current_rails_gemfile
+    gemfiles/rails-5_1.gemfile
 
-  - &rails_5_0_gemfile
-    gemfiles/rails-5_0_6.gemfile
+  - &previous_rails_gemfile
+    gemfiles/rails-5_0.gemfile
 
-  - &ruby_2_5_image
+  - &current_ruby_image
     circleci/ruby:2.5.1-browsers
 
-  - &ruby_2_4_image
+  - &previous_ruby_image
     circleci/ruby:2.4.4-browsers
 
   - &defaults
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_5_image
+      - image: *current_ruby_image
 
   - &step_restore_root_cache
     restore_cache:
@@ -93,12 +93,12 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  rails_5_X-job:
+  current_rails-current_ruby-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_5_image
+      - image: *current_ruby_image
         environment:
-          BUNDLE_GEMFILE: *rails_5_1_gemfile
+          BUNDLE_GEMFILE: *current_rails_gemfile
     steps: &rails_steps
       - checkout
       - *step_install_root_dependencies
@@ -109,45 +109,45 @@ jobs:
       - *step_store_coverage_artifacts
 
   # build rails_5_X with previous version of ruby
-  rails_5_X-prev-job:
+  current_rails-previous_ruby-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_5_image
+      - image: *previous_ruby_image
         environment:
-          BUNDLE_GEMFILE: *rails_5_0_gemfile
+          BUNDLE_GEMFILE: *current_rails_gemfile
     steps: *rails_steps
 
-  rails_5_0-job:
+  previous_rails-current_ruby-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_4_image
+      - image: *current_ruby_image
         environment:
-          BUNDLE_GEMFILE: *rails_5_1_gemfile
+          BUNDLE_GEMFILE: *previous_rails_gemfile
     steps: *rails_steps
 
   # build rails_5_0 with previous version of ruby
-  rails_5_0-prev-job:
+  previous_rails-previous_ruby-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_4_image
+      - image: *previous_ruby_image
         environment:
-          BUNDLE_GEMFILE: *rails_5_0_gemfile
+          BUNDLE_GEMFILE: *previous_rails_gemfile
     steps: *rails_steps
 
 workflows:
     version: 2
-    build-test:
+    build-test_current-ruby:
       jobs:
-        - rails_5_X-job
-        - rails_5_0-job:
+        - current_rails-current_ruby-job
+        - previous_rails-current_ruby-job:
             requires:
-              - rails_5_X-job # let primary job fetch all dependencies first
+              - current_rails-current_ruby-job # let primary job fetch all dependencies first
         - code-quality-job:
             requires:
-              - rails_5_X-job # let primary job fetch all dependencies first
-    build-test-prev:
+              - current_rails-current_ruby-job # let primary job fetch all dependencies first
+    build-test_previous-ruby:
       jobs:
-        - rails_5_X-prev-job
-        - rails_5_0-prev-job:
+        - current_rails-previous_ruby-job
+        - previous_rails-previous_ruby-job:
             requires:
-              - rails_5_X-prev-job
+              - current_rails-previous_ruby-job

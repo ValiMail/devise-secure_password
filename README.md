@@ -9,7 +9,7 @@ as well.
 
 ## Build Status
 
-| Service    | rails 5.1.4 |
+| Service    | rails 5.1 |
 |:-----------|:-----------:|
 | Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
 
@@ -228,7 +228,7 @@ To determine the Ruby on Rails versions supported by this release, run the follo
 prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
-Available Rails targets: 5.0.6, 5.1.4
+Available Rails targets: 5.0, 5.1
 ```
 
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
