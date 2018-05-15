@@ -26,18 +26,6 @@ aliases:
       keys:
       - valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
 
-  # regardless of target, generate a predictable gemfile for a cache checksum
-  - &step_generate_cache_app-gemfile
-    run:
-      name: generate app-gems-cache checksum
-      command: |
-        cp "gemfiles/${TARGET_GEMFILE_NAME}.gemfile" "gemfiles/rails-target.gemfile"
-
-  - &step_restore_cache_app-gems-rails
-    restore_cache:
-      keys:
-        - valimail-secure-password-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
-
   - &step_install_root_dependencies
     run:
       name: install root dependencies
