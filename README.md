@@ -234,8 +234,8 @@ Available Rails targets: 5.0, 5.1
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle exec rake
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle exec rake
 ```
 
 The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.

@@ -10,12 +10,12 @@ module Devise
 
         # Redirect to password change page if password needs to be changed.
         def pending_password_expired_redirect!
-          return unless skip_current_controller? && redirected_in_session? && warden.session && warden.session['secure_password_expired']
+          return unless skip_current_controller? && redirected_in_session? && warden.session&.[]('secure_password_expired')
           redirect_to edit_user_password_with_policy_url, alert: "#{error_string_for_password_expired}."
         end
 
         def redirected_in_session?
-          warden.authenticated? && warden.session['secure_password_last_controller'] == 'Devise::SessionsController'
+          warden.authenticated? && ['Devise::SessionsController', nil].include?(warden.session['secure_password_last_controller'])
         end
 
         # Prevent infinite loops and allow specified controllers to bypass.
@@ -27,7 +27,8 @@ module Devise
             'Devise::PasswordsWithPolicyController#edit',
             'Devise::PasswordsWithPolicyController#update',
             'DeviseInvitable::RegistrationsController#edit',
-            'DeviseInvitable::RegistrationsController#update'
+            'DeviseInvitable::RegistrationsController#update',
+            'Devise::DeviseAuthyController#POST_verify_authy'
           ]
           !(exclusion_list.include?("#{self.class.name}#" + action_name) || (exclusion_list & self.class.ancestors.map(&:to_s)).any?)
         end
