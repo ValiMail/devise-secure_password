@@ -38,8 +38,8 @@ module Devise
           end
 
           def save_controller_state
-            warden.session(scope_name)[:secure_last_controller] = self.class.name
-            warden.session(scope_name)[:secure_last_action] = action_name
+            warden.session(scope_name)[:secure_password_last_controller] = self.class.name
+            warden.session(scope_name)[:secure_password_last_action] = action_name
           end
 
           # Prevent infinite loops and allow specified controllers to bypass.
