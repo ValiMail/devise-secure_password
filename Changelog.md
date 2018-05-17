@@ -1,7 +1,12 @@
 # Changelog: devise-secure_password
 
-* Fix specs to use appropriate Rails version
-* Update configuration to not include patch version for Rails
+## 1.0.7 / 2018-05-17
+
+* Fix for expired password not tracked when authy is configured.
+* Fix controller state preservation.
+* Update README for dropped patch version references.
+* Fix specs to use appropriate Rails version.
+* Update configuration to not include patch version for Rails.
 
 ## 1.0.6 / 2018-05-04
 
