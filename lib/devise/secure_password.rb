@@ -38,15 +38,10 @@ module Devise
 
   module SecurePassword
     module Controllers
-      autoload :DeviseHelpers, 'devise/secure_password/controllers/devise_helpers'
       autoload :ActiveHelpers, 'devise/secure_password/controllers/active_helpers'
     end
 
     class Engine < ::Rails::Engine
-      ActiveSupport.on_load(:devise_controller) do
-        include ActionView::Helpers::DateHelper
-        include Devise::SecurePassword::Controllers::DeviseHelpers
-      end
       ActiveSupport.on_load(:action_controller) do
         include ActionView::Helpers::DateHelper
         include Devise::SecurePassword::Controllers::ActiveHelpers
