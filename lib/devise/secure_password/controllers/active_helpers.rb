@@ -4,9 +4,9 @@ module Devise
       module ActiveHelpers
         extend ActiveSupport::Concern
         def authenticate_secure_password_expired?
-          return if devise_controller?
-          return unless warden.authenticated?
-          return unless warden.session.present?
+          return false if devise_controller?
+          return false unless warden.authenticated?
+          return false unless warden.session.present?
           warden.session['secure_password_expired'] == true
         end
 
@@ -16,6 +16,7 @@ module Devise
         end
 
         def authenticate_secure_password_path
+          return unless warden.user
           scope = Devise::Mapping.find_scope!(warden.user)
           :"edit_#{scope}_password_with_policy"
         end
