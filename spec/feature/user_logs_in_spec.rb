@@ -52,7 +52,7 @@ RSpec.describe 'User logs in', type: :feature do
       end
     end
 
-    scenario 'attempts to access application without updating password', js: true do
+    scenario 'attempts to access application without updating password' do
       visit '/users/sign_in'
       sign_in_user
 
@@ -66,7 +66,7 @@ RSpec.describe 'User logs in', type: :feature do
       expect(page).to have_current_path('/users/change_password/edit')
     end
 
-    scenario 'accesses application after updating password', js: true do
+    scenario 'accesses application after updating password' do
       visit '/users/sign_in'
       sign_in_user
 

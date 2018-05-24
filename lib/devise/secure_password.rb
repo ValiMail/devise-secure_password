@@ -38,13 +38,13 @@ module Devise
 
   module SecurePassword
     module Controllers
-      autoload :ActiveHelpers, 'devise/secure_password/controllers/active_helpers'
+      autoload :Helpers, 'devise/secure_password/controllers/helpers'
     end
 
     class Engine < ::Rails::Engine
       ActiveSupport.on_load(:action_controller) do
         include ActionView::Helpers::DateHelper
-        include Devise::SecurePassword::Controllers::ActiveHelpers
+        include Devise::SecurePassword::Controllers::Helpers
       end
 
       # add exceptions to the inflector so it doesn't get tripped up by our concerns that end in an 's'
