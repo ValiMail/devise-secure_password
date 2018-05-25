@@ -1,7 +1,10 @@
 # Changelog: devise-secure_password
 
+## 1.0.7 / 2018-05-25
+
 * Fix specs to use appropriate Rails version
 * Update configuration to not include patch version for Rails
+* Manage expiration in session to remove incompatability with authentication extensions
 
 ## 1.0.6 / 2018-05-04
 
