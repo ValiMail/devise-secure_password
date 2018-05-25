@@ -5,7 +5,7 @@ module Devise
         extend ActiveSupport::Concern
 
         included do
-          before_action :check_secure_password_expiration_and_set_session_state
+          before_action :authenticate_secure_password!, unless: :devise_controller?
         end
 
         def authenticate_secure_password_expired?
@@ -34,15 +34,6 @@ module Devise
             'secure_password.password_requires_regular_updates.errors.messages.password_expired',
             timeframe: distance_of_time_in_words(warden.user.class.password_maximum_age)
           )
-        end
-
-        def check_secure_password_expiration_and_set_session_state
-          return unless warden.authenticated?
-          return if warden.session.blank?
-          return unless warden_secure_password_expired?
-
-          unset_warden_secure_password_expired!
-          set_devise_secure_password_expired!
         end
 
         def set_devise_secure_password_expired!
