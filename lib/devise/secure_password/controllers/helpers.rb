@@ -43,14 +43,6 @@ module Devise
         def unset_devise_secure_password_expired!
           session.delete(:devise_secure_password_expired)
         end
-
-        def unset_warden_secure_password_expired!
-          warden.session(devise_secure_password_scope).delete('secure_password_expired')
-        end
-
-        def warden_secure_password_expired?
-          warden.session(devise_secure_password_scope)['secure_password_expired'] == true
-        end
       end
     end
   end
