@@ -3,8 +3,6 @@ module Devise
     module PasswordRequiresRegularUpdates
       extend ActiveSupport::Concern
 
-      require 'devise/secure_password/hooks/password_requires_regular_updates'
-
       class ConfigurationError < RuntimeError; end
 
       included do

@@ -4,9 +4,7 @@ module Devise
 
     def edit
       self.resource = resource_class.new
-      if warden.session(scope_name)['secure_password_expired']
-        resource.errors.add(:base, "#{error_string_for_password_expired}.")
-      end
+      resource.errors.add(:base, "#{error_string_for_password_expired}.")
       render :edit
     end
 
@@ -44,7 +42,7 @@ module Devise
     end
 
     def prepare_for_redirect
-      warden.session(scope_name)[:secure_password_expired] = false
+      unset_devise_secure_password_expired!
       flash[:notice] = alert_string_for_password_updated
       bypass_sign_in resource, scope: scope_name
     end
