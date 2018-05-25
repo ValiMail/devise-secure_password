@@ -37,11 +37,15 @@ module Devise
         end
 
         def set_devise_secure_password_expired!
-          session[:devise_secure_password_expired] = true
+          session[:devise_secure_password_expired] = warden.user.password_expired?
         end
 
         def unset_devise_secure_password_expired!
           session.delete(:devise_secure_password_expired)
+        end
+
+        def warden_user_has_password_expiration?
+          warden.user && warden.user.respond_to?(:password_expired?)
         end
       end
     end

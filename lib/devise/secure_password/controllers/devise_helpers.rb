@@ -11,9 +11,7 @@ module Devise
 
           def sign_in(*args)
             devise_sign_in(*args).tap do |signed_in|
-              if warden.user && warden.user.respond_to?(:password_expired?)
-                session[:devise_secure_password_expired] = warden.user.password_expired?
-              end
+              set_devise_secure_password_expired! if warden_user_has_password_expiration?
             end
           end
         end
