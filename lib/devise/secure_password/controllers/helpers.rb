@@ -45,7 +45,7 @@ module Devise
         end
 
         def warden_user_has_password_expiration?
-          warden.user && warden.user.respond_to?(:password_expired?)
+          warden&.user&.respond_to?(:password_expired?)
         end
       end
     end
