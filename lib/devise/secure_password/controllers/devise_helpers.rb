@@ -10,12 +10,11 @@ module Devise
           protected
 
           def sign_in(*args)
-            if warden.session(args.first).has_key? 'secure_password_expired'
-              session[:devise_secure_password_expired] = warden.session(args.first)['secure_password_expired']
+            devise_sign_in(*args).tap do |signed_in|
+              if warden.user && warden.user.respond_to?(:password_expired?)
+                session[:devise_secure_password_expired] = warden.user.password_expired?
+              end
             end
-          rescue Warden::NotAuthenticated
-          ensure
-            devise_sign_in(*args)
           end
         end
       end
