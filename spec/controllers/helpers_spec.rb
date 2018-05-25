@@ -14,41 +14,6 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
     controller(ApplicationController) do
     end
 
-    describe '#check_secure_password_expiration_and_set_session_state' do
-      subject { controller.send(:check_secure_password_expiration_and_set_session_state) }
-
-      context 'unauthenticated' do
-        it { is_expected.to be_nil }
-      end
-
-      context 'authenticated w/o session' do
-        before { sign_in user }
-        it { is_expected.to be_nil }
-      end
-
-      context 'authenticated w/o valid :secure_password_expired warden session' do
-        before { sign_in user }
-        before { controller.warden.session(:user)['secure_password_expired'] = 'anything' }
-        it { is_expected.to be_nil }
-      end
-
-      context 'authenticated w/ valid :secure_password_expired warden session' do
-        before { sign_in user }
-        before { controller.warden.session(:user)['secure_password_expired'] = true }
-        it { is_expected.to be true }
-
-        it 'sets session variable' do
-          expect { subject }.to change \
-            { session[:devise_secure_password_expired] }.from(nil).to(true)
-        end
-
-        it 'removes warden session information' do
-          expect { subject }.to change \
-            { controller.warden.session(:user)['secure_password_expired'] }.from(true).to(nil)
-        end
-      end
-    end
-
     describe '#authenticate_secure_password_expired?' do
       subject { controller.authenticate_secure_password_expired? }
 
