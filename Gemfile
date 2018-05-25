@@ -9,6 +9,5 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'pry'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
 end
