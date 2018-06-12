@@ -7,6 +7,7 @@ module Support
 
       def initialize
         @count_hash = {
+          length: { count: 0 },
           uppercase: characters_to_dictionary(('A'..'Z').to_a),
           lowercase: characters_to_dictionary(('a'..'z').to_a),
           number: characters_to_dictionary(('0'..'9').to_a),
@@ -19,6 +20,7 @@ module Support
         raise ArgumentError, "Invalid value for string: #{string}" if string.nil?
 
         string.split('').each { |c| tally_character(c) }
+        @count_hash[:length][:count] = string.length
 
         @count_hash
       end
