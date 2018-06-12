@@ -1,9 +1,11 @@
 <h2><%= t('.titles.section_title') %></h2>
 
 <%= form_for(resource, as: resource_name, url: [resource_name, :password_with_policy], html: { method: :put }) do |f| %>
-  <%= devise_error_messages! %>
+  <% if resource.errors.full_messages.count.positive? %>
+    <%= devise_error_messages! %>
+  <% end %>
 
-  <%= f.hidden :update_action, :change_password %>
+  <%= f.hidden_field :update_action, value: :change_password %>
 
   <p><%= f.label :current_password, t('.labels.current_password') %><br />
   <%= f.password_field :current_password %></p>
