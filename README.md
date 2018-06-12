@@ -265,6 +265,20 @@ prompt> brew install chromedriver
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.
 
+#### Automated screenshots on failure
+
+The [capybara-screenshot gem](https://github.com/mattheworiordan/capybara-screenshot) supports automated screenshot
+captures on failing tests but this will only take place for tests that have JavaScript enabled. You can temporarily
+modify an example by setting `js: true` as in the following example:
+
+```ruby
+context 'when minimum age enforcement is enabled', js: true do
+...
+end
+```
+
+Do not submit pull requests with this setting enabled where it wasn't enabled previously.
+
 ### Testing inside the spec/rails-app-X_y_z
 
 To debug from inside of the dummy rails-app you will need to first install the rails bin stubs and then perform a db
