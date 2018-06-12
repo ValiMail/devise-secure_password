@@ -3,6 +3,8 @@
 <%= form_for(resource, as: resource_name, url: [resource_name, :password_with_policy], html: { method: :put }) do |f| %>
   <%= devise_error_messages! %>
 
+  <%= f.hidden :update_action, :change_password %>
+
   <p><%= f.label :current_password, t('.labels.current_password') %><br />
   <%= f.password_field :current_password %></p>
 
