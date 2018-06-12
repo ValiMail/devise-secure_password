@@ -50,9 +50,9 @@ module Devise
       def validate_type(type, dict)
         type_total = dict.values.reduce(0, :+)
         error_string = if type_total < required_char_counts_for_type(type)[:min]
-                        error_string_for_type_length(type, :min)
+                         error_string_for_type_length(type, :min)
                        elsif type_total > required_char_counts_for_type(type)[:max]
-                        error_string_for_type_length(type, :max)
+                         error_string_for_type_length(type, :max)
                        end
         error_string
       end
