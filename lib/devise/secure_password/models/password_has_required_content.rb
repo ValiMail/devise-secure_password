@@ -14,12 +14,14 @@ module Devise
 
       def validate_password_content
         self.password ||= ''
+        errors.delete(:password)
         validate_password_content_for(:password)
         errors[:password].count.zero?
       end
 
       def validate_password_confirmation_content
         self.password_confirmation ||= ''
+        errors.delete(:password_confirmation)
         validate_password_content_for(:password_confirmation)
         errors[:password_confirmation].count.zero?
       end
@@ -28,6 +30,7 @@ module Devise
         return unless respond_to?(attr) && !(password_obj = send(attr)).nil?
         ::Support::String::CharacterCounter.new.count(password_obj).each do |type, dict|
           error_string =  case type
+                          when :length then validate_length(dict[:count])
                           when :unknown then validate_unknown(dict)
                           else validate_type(type, dict)
                           end
@@ -47,14 +50,33 @@ module Devise
       def validate_type(type, dict)
         type_total = dict.values.reduce(0, :+)
         error_string = if type_total < required_char_counts_for_type(type)[:min]
-                         error_string_for_length(type, :min)
+                        error_string_for_type_length(type, :min)
                        elsif type_total > required_char_counts_for_type(type)[:max]
-                         error_string_for_length(type, :max)
+                        error_string_for_type_length(type, :max)
                        end
         error_string
       end
 
-      def error_string_for_length(type, threshold = :min)
+      def validate_length(dict)
+        if dict < Devise.password_length.min
+          error_string_for_length(:min)
+        elsif dict > Devise.password_length.max
+          error_string_for_length(:max)
+        end
+      end
+
+      def error_string_for_length(threshold = :min)
+        lang_key = case threshold
+                   when :min then 'secure_password.password_has_required_content.errors.messages.minimum_characters'
+                   when :max then 'secure_password.password_has_required_content.errors.messages.maximum_characters'
+                   else return ''
+                   end
+
+        count = required_char_counts_for_type(:length)[threshold]
+        I18n.t(lang_key, count: count, type: '', subject: 'character'.pluralize(count))
+      end
+
+      def error_string_for_type_length(type, threshold = :min)
         lang_key = case threshold
                    when :min then 'secure_password.password_has_required_content.errors.messages.minimum_characters'
                    when :max then 'secure_password.password_has_required_content.errors.messages.maximum_characters'
@@ -101,6 +123,10 @@ module Devise
         def config
           {
             REQUIRED_CHAR_COUNTS: {
+              length: {
+                min: Devise.password_length.min,
+                max: Devise.password_length.max
+              },
               uppercase: {
                 min: password_required_uppercase_count,
                 max: LENGTH_MAX
