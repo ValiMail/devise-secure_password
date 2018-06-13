@@ -6,6 +6,8 @@ en:
           unknown_characters: "contains %{count} invalid %{subject}"
           minimum_characters: "must contain at least %{count} %{type} %{subject}"
           maximum_characters: "must contain less than %{count} %{type} %{subject}"
+          minimum_length: "must contain at least %{count} %{subject}"
+          maximum_length: "must contain less than %{count} %{subject}"
     password_disallows_frequent_reuse:
       errors:
         messages:

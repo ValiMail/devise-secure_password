@@ -67,13 +67,13 @@ module Devise
 
       def error_string_for_length(threshold = :min)
         lang_key = case threshold
-                   when :min then 'secure_password.password_has_required_content.errors.messages.minimum_characters'
-                   when :max then 'secure_password.password_has_required_content.errors.messages.maximum_characters'
+                   when :min then 'secure_password.password_has_required_content.errors.messages.minimum_length'
+                   when :max then 'secure_password.password_has_required_content.errors.messages.maximum_length'
                    else return ''
                    end
 
         count = required_char_counts_for_type(:length)[threshold]
-        I18n.t(lang_key, count: count, type: '', subject: 'character'.pluralize(count))
+        I18n.t(lang_key, count: count, subject: 'character'.pluralize(count))
       end
 
       def error_string_for_type_length(type, threshold = :min)
