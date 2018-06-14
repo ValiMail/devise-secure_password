@@ -5,6 +5,8 @@ module Devise
         extend ActiveSupport::Concern
 
         included do
+          include Devise::SecurePassword::Grammar
+
           before_action :authenticate_secure_password!, unless: :devise_controller?
         end
 
@@ -32,7 +34,7 @@ module Devise
         def error_string_for_password_expired
           I18n.t(
             'secure_password.password_requires_regular_updates.errors.messages.password_expired',
-            timeframe: distance_of_time_in_words(warden.user.class.password_maximum_age)
+            timeframe: precise_distance_of_time_in_words(warden.user.class.password_maximum_age)
           )
         end
 
