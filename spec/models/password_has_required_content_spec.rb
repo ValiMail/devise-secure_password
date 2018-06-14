@@ -26,32 +26,15 @@ RSpec.describe Devise::Models::PasswordHasRequiredContent, type: :model do
     subject { user }
 
     context 'when password is less than minimum length' do
-      context 'devise_invitable is not enabled' do
-        before { user.password = user.password_confirmation = '' }
-        it { is_expected.not_to be_valid }
-      end
+      before { user.password = user.password_confirmation = '' }
+      it { is_expected.not_to be_valid }
+    end
 
-      context 'devise_invitable is enabled' do
-        before do
-          user.password_confirmation = nil
-        end
-
-        context 'and user is not accepting invitation' do
-          before do
-            allow(user).to receive(:accepting_invitation?) { false }
-          end
-
-          it { is_expected.not_to be_valid }
-        end
-
-        context 'and user is accepting invitation' do
-          before do
-            allow(user).to receive(:accepting_invitation?) { true }
-          end
-
-          it { is_expected.to be_valid }
-        end
-      end
+    # rails skips password_confirmation validation if nil, make sure we continue
+    # to support this behavior!
+    context 'when password_confirmation is nil' do
+      before { user.password_confirmation = nil }
+      it { is_expected.to be_valid }
     end
 
     context 'when password is more than maximum length' do
