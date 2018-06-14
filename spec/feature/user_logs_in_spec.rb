@@ -24,7 +24,15 @@ RSpec.describe 'User logs in', type: :feature do
   end
 
   context 'with a password older than password_maximum_age', js: true do
-    before { expire_user_password }
+    before do
+      Devise.setup { |config| config.password_maximum_age = 60.days }
+      expire_user_password
+    end
+
+    after do
+      Devise.setup { |config| config.password_maximum_age = 180.days }
+      expire_user_password
+    end
 
     scenario 'redirected to the change password page' do
       visit '/users/sign_in'
@@ -37,7 +45,7 @@ RSpec.describe 'User logs in', type: :feature do
 
       expect(page).to have_content(/Change your password/i)
       within '#error_explanation' do
-        expect(page).to have_content 'Your password has expired'
+        expect(page).to have_content 'Your password has expired. Passwords must be changed every 2 months.'
       end
 
       expect(page).to have_selector('form.new_user')
