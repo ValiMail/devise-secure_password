@@ -9,7 +9,7 @@ module Devise
 
       included do
         validate :validate_password_content, if: :password_required?
-        validate :validate_password_confirmation_content, if: :password_required?
+        validate :validate_password_confirmation_content, if: -> { password_required? && !devise_invitable_accepting? }
       end
 
       def validate_password_content
@@ -108,6 +108,11 @@ module Devise
 
       def required_char_counts_for_type(type)
         self.class.config[:REQUIRED_CHAR_COUNTS][type]
+      end
+
+      # check if user is is currently accepting a devise_invitable invitation
+      def devise_invitable_accepting?
+        respond_to?(:accepting_invitation?) && accepting_invitation?
       end
 
       module ClassMethods
