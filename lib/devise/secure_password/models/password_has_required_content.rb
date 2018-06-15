@@ -10,6 +10,7 @@ module Devise
       included do
         validate :validate_password_content, if: :password_required?
         validate :validate_password_confirmation_content, if: :password_required?
+        validate :validate_password_confirmation, if: :password_required?
       end
 
       def validate_password_content
@@ -23,6 +24,15 @@ module Devise
         return true if password_confirmation.nil? # rails skips password_confirmation validation if nil!
         errors.delete(:password_confirmation)
         validate_password_content_for(:password_confirmation)
+        errors[:password_confirmation].count.zero?
+      end
+
+      def validate_password_confirmation
+        return true if password_confirmation.nil? # rails skips password_confirmation validation if nil!
+        unless password == password_confirmation
+          human_attribute_name = self.class.human_attribute_name(:password)
+          errors.add(:password_confirmation, :confirmation, attribute: human_attribute_name)
+        end
         errors[:password_confirmation].count.zero?
       end
 

@@ -2,7 +2,9 @@ require 'spec_helper'
 
 RSpec.describe 'User changes password', type: :feature do
   let(:password) { 'Bubb1234%$#X' }
+  let(:current_password) { password }
   let(:new_password) { 'Bubb1234%$#$' }
+  let(:new_password_confirmation) { new_password }
   let(:user) do
     User.new(
       email:                 'betty@rubble.com',
@@ -11,7 +13,7 @@ RSpec.describe 'User changes password', type: :feature do
     )
   end
 
-  shared_examples_for 'a submission with a bad current password' do |error_regex|
+  shared_examples_for 'a submission with a bad password' do |error_regex|
     before do
       user.save
       login_as(user, scope: :user)
@@ -22,7 +24,28 @@ RSpec.describe 'User changes password', type: :feature do
       expect(page).to have_content(/Change your password/i)
       fill_in 'user_current_password', with: current_password
       fill_in 'user_password', with: new_password
-      fill_in 'user_password_confirmation', with: new_password
+      fill_in 'user_password_confirmation', with: new_password_confirmation
+      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+
+      expect(page).to have_content(/Change your password/i)
+      within '#error_explanation' do
+        expect(page).to have_content(error_regex)
+      end
+    end
+  end
+
+  shared_examples_for 'a submission with a bad password confirmation' do |error_regex|
+    before do
+      user.save
+      login_as(user, scope: :user)
+      visit '/users/change_password/edit'
+    end
+
+    scenario 'remains on page and displays error messages', js: true do
+      expect(page).to have_content(/Change your password/i)
+      fill_in 'user_current_password', with: current_password
+      fill_in 'user_password', with: new_password
+      fill_in 'user_password_confirmation', with: new_password_confirmation
       find(:xpath, ".//input[@type='submit' and @name='commit']").click
 
       expect(page).to have_content(/Change your password/i)
@@ -91,13 +114,13 @@ RSpec.describe 'User changes password', type: :feature do
   context 'with an incorrect current password' do
     let(:current_password) { user.password + 'Y' }
 
-    it_behaves_like 'a submission with a bad current password', /Current password is invalid/i
+    it_behaves_like 'a submission with a bad password', /Current password is invalid/i
   end
 
   context 'with a blank current password' do
     let(:current_password) { '' }
 
-    it_behaves_like 'a submission with a bad current password', /Current password can't be blank/i
+    it_behaves_like 'a submission with a bad password', /Current password can't be blank/i
   end
 
   context 'with an invalid new password' do
@@ -117,6 +140,18 @@ RSpec.describe 'User changes password', type: :feature do
 
       it_behaves_like 'a submission with multiple new password errors'
     end
+  end
+
+  context 'with a non-matching new password and confirmation' do
+    let(:new_password_confirmation) { new_password + 'Z' }
+
+    it_behaves_like 'a submission with a bad password', /Password confirmation doesn't match Password/i
+  end
+
+  context 'with a blank new password confirmation' do
+    let(:new_password_confirmation) { ' ' }
+
+    it_behaves_like 'a submission with a bad password', /Password confirmation must contain at least 6 characters/i
   end
 
   context 'with a valid password' do
