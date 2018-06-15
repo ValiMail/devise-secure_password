@@ -33,7 +33,7 @@ and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More
 are currently supported by the __Devise Secure Password Extension__:
 
 - Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
-- Ruby: __2.5.0__, __2.4.3__ (current and previous stable release)
+- Ruby: __2.5.1__, __2.4.4__ (current and previous stable release)
 
 ## Installation
 
