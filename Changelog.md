@@ -1,12 +1,16 @@
 # Changelog: devise-secure_password
 
-## 1.0.8 / 2018-06-12
+## 1.0.8 / 2018-06-15
 
+* Update README for ruby versions tested (2.5.1, 2.4.4).
 * Update README for target reconfig instructions.
 * Update README for test screenshot generation.
+* Fix grammar for error messages.
+* Fix empty new passwords skipping validation.
 * Add tests for invalid empty and current passwords.
 * Add total string length counting to character_counter.
-* Add length valildations to password fields.
+* Add password confirmation equality validator.
+* Add length validations to password fields.
 * Add update_action hidden field to forced password change form.
 * Refactor passwords_with_policy controller.
 
