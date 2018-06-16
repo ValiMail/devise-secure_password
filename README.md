@@ -234,8 +234,8 @@ Available Rails targets: 5.0, 5.1
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle exec rake
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle exec rake
 ```
 
 The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.
@@ -264,6 +264,20 @@ prompt> brew install chromedriver
 
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.
+
+#### Automated screenshots on failure
+
+The [capybara-screenshot gem](https://github.com/mattheworiordan/capybara-screenshot) supports automated screenshot
+captures on failing tests but this will only take place for tests that have JavaScript enabled. You can temporarily
+modify an example by setting `js: true` as in the following example:
+
+```ruby
+context 'when minimum age enforcement is enabled', js: true do
+...
+end
+```
+
+Do not submit pull requests with this setting enabled where it wasn't enabled previously.
 
 ### Testing inside the spec/rails-app-X_y_z
 
