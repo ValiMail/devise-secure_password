@@ -7,6 +7,8 @@ module Devise
 
       included do
         include ActionView::Helpers::DateHelper
+        include Devise::SecurePassword::Grammar
+
         validate :validate_password_frequent_change, if: :password_required?
 
         set_callback(:initialize, :before, :before_resource_initialized)
@@ -17,7 +19,7 @@ module Devise
         if encrypted_password_changed? && password_recent?
           error_string = I18n.t(
             'secure_password.password_disallows_frequent_changes.errors.messages.password_is_recent',
-            timeframe: distance_of_time_in_words(self.class.password_minimum_age)
+            timeframe: precise_distance_of_time_in_words(self.class.password_minimum_age)
           )
           errors.add(:base, error_string)
         end

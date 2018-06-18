@@ -33,7 +33,7 @@ and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More
 are currently supported by the __Devise Secure Password Extension__:
 
 - Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
-- Ruby: __2.5.0__, __2.4.3__ (current and previous stable release)
+- Ruby: __2.5.1__, __2.4.4__ (current and previous stable release)
 
 ## Installation
 
@@ -234,8 +234,8 @@ Available Rails targets: 5.0, 5.1
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0_6.gemfile bundle exec rake
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle exec rake
 ```
 
 The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.
@@ -264,6 +264,20 @@ prompt> brew install chromedriver
 
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.
+
+#### Automated screenshots on failure
+
+The [capybara-screenshot gem](https://github.com/mattheworiordan/capybara-screenshot) supports automated screenshot
+captures on failing tests but this will only take place for tests that have JavaScript enabled. You can temporarily
+modify an example by setting `js: true` as in the following example:
+
+```ruby
+context 'when minimum age enforcement is enabled', js: true do
+...
+end
+```
+
+Do not submit pull requests with this setting enabled where it wasn't enabled previously.
 
 ### Testing inside the spec/rails-app-X_y_z
 

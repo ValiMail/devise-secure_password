@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
   include ActionView::Helpers::DateHelper
+  include Devise::SecurePassword::Grammar
 
   let(:password) { 'Bubb1234@#$!' }
   let(:user) do
@@ -51,7 +52,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
       it 'has the correct error message' do
         error_string = I18n.t(
           'secure_password.password_disallows_frequent_changes.errors.messages.password_is_recent',
-          timeframe: distance_of_time_in_words(user.class.password_minimum_age)
+          timeframe: precise_distance_of_time_in_words(user.class.password_minimum_age)
         )
         expect(user.errors.full_messages).to include error_string
       end
