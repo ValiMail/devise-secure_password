@@ -11,6 +11,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'codecov', require: false
   gem 'jquery-rails', '~> 4.3.1'
   gem 'rails', '~> 5.0.0'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'

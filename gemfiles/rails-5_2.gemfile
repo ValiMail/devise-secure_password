@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-ENV['RAILS_TARGET'] ||= '5.1'
+ENV['RAILS_TARGET'] ||= '5.2'
 
 gemspec path: '../'
 
@@ -12,6 +12,6 @@ end
 
 group :test do
   gem 'codecov', require: false
-  gem 'rails', '~> 5.1.0'
+  gem 'rails', '~> 5.2.0'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
 end
