@@ -14,7 +14,8 @@ end
 require 'rspec/core/rake_task'
 
 def targets
-  Dir.glob("#{SPEC_ROOT_DIR}/rails-app-*").map { |f| File.basename(f).gsub(/^rails-app-/, '').tr('_', '.') if File.directory? f }
+  version_list = Dir.glob("#{SPEC_ROOT_DIR}/rails-app-*").map { |f| File.basename(f).gsub(/^rails-app-/, '').tr('_', '.') if File.directory? f }.sort
+  version_list.reverse
 end
 
 def default_target
