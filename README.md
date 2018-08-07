@@ -9,7 +9,7 @@ as well.
 
 ## Build Status
 
-| Service    | rails 5.1 |
+| Service    | rails 5.2 |
 |:-----------|:-----------:|
 | Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
 
@@ -32,7 +32,7 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Secure Password Extension__:
 
-- Ruby on Rails: __5.1.Z__, __5.0.Z__ (current and previous stable release)
+- Ruby on Rails: __5.2.Z__, __5.1.Z__ (current and previous stable release)
 - Ruby: __2.5.1__, __2.4.4__ (current and previous stable release)
 
 ## Installation
@@ -228,14 +228,14 @@ To determine the Ruby on Rails versions supported by this release, run the follo
 prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
-Available Rails targets: 5.0, 5.1
+Available Rails targets: 5.1, 5.2
 ```
 
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle
-prompt> BUNDLE_GEMFILE=gemfiles/rails-5_0.gemfile bundle exec rake
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_2.gemfile bundle
+prompt> BUNDLE_GEMFILE=gemfiles/rails-5_2.gemfile bundle exec rake
 ```
 
 The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.
@@ -337,6 +337,17 @@ initiating any development work including tests.
 
 ```bash
 prompt> gem update bundler
+```
+
+#### Updating test.sqlite3.db
+
+To update or generate a `db/test/sqlite3.db` database file:
+
+```bash
+prompt> cd spec/rails-app-X_y_z
+prompt> bundle install
+prompt> rake app:update:bin
+prompt> RAILS_ENV=test bundle exec rake db:migrate
 ```
 
 ## Contributing
