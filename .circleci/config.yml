@@ -5,10 +5,10 @@
 version: 2
 aliases:
   - &current_rails_gemfile
-    gemfiles/rails-5_1.gemfile
+    gemfiles/rails-5_2.gemfile
 
   - &previous_rails_gemfile
-    gemfiles/rails-5_0.gemfile
+    gemfiles/rails-5_1.gemfile
 
   - &current_ruby_image
     circleci/ruby:2.5.1-browsers
@@ -108,7 +108,7 @@ jobs:
       - *step_store_test_artifacts
       - *step_store_coverage_artifacts
 
-  # build rails_5_X with previous version of ruby
+  # build current rails with previous version of ruby
   current_rails-previous_ruby-job:
     working_directory: ~/repo
     docker:
@@ -125,7 +125,7 @@ jobs:
           BUNDLE_GEMFILE: *previous_rails_gemfile
     steps: *rails_steps
 
-  # build rails_5_0 with previous version of ruby
+  # build previous rails with previous version of ruby
   previous_rails-previous_ruby-job:
     working_directory: ~/repo
     docker:
