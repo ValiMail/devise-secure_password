@@ -13,7 +13,7 @@
 # NOTE: The order in which you run 'bundle install' in spec/rails and then in
 # the top directory is important.
 #
-FROM circleci/ruby:2.5.0-browsers
+FROM circleci/ruby:2.5.1-browsers
 LABEL maintainer="Mark Eissler <mark.eissler@valimail.com>"
 
 ENV BUILD_HOME='/secure-password-gem'
