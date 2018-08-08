@@ -1,5 +1,20 @@
 # Changelog: devise-secure_password
 
+## 1.1.0 / 2018-08-08
+
+With this release, the __devise-secure_password__ gem drops official support for Rails < 5.1. Supported versions are now
+Rails 5.2 (current release) and Rails 5.1 (last release).
+
+* Update README for Rails versions tested (5.2, 5.1).
+* Update circleci config for Ruby and Rails versions.
+* Update default dev build to Rails 5.2.
+* Add test support for Rails 5.2.
+* Remove test support for Rails 5.0.
+* Update Dockerfile.prev ruby to 2.4.4.
+* Update Dockerfile ruby to 2.5.1.
+* Sort rake targets task list output.
+* Add Codecov.io for coverage tracking
+
 ## 1.0.8 / 2018-06-15
 
 * Update README for ruby versions tested (2.5.1, 2.4.4).
