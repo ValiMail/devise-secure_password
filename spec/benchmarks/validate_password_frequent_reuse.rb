@@ -6,8 +6,8 @@ max_count = Isolated::UserFrequentReuse.password_previously_used_count
 password = 'Bubb1234@#$!'
 
 user = Isolated::UserFrequentReuse.new(
-  email:                 'barney@rubble.com',
-  password:              password,
+  email: 'barney@rubble.com',
+  password: password,
   password_confirmation: password
 )
 

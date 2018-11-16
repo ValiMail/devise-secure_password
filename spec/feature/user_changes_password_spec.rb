@@ -7,8 +7,8 @@ RSpec.describe 'User changes password', type: :feature do
   let(:new_password_confirmation) { new_password }
   let(:user) do
     User.new(
-      email:                 'betty@rubble.com',
-      password:              password,
+      email: 'betty@rubble.com',
+      password: password,
       password_confirmation: password
     )
   end

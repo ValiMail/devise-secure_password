@@ -22,6 +22,7 @@ module Devise
 
       def validate_password_confirmation_content
         return true if password_confirmation.nil? # rails skips password_confirmation validation if nil!
+
         errors.delete(:password_confirmation)
         validate_password_content_for(:password_confirmation)
         errors[:password_confirmation].count.zero?
@@ -29,6 +30,7 @@ module Devise
 
       def validate_password_confirmation
         return true if password_confirmation.nil? # rails skips password_confirmation validation if nil!
+
         unless password == password_confirmation
           human_attribute_name = self.class.human_attribute_name(:password)
           errors.add(:password_confirmation, :confirmation, attribute: human_attribute_name)
@@ -38,6 +40,7 @@ module Devise
 
       def validate_password_content_for(attr)
         return unless respond_to?(attr) && !(password_obj = send(attr)).nil?
+
         ::Support::String::CharacterCounter.new.count(password_obj).each do |type, dict|
           error_string =  case type
                           when :length then validate_length(dict[:count])

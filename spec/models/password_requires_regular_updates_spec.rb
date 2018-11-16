@@ -4,8 +4,8 @@ RSpec.describe Devise::Models::PasswordRequiresRegularUpdates, type: :model do
   let(:password) { 'Bubb1234@#$!' }
   let(:user) do
     Isolated::UserRegularUpdates.new(
-      email:                 'barney@rubble.com',
-      password:              password,
+      email: 'barney@rubble.com',
+      password: password,
       password_confirmation: password
     )
   end

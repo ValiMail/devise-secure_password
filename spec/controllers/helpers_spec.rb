@@ -4,8 +4,8 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
   let(:password) { 'Bubb1234%$#!' }
   let(:user) do
     User.create(
-      email:                 'george@jetson.com',
-      password:              password,
+      email: 'george@jetson.com',
+      password: password,
       password_confirmation: password
     )
   end

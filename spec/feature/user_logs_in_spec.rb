@@ -5,8 +5,8 @@ RSpec.describe 'User logs in', type: :feature do
   let(:new_password) { 'Dubb9874%$#!' }
   let(:user) do
     User.create(
-      email:                 'betty@rubble.com',
-      password:              password,
+      email: 'betty@rubble.com',
+      password: password,
       password_confirmation: password
     )
   end

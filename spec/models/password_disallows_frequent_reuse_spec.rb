@@ -4,8 +4,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
   let(:password) { 'Bubb1234@#$!' }
   let(:user) do
     Isolated::UserFrequentReuse.new(
-      email:                 'fred@flintstone.com',
-      password:              password,
+      email: 'fred@flintstone.com',
+      password: password,
       password_confirmation: password
     )
   end
@@ -47,8 +47,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       context 'and it is a different user' do
         let(:other_user) do
           Isolated::UserFrequentReuse.new(
-            email:                 'wilma@flintstone.com',
-            password:              user.password,
+            email: 'wilma@flintstone.com',
+            password: user.password,
             password_confirmation: user.password
           )
         end

@@ -54,6 +54,7 @@ module Devise
 
       def dirty_password?
         return false unless password_required?
+
         if Rails.version > '5.1'
           saved_change_to_encrypted_password?
         else
