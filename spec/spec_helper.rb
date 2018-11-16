@@ -107,6 +107,8 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
 
+Capybara.server = :webrick
+
 Capybara.register_driver :selenium_chrome_headless do |app|
   chrome_args = %w(headless disable-gpu window-size=1024,768)
   chrome_options = {
