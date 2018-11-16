@@ -4,8 +4,8 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   let(:password) { 'Bubb1234%$#!' }
   let(:user) do
     Isolated::UserFrequentReuse.new(
-      email:                 'wilma@flintstone.com',
-      password:              password,
+      email: 'wilma@flintstone.com',
+      password: password,
       password_confirmation: password
     )
   end

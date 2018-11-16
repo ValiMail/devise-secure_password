@@ -5,10 +5,10 @@
 version: 2
 aliases:
   - &current_rails_gemfile
-    gemfiles/rails-5_2.gemfile
+    gemfiles/rails_5_2.gemfile
 
   - &previous_rails_gemfile
-    gemfiles/rails-5_1.gemfile
+    gemfiles/rails_5_1.gemfile
 
   - &current_ruby_image
     circleci/ruby:2.5.1-browsers

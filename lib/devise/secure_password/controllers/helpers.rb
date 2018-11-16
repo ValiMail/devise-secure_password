@@ -12,16 +12,19 @@ module Devise
 
         def authenticate_secure_password_expired?
           return false if devise_controller?
+
           session[:devise_secure_password_expired] == true
         end
 
         def authenticate_secure_password!
           return unless authenticate_secure_password_expired?
+
           redirect_to authenticate_secure_password_path, alert: "#{error_string_for_password_expired}."
         end
 
         def authenticate_secure_password_path
           return unless warden.user
+
           :"edit_#{devise_secure_password_scope}_password_with_policy"
         end
 

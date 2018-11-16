@@ -27,7 +27,7 @@ def directory_for_target(target)
 end
 
 def gemfile_for_target(target)
-  File.join("gemfiles/rails-#{target.tr('.', '_')}.gemfile")
+  File.join("gemfiles/rails_#{target.tr('.', '_')}.gemfile")
 end
 
 def gemlock_purge_root

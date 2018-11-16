@@ -42,6 +42,7 @@ module Devise
 
     def error_string_for_password_expired
       return 'password expired' unless warden.user.class.respond_to?(:password_maximum_age)
+
       I18n.t(
         'secure_password.password_requires_regular_updates.errors.messages.password_expired',
         timeframe: precise_distance_of_time_in_words(warden.user.class.password_maximum_age)

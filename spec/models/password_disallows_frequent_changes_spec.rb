@@ -7,8 +7,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
   let(:password) { 'Bubb1234@#$!' }
   let(:user) do
     Isolated::UserFrequentChanges.new(
-      email:                 'barney@rubble.com',
-      password:              password,
+      email: 'barney@rubble.com',
+      password: password,
       password_confirmation: password
     )
   end
