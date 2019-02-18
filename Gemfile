@@ -10,5 +10,5 @@ gemspec
 
 group :test do
   gem 'codecov', require: false
-  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
+  gem 'shoulda-matchers'
 end
