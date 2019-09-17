@@ -86,7 +86,7 @@ jobs:
       - run:
           name: run ruby linter (rubocop)
           command: |
-            bundle exec rake test:rubocop
+            bundle exec rubocop
 
       - run:
           name: run code coverage (flay)
