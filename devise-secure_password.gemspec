@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler',                 '>= 1.16.1'
   spec.add_development_dependency 'capybara',                '>= 2.16.1', '~> 3.11'
   spec.add_development_dependency 'capybara-screenshot',     '>= 1.0.18'
-  spec.add_development_dependency 'coffee-rails',            '~> 4.2'
+  spec.add_development_dependency 'coffee-rails',            '~> 5.0'
   spec.add_development_dependency 'database_cleaner',        '~> 1.6',  '>= 1.6.2'
   spec.add_development_dependency 'devise',                  '~> 4.0'
   spec.add_development_dependency 'flay',                    '>= 2.10.0'
