@@ -37,8 +37,9 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
 
     context 'when destroying a user' do
       before { user.save }
+
       it 'decreases number of previous passwords' do
-        expect { user.destroy }.to change { Devise::Models::PreviousPassword.count }.by(-1)
+        expect { user.destroy }.to change(described_class, :count).by(-1)
       end
     end
   end
@@ -63,11 +64,11 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   end
 
   describe '#fresh?' do
-    it { is_expected.to respond_to(:fresh?) }
-
     let(:previous_password) { user.previous_passwords.first }
 
     before { user.save }
+
+    it { is_expected.to respond_to(:fresh?) }
 
     context 'when a password is not recent' do
       it 'returns false' do
@@ -84,11 +85,11 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   end
 
   describe '#stale?' do
-    it { is_expected.to respond_to(:stale?) }
-
     let(:previous_password) { user.previous_passwords.first }
 
     before { user.save }
+
+    it { is_expected.to respond_to(:stale?) }
 
     context 'when a password is old' do
       it 'returns true' do

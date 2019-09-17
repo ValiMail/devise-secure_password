@@ -26,27 +26,32 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
 
         context 'w/o session' do
           before { allow(controller.warden).to receive(:session).and_return nil }
+
           it { is_expected.to be false }
         end
 
         context 'w/ session' do
           context 'no secure_password_expired information' do
             before { allow(controller).to receive(:session).and_return({}) }
+
             it { is_expected.to be false }
           end
 
           context 'devise_secure_password_expired is false' do
             before { allow(controller).to receive(:session).and_return(devise_secure_password_expired: false) }
+
             it { is_expected.to be false }
           end
 
           context 'devise_secure_password_expired is other value' do
             before { allow(controller).to receive(:session).and_return(devise_secure_password_expired: 'other value') }
+
             it { is_expected.to be false }
           end
 
           context 'secure_password_expired is true' do
             before { allow(controller).to receive(:session).and_return(devise_secure_password_expired: true) }
+
             it { is_expected.to be true }
           end
         end
@@ -78,7 +83,7 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
           controller.authenticate_secure_password!
         end
 
-        it { expect(controller).to_not have_received(:redirect_to) }
+        it { expect(controller).not_to have_received(:redirect_to) }
       end
     end
 
@@ -91,6 +96,7 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
 
       context 'w/ warden.user' do
         before { sign_in user }
+
         it { is_expected.to eq :edit_user_password_with_policy }
       end
     end
@@ -109,7 +115,7 @@ RSpec.describe Devise::SecurePassword::Controllers::Helpers, type: :controller d
       end
 
       it 'does not prompt for password within a Devise controller' do
-        is_expected.to be false
+        expect(subject).to be false
       end
     end
   end

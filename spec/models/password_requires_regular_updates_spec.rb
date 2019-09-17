@@ -12,6 +12,7 @@ RSpec.describe Devise::Models::PasswordRequiresRegularUpdates, type: :model do
 
   describe 'config' do
     subject { Isolated::UserRegularUpdates }
+
     it { is_expected.to respond_to(:password_maximum_age) }
 
     context 'when password_frequent_change_prevention module is not enabled' do
