@@ -48,7 +48,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby2ruby',               '~> 2.4',  '>= 2.4.0'
   spec.add_development_dependency 'selenium-webdriver',      '~> 3.7',  '>= 3.7.0'
   spec.add_development_dependency 'simplecov',               '~> 0.17.1'
-  spec.add_development_dependency 'simplecov-console',       '~> 0.4.2'
+  spec.add_development_dependency 'simplecov-console',       '~> 0.5.0'
   spec.add_development_dependency 'sqlite3',                 '~> 1.3',  '>= 1.3.13'
 
   spec.required_ruby_version = '>= 2.4'
