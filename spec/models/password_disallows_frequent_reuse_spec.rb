@@ -12,11 +12,13 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
 
   describe 'config' do
     subject { Isolated::UserFrequentReuse }
+
     it { is_expected.to respond_to(:password_previously_used_count) }
   end
 
   describe 'associations' do
     subject { Isolated::UserFrequentReuse.new }
+
     it { is_expected.to have_many(:previous_passwords) }
   end
 
@@ -45,6 +47,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       end
 
       context 'and it is a different user' do
+        subject { other_user }
+
         let(:other_user) do
           Isolated::UserFrequentReuse.new(
             email: 'wilma@flintstone.com',
@@ -52,21 +56,23 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
             password_confirmation: user.password
           )
         end
-        subject { other_user }
+
         it { is_expected.to be_valid }
       end
     end
 
     context 'when password has not been used recently' do
       before { user.password = user.password_confirmation = user.password + 'Z' }
+
       it { is_expected.to be_valid }
     end
   end
 
   describe 'password updates' do
+    subject { user }
+
     let(:max_count) { Isolated::UserFrequentReuse.password_previously_used_count }
     let(:passwords) { (0..max_count).map { |c| user.password + c.to_s } }
-    subject { user }
 
     context 'when password is set to same as current' do
       before do
@@ -102,6 +108,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       let(:other_user) { Isolated::UserFrequentReuse.new(email: 'wilma@flintstone.com') }
 
       let(:dates) { (max_count - 1).downto(0).to_a.map { |c| c.days.ago } }
+
       @last_password = nil
 
       before do

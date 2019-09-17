@@ -34,7 +34,7 @@ RSpec.describe 'User logs in', type: :feature do
       expire_user_password
     end
 
-    scenario 'redirected to the change password page' do
+    it 'redirected to the change password page' do
       visit '/users/sign_in'
 
       expect(page).to have_content(/Log in/i)
@@ -60,7 +60,7 @@ RSpec.describe 'User logs in', type: :feature do
       end
     end
 
-    scenario 'attempts to access application without updating password' do
+    it 'attempts to access application without updating password' do
       visit '/users/sign_in'
       sign_in_user
 
@@ -74,7 +74,7 @@ RSpec.describe 'User logs in', type: :feature do
       expect(page).to have_current_path('/users/change_password/edit')
     end
 
-    scenario 'accesses application after updating password' do
+    it 'accesses application after updating password' do
       visit '/users/sign_in'
       sign_in_user
 
@@ -93,7 +93,7 @@ RSpec.describe 'User logs in', type: :feature do
       visit '/users/sign_in'
     end
 
-    scenario 'is not redirected to change password page' do
+    it 'is not redirected to change password page' do
       expect(page).to have_content(/Log in/i)
       expect(page).to have_selector('input[type="submit"]')
       fill_in 'user_email', with: user.email

@@ -15,6 +15,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
 
   describe 'config' do
     subject { Isolated::UserFrequentChanges }
+
     it { is_expected.to respond_to(:password_minimum_age) }
 
     context 'when password_frequent_reuse_prevention module is not enabled' do
@@ -31,6 +32,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
   end
 
   describe 'validations' do
+    subject { user }
+
     before do
       Devise.setup { |config| config.password_minimum_age = 1.day }
     end
@@ -39,14 +42,13 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
       Devise.setup { |config| config.password_minimum_age = 0.days }
     end
 
-    subject { user }
-
     context 'when password has been changed recently' do
       before do
         user.save(validate: false)
         user.password = user.password + 'Z'
         user.save
       end
+
       it { is_expected.not_to be_valid }
 
       it 'has the correct error message' do
@@ -68,6 +70,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
         # bypass frequent_reuse validator by changing password
         user.password = user.password_confirmation = user.password + 'Z'
       end
+
       it { is_expected.to be_valid }
     end
   end

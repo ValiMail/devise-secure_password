@@ -24,7 +24,7 @@ aliases:
   - &step_restore_root_cache
     restore_cache:
       keys:
-      - valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
+      - valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
 
   - &step_install_root_dependencies
     run:
@@ -42,7 +42,7 @@ aliases:
     save_cache:
       paths:
         - ./vendor/bundle
-      key: valimail-secure-password-gems-{{ arch }}-{{ checksum "Gemfile" }}
+      key: valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
 
   - &step_make_test_output_directory
     run:
