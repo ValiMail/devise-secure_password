@@ -8,6 +8,7 @@ gemspec path: '../'
 
 gem 'rails',         '~> 5.1.0'
 gem 'sass-rails',    '~> 5.0'
+gem 'sqlite3',       '~> 1.3.11'
 gem 'therubyracer',  '~> 0.12.3', platforms: :ruby
 
 group :development, :test do
