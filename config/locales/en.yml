@@ -1,5 +1,15 @@
 en:
   secure_password:
+    character:
+      one: "character"
+      other: "characters"
+
+    types:
+      uppercase: "uppercase"
+      downcase: "downcase"
+      number: "number"
+      special: "special"
+
     password_has_required_content:
       errors:
         messages:
