@@ -23,7 +23,7 @@ require 'ruby2ruby'
 
 namespace :test do
   desc 'Run Flay code coverage tests'
-  task :flay do
+  task flay: :environment do
     flay = Flay.new(Flay.default_options.merge(diff: true, mass: 35))
     flay.process(*FLAY_FILES)
     flay.report

@@ -67,25 +67,25 @@ Rake::Task[:spec].clear_comments
 namespace :test do
   default_rails = default_target
   desc 'Run RSpec tests (set Rails target with RAILS_TARGET=X.y)'
-  task :spec do
+  task spec: :environment do
     ENV['RAILS_TARGET'] ||= default_rails
     Rake::Task[:spec].invoke
   end
   # add a task for each available rails target version
   namespace :spec do
     desc 'Run RSpec tests with code coverage (SimpleCov)'
-    task :coverage do
+    task coverage: :environment do
       ENV['COVERAGE'] = 'true'
       Rake::Task[:spec].invoke
     end
     desc 'List available Rails targets for RSpec tests'
-    task :targets do
+    task targets: :environment do
       available_targets_message
     end
   end
   # purge all gemfile locks
   desc 'Reset the build (when switching Rails targets)'
-  task :reset do
+  task reset: :environment do
     gemlock_purge_root
     gemlock_purge_spec
   end

@@ -105,7 +105,7 @@ module Devise
         I18n.t(
           'secure_password.password_has_required_content.errors.messages.unknown_characters',
           count: count,
-          subject: I18n.t("secure_password.character", count: count)
+          subject: I18n.t('secure_password.character', count: count)
         ) + " (#{chars.join('')})"
       end
 

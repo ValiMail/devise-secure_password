@@ -8,7 +8,7 @@ dictionary = categories.flatten
 
 puts 'Setting up benchmark (character_counter)...'
 puts '-> creating a long string with characters from:'
-categories.each_with_index { |c, i| printf("[%i]: %s\n", i, c.join(', ')) }
+categories.each_with_index { |c, i| puts "[#{i}]: #{c.join(', ')}" }
 puts("\n")
 
 # create a long string of mixed chars

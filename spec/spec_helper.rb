@@ -129,7 +129,7 @@ Capybara.javascript_driver = :selenium_chrome_headless
 require 'capybara-screenshot/rspec'
 
 Capybara.asset_host = 'http://localhost:3000'
-Capybara.save_path = Rails.root.join('tmp', 'capybara')
+Capybara.save_path = Rails.root.join('tmp/capybara')
 Capybara::Screenshot.register_filename_prefix_formatter(:rspec) do |example|
   "screenshot_#{example.description.tr(' ', '-').gsub(%r{^.*\/spec\/}, '')}"
 end
