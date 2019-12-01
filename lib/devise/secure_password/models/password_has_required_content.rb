@@ -86,7 +86,7 @@ module Devise
                    end
 
         count = required_char_counts_for_type(:length)[threshold]
-        I18n.t(lang_key, count: count, subject: 'character'.pluralize(count))
+        I18n.t(lang_key, count: count, subject: I18n.t('secure_password.character', count: count))
       end
 
       def error_string_for_type_length(type, threshold = :min)
@@ -97,7 +97,7 @@ module Devise
                    end
 
         count = required_char_counts_for_type(type)[threshold]
-        error_string = I18n.t(lang_key, count: count, type: type.to_s, subject: 'character'.pluralize(count))
+        error_string = I18n.t(lang_key, count: count, type: I18n.t("secure_password.types.#{type}"), subject: I18n.t('secure_password.character', count: count))
         error_string + ' ' + dict_for_type(type)
       end
 
@@ -105,7 +105,7 @@ module Devise
         I18n.t(
           'secure_password.password_has_required_content.errors.messages.unknown_characters',
           count: total,
-          subject: 'character'.pluralize(total)
+          subject: I18n.t("secure_password.character", count: count)
         ) + " (#{chars.join('')})"
       end
 
