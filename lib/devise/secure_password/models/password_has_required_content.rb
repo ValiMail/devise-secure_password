@@ -101,10 +101,10 @@ module Devise
         error_string + ' ' + dict_for_type(type)
       end
 
-      def error_string_for_unknown_chars(total, chars = [])
+      def error_string_for_unknown_chars(count, chars = [])
         I18n.t(
           'secure_password.password_has_required_content.errors.messages.unknown_characters',
-          count: total,
+          count: count,
           subject: I18n.t("secure_password.character", count: count)
         ) + " (#{chars.join('')})"
       end
