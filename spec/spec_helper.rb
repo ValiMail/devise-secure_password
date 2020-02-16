@@ -42,7 +42,7 @@ require 'orm/active_record'
 require 'database_cleaner'
 
 # Load all support files including custom matchers and helpers.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
