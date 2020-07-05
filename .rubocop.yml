@@ -9,12 +9,26 @@ AllCops:
     - 'vendor/bundle/**/*'
   TargetRubyVersion: 2.4
 
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
 Metrics/LineLength:
   Enabled: false
 Rails:
   Enabled: true
 Style/Documentation:
   Enabled: false
+Style/ExponentialNotation:
+  Enabled: true
 Style/FrozenStringLiteralComment:
   Enabled: false
 Layout/ExtraSpacing:
@@ -54,8 +68,22 @@ Style/FormatStringToken:
   SupportedStyles:
     - annotated
     - template
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     default: '()'
     '%i': '()'
     '%w': '()'
+Style/RedundantFetchBlock:
+  Enabled: true
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+Style/RedundantRegexpEscape:
+  Enabled: true
+Style/SlicingWithRange:
+  Enabled: true

@@ -131,7 +131,7 @@ require 'capybara-screenshot/rspec'
 Capybara.asset_host = 'http://localhost:3000'
 Capybara.save_path = Rails.root.join('tmp/capybara')
 Capybara::Screenshot.register_filename_prefix_formatter(:rspec) do |example|
-  "screenshot_#{example.description.tr(' ', '-').gsub(%r{^.*\/spec\/}, '')}"
+  "screenshot_#{example.description.tr(' ', '-').gsub(%r{^.*/spec/}, '')}"
 end
 Capybara::Screenshot.autosave_on_failure = true
 Capybara::Screenshot.prune_strategy = :keep_last_run
