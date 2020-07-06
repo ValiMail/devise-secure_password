@@ -11,10 +11,10 @@ aliases:
     gemfiles/rails_5_1.gemfile
 
   - &current_ruby_image
-    circleci/ruby:2.5.1-browsers
+    circleci/ruby:2.7.1-browsers
 
   - &previous_ruby_image
-    circleci/ruby:2.4.4-browsers
+    circleci/ruby:2.6.6-browsers
 
   - &defaults
     working_directory: ~/repo
