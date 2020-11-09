@@ -2,7 +2,7 @@ module Devise
   module Models
     class PreviousPassword < ::ActiveRecord::Base
       self.table_name = 'previous_passwords'
-      belongs_to :user, required: true
+      belongs_to :user, optional: true
       default_scope -> { order(id: :desc) }
       validates :user_id, presence: true
       validates :salt, presence: true

@@ -62,7 +62,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
     end
 
     context 'when password has not been used recently' do
-      before { user.password = user.password_confirmation = user.password + 'Z' }
+      before { user.password = user.password_confirmation = "#{user.password}Z" }
 
       it { is_expected.to be_valid }
     end
@@ -111,6 +111,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
 
       @last_password = nil
 
+      # rubocop:disable Style/CombinableLoops
       before do
         # add passwords for the target user
         passwords[0..max_count - 1].each_with_index do |password, index|
@@ -132,6 +133,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
           previous_password.save!
         end
       end
+      # rubocop:enable Style/CombinableLoops
 
       # NOTE: These tests are to prevent regression from an association scoping
       # bug where password ages from one user were sometimes compared with those
@@ -152,13 +154,13 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
       # NOTE: These tests are to prevent regression from a change in strategy
       # after commit ccd2e51 up to which point old passwords were purged.
       it 'increases the number of previous passwords (all old passwords are preserved)' do
-        user.password = user.password_confirmation = passwords.last + 'Z'
+        user.password = user.password_confirmation = "#{passwords.last}Z"
         expect { user.save }.to change { Devise::Models::PreviousPassword.count }.by(1)
       end
 
       it 'preserves the oldest previous password (all old passwords are preserved)' do
         oldest_password = user.previous_passwords.last
-        user.password = user.password_confirmation = passwords.last + 'Z'
+        user.password = user.password_confirmation = "#{passwords.last}Z"
         user.save
         expect(user.previous_passwords.find_by(id: oldest_password.id)).not_to be_nil
       end
