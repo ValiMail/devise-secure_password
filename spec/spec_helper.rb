@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
-ENV['RAILS_TARGET'] ||= '5.1'
+ENV['RAILS_TARGET'] ||= '6.0'
 
 #
 # Simplecov configuration (COVERAGE=true bundle exec rspec spec/)
