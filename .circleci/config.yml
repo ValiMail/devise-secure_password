@@ -8,7 +8,7 @@ aliases:
     gemfiles/rails_6_0.gemfile
 
   - &current_ruby_image
-    circleci/ruby:2.7.2-browsers
+    circleci/ruby:2.7.2-buster-node-browsers
 
   - &defaults
     working_directory: ~/repo
