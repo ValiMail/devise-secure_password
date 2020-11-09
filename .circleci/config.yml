@@ -102,12 +102,11 @@ jobs:
       - *step_store_test_artifacts
       - *step_store_coverage_artifacts
 
-  # build current rails with previous version of ruby
 workflows:
     version: 2
     build-test_current-ruby:
       jobs:
         - current_rails-current_ruby-job
-         - code-quality-job:
+        - code-quality-job:
             requires:
               - current_rails-current_ruby-job # let primary job fetch all dependencies first
