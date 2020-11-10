@@ -166,7 +166,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'redirects to home page and displays success message', js: true do
+    xit 'redirects to home page and displays success message', js: true do
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password
