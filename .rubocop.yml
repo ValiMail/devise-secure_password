@@ -7,7 +7,7 @@ AllCops:
     - 'db/schema.rb'
     - 'spec/rails-app*/**/*'
     - 'vendor/bundle/**/*'
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.7
 
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
