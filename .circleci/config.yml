@@ -11,10 +11,7 @@ aliases:
     gemfiles/rails_5_1.gemfile
 
   - &current_ruby_image
-    circleci/ruby:2.5.1-browsers
-
-  - &previous_ruby_image
-    circleci/ruby:2.4.4-browsers
+    cimg/ruby:2.7-browsers
 
   - &defaults
     working_directory: ~/repo
@@ -108,46 +105,11 @@ jobs:
       - *step_store_test_artifacts
       - *step_store_coverage_artifacts
 
-  # build current rails with previous version of ruby
-  current_rails-previous_ruby-job:
-    working_directory: ~/repo
-    docker:
-      - image: *previous_ruby_image
-        environment:
-          BUNDLE_GEMFILE: *current_rails_gemfile
-    steps: *rails_steps
-
-  previous_rails-current_ruby-job:
-    working_directory: ~/repo
-    docker:
-      - image: *current_ruby_image
-        environment:
-          BUNDLE_GEMFILE: *previous_rails_gemfile
-    steps: *rails_steps
-
-  # build previous rails with previous version of ruby
-  previous_rails-previous_ruby-job:
-    working_directory: ~/repo
-    docker:
-      - image: *previous_ruby_image
-        environment:
-          BUNDLE_GEMFILE: *previous_rails_gemfile
-    steps: *rails_steps
-
 workflows:
     version: 2
     build-test_current-ruby:
       jobs:
         - current_rails-current_ruby-job
-        - previous_rails-current_ruby-job:
-            requires:
-              - current_rails-current_ruby-job # let primary job fetch all dependencies first
         - code-quality-job:
             requires:
               - current_rails-current_ruby-job # let primary job fetch all dependencies first
-    build-test_previous-ruby:
-      jobs:
-        - current_rails-previous_ruby-job
-        - previous_rails-previous_ruby-job:
-            requires:
-              - current_rails-previous_ruby-job
