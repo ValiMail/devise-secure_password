@@ -9,7 +9,7 @@ as well.
 
 ## Build Status
 
-| Service    | rails 5.2 |
+| Service    | rails 6.1 |
 |:-----------|:-----------:|
 | Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
 
@@ -32,16 +32,16 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Secure Password Extension__:
 
-- Ruby on Rails: __5.2.Z__, __5.1.Z__ (current and previous stable release)
-- Ruby: __2.5.1__, __2.4.4__ (current and previous stable release)
+- Ruby on Rails: __6.1.x__, __6.0.x__ (current and previous stable release)
+- Ruby: __3.0.x__, __2.7.x__ (current and previous stable release)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise',                 '~> 4.2'
-gem 'devise-secure_password', '~> 1.0.5'
+gem 'devise',                 '~> 4.7'
+gem 'devise-secure_password', '~> 2.0'
 ```
 
 And then execute:
@@ -259,8 +259,6 @@ for testing.
 ```bash
 prompt> brew install chromedriver
 ```
-
->NOTE: __ChromeDriver__ < 2.33 has a bug for testing clickable targets; therefore, install >= 2.3.4.
 
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
 unpacking into the `/usr/local/bin` directory.
