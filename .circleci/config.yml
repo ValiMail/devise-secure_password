@@ -2,19 +2,19 @@
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1
 aliases:
   - &current_rails_gemfile
-    gemfiles/rails_5_2.gemfile
+    gemfiles/rails_6_1.gemfile
 
   - &previous_rails_gemfile
-    gemfiles/rails_5_1.gemfile
+    gemfiles/rails_6_0.gemfile
 
   - &current_ruby_image
-    circleci/ruby:2.5.1-browsers
+    cimg/ruby:2.7-browsers
 
   - &previous_ruby_image
-    circleci/ruby:2.4.4-browsers
+    cimg/ruby:3.0-browsers
 
   - &defaults
     working_directory: ~/repo
@@ -30,7 +30,12 @@ aliases:
     run:
       name: install root dependencies
       command: |
-        gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
+        sudo apt-get update
+        sudo apt-get install software-properties-common
+        sudo apt-get -y install libsqlite3-dev
+        gem install bundler
+        bundle config set --local path 'vendor/bundle'
+        bundle install --jobs=4 --retry=3
 
   - &step_save_cache_app-gems-rails
     save_cache:
@@ -75,6 +80,9 @@ aliases:
       path: coverage
       destination: coverage
 
+orbs:
+  browser-tools: circleci/browser-tools@1.1.3
+
 jobs:
   code-quality-job:
     <<: *defaults
@@ -101,6 +109,8 @@ jobs:
           BUNDLE_GEMFILE: *current_rails_gemfile
     steps: &rails_steps
       - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - *step_install_root_dependencies
       - *step_make_test_output_directory
       - *step_run_rspec_tests
@@ -135,19 +145,18 @@ jobs:
     steps: *rails_steps
 
 workflows:
-    version: 2
-    build-test_current-ruby:
-      jobs:
-        - current_rails-current_ruby-job
-        - previous_rails-current_ruby-job:
-            requires:
-              - current_rails-current_ruby-job # let primary job fetch all dependencies first
-        - code-quality-job:
-            requires:
-              - current_rails-current_ruby-job # let primary job fetch all dependencies first
-    build-test_previous-ruby:
-      jobs:
-        - current_rails-previous_ruby-job
-        - previous_rails-previous_ruby-job:
-            requires:
-              - current_rails-previous_ruby-job
+  build-test_current-ruby:
+    jobs:
+      - current_rails-current_ruby-job
+      - previous_rails-current_ruby-job:
+          requires:
+            - current_rails-current_ruby-job # let primary job fetch all dependencies first
+      - code-quality-job:
+          requires:
+            - current_rails-current_ruby-job # let primary job fetch all dependencies first
+  build-test_previous-ruby:
+    jobs:
+      - current_rails-previous_ruby-job
+      - previous_rails-previous_ruby-job:
+          requires:
+            - current_rails-previous_ruby-job

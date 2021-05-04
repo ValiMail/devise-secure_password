@@ -4,7 +4,6 @@ module Devise
       module DeviseHelpers
         extend ActiveSupport::Concern
 
-        # rubocop:disable Style/ClassAndModuleChildren
         class ::DeviseController
           alias devise_sign_in sign_in
 
@@ -16,7 +15,6 @@ module Devise
             end
           end
         end
-        # rubocop:enable Style/ClassAndModuleChildren
       end
     end
   end

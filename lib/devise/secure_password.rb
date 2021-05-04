@@ -28,13 +28,7 @@ module Devise
   @password_maximum_age = 180.days
 
   class << self
-    attr_accessor :password_required_uppercase_count
-    attr_accessor :password_required_lowercase_count
-    attr_accessor :password_required_number_count
-    attr_accessor :password_required_special_character_count
-    attr_accessor :password_previously_used_count
-    attr_accessor :password_minimum_age
-    attr_accessor :password_maximum_age
+    attr_accessor :password_required_uppercase_count, :password_required_lowercase_count, :password_required_number_count, :password_required_special_character_count, :password_previously_used_count, :password_minimum_age, :password_maximum_age
   end
 
   module SecurePassword

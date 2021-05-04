@@ -2,7 +2,7 @@
 
 <%= form_for(resource, as: resource_name, url: [resource_name, :password_with_policy], html: { method: :put }) do |f| %>
   <% if resource.errors.full_messages.count.positive? %>
-    <%= devise_error_messages! %>
+    <%= render 'devise/shared/error_messages', resource: resource %>
   <% end %>
 
   <%= f.hidden_field :update_action, value: :change_password %>
