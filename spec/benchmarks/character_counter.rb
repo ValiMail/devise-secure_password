@@ -13,7 +13,7 @@ puts("\n")
 
 # create a long string of mixed chars
 length = 256
-string = (dictionary * (length / dictionary.length.to_f).ceil).shuffle.join('').slice(0, length)
+string = (dictionary * (length / dictionary.length.to_f).ceil).shuffle.join.slice(0, length)
 
 puts 'Running benchmark (character_counter)...'
 puts "-> updating count_hash from string with #{length} characters\n\n"

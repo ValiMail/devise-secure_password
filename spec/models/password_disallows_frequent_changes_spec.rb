@@ -45,7 +45,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
     context 'when password has been changed recently' do
       before do
         user.save(validate: false)
-        user.password = user.password + 'Z'
+        user.password = "#{user.password}Z"
         user.save
       end
 
@@ -68,7 +68,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
         last_password.created_at = Time.zone.now - Isolated::UserFrequentChanges.password_minimum_age
         last_password.save
         # bypass frequent_reuse validator by changing password
-        user.password = user.password_confirmation = user.password + 'Z'
+        user.password = user.password_confirmation = "#{user.password}Z"
       end
 
       it { is_expected.to be_valid }

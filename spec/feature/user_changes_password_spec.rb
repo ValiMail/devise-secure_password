@@ -112,7 +112,7 @@ RSpec.describe 'User changes password', type: :feature do
   end
 
   context 'with an incorrect current password' do
-    let(:current_password) { user.password + 'Y' }
+    let(:current_password) { "#{user.password}Y" }
 
     it_behaves_like 'a submission with a bad password', /Current password is invalid/i
   end
@@ -143,7 +143,7 @@ RSpec.describe 'User changes password', type: :feature do
   end
 
   context 'with a non-matching new password and confirmation' do
-    let(:new_password_confirmation) { new_password + 'Z' }
+    let(:new_password_confirmation) { "#{new_password}Z" }
 
     it_behaves_like 'a submission with a bad password', /Password confirmation doesn't match Password/i
   end
@@ -155,7 +155,7 @@ RSpec.describe 'User changes password', type: :feature do
   end
 
   context 'with a valid password' do
-    let(:new_password) { user.password + 'Z' }
+    let(:new_password) { "#{user.password}Z" }
 
     before do
       user.save

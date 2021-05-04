@@ -62,12 +62,11 @@ module Devise
 
       def validate_type(type, dict)
         type_total = dict.values.reduce(0, :+)
-        error_string = if type_total < required_char_counts_for_type(type)[:min]
-                         error_string_for_type_length(type, :min)
-                       elsif type_total > required_char_counts_for_type(type)[:max]
-                         error_string_for_type_length(type, :max)
-                       end
-        error_string
+        if type_total < required_char_counts_for_type(type)[:min]
+          error_string_for_type_length(type, :min)
+        elsif type_total > required_char_counts_for_type(type)[:max]
+          error_string_for_type_length(type, :max)
+        end
       end
 
       def validate_length(dict)
@@ -98,7 +97,7 @@ module Devise
 
         count = required_char_counts_for_type(type)[threshold]
         error_string = I18n.t(lang_key, count: count, type: I18n.t("secure_password.types.#{type}"), subject: I18n.t('secure_password.character', count: count))
-        error_string + ' ' + dict_for_type(type)
+        "#{error_string}  #{dict_for_type(type)}"
       end
 
       def error_string_for_unknown_chars(count, chars = [])
@@ -106,14 +105,14 @@ module Devise
           'secure_password.password_has_required_content.errors.messages.unknown_characters',
           count: count,
           subject: I18n.t('secure_password.character', count: count)
-        ) + " (#{chars.join('')})"
+        ) + " (#{chars.join})"
       end
 
       def dict_for_type(type)
         character_counter = ::Support::String::CharacterCounter.new
 
         case type
-        when :special, :unknown then "(#{character_counter.count_hash[type].keys.join('')})"
+        when :special, :unknown then "(#{character_counter.count_hash[type].keys.join})"
         else
           "(#{character_counter.count_hash[type].keys.first}..#{character_counter.count_hash[type].keys.last})"
         end

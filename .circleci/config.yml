@@ -5,16 +5,16 @@
 version: 2
 aliases:
   - &current_rails_gemfile
-    gemfiles/rails_5_2.gemfile
+    gemfiles/rails_6_1.gemfile
 
   - &previous_rails_gemfile
-    gemfiles/rails_5_1.gemfile
+    gemfiles/rails_6_0.gemfile
 
   - &current_ruby_image
-    circleci/ruby:2.5.1-browsers
+    cimg/ruby:2.7-browsers
 
   - &previous_ruby_image
-    circleci/ruby:2.4.4-browsers
+    cimg/ruby:3.0-browsers
 
   - &defaults
     working_directory: ~/repo

@@ -19,7 +19,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
   end
 
   describe 'associations' do
-    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:user).optional }
   end
 
   describe 'validations' do

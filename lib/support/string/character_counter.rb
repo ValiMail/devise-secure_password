@@ -19,7 +19,7 @@ module Support
       def count(string)
         raise ArgumentError, "Invalid value for string: #{string}" if string.nil?
 
-        string.split('').each { |c| tally_character(c) }
+        string.chars.each { |c| tally_character(c) }
         @count_hash[:length][:count] = string.length
 
         @count_hash

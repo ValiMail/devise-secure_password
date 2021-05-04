@@ -111,15 +111,8 @@ Capybara.server = :webrick
 
 Capybara.register_driver :selenium_chrome_headless do |app|
   chrome_args = %w(headless disable-gpu window-size=1024,768)
-  chrome_options = {
-    browser: :chrome,
-    options: Selenium::WebDriver::Chrome::Options.new(args: chrome_args)
-  }
 
-  ## additional chrome_options
-  ## chrome_options.merge(clear_local_storage: true, clear_session_storage: true)
-
-  Capybara::Selenium::Driver.new(app, chrome_options)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: Selenium::WebDriver::Chrome::Options.new(args: chrome_args))
 end
 Capybara.javascript_driver = :selenium_chrome_headless
 
