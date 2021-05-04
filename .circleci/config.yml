@@ -30,7 +30,12 @@ aliases:
     run:
       name: install root dependencies
       command: |
-        gem install bundler && bundle install --jobs=4 --retry=3 --path vendor/bundle
+        sudo apt-get update
+        sudo apt-get install software-properties-common
+        sudo apt-get -y install libsqlite3-dev
+        gem install bundler
+        bundle config set --local path 'vendor/bundle'
+        bundle install --jobs=4 --retry=3
 
   - &step_save_cache_app-gems-rails
     save_cache:
