@@ -11,7 +11,7 @@ module Support
           uppercase: characters_to_dictionary(('A'..'Z').to_a),
           lowercase: characters_to_dictionary(('a'..'z').to_a),
           number: characters_to_dictionary(('0'..'9').to_a),
-          special: characters_to_dictionary(%w(! @ # $ % ^ & * ( ) _ + - = [ ] { } | ')),
+          special: characters_to_dictionary(%w(! @ # $ % ^ & * ( ) _ + - = [ ] { } | ' " / \ ^ . , ` < > : ; ? ~)),
           unknown: {}
         }
       end
