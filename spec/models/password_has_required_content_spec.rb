@@ -76,6 +76,206 @@ RSpec.describe Devise::Models::PasswordHasRequiredContent, type: :model do
       it { is_expected.not_to be_valid }
     end
 
+    context 'when password contains allowed special characters' do
+      context 'with space' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub ' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with exclamation' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub!' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with double quote' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub"' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with number sign (hash)' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub#' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with dollar sign' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub$' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with percent' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub%' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with ampersand (&)' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub&' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with single quote (\')' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub\'' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with left parenthesis' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub(' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with right parenthesis' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub)' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with asterisk' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub*' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with plus' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub+' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with comma' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub,' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with minus' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub-' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with full stop' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub.' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with slash' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub/' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with colon' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub:' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with semicolon' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub;' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with less than sign' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub<' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with equal sign' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub=' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with greater than' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub>' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with question mark' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub?' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with at sign' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub@' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with left bracket' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub[' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with backslash' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub\\' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with right bracket' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub]' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with caret' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub^' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with underscore' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub_' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with grave accent (backtick)' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub`' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with left brace' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub{' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with vertical bar' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub|' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with right brace' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub}' }
+
+        it { is_expected.to be_valid }
+      end
+
+      context 'with tilde' do
+        before { user.password = user.password_confirmation = 'Bubb1234bub~' }
+
+        it { is_expected.to be_valid }
+      end
+    end
+
     context 'when password contains minimum number of required characters' do
       it { is_expected.to be_valid }
     end
