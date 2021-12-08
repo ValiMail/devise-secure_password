@@ -18,7 +18,7 @@ Devise.setup do |config|
   # The number of numbers (0-9) required in a password:
   # config.password_required_number_count = 1
 
-  # The number of special characters (!@#$%^&*()_+-=[]{}|') required in a password:
+  # The number of special characters ( !@#$%^&*()_+-=[]{}|'"/\.,`<>:;?~) required in a password:
   # config.password_required_special_character_count = 1
 
   # ==> Configuration for the Devise Secure Password extension

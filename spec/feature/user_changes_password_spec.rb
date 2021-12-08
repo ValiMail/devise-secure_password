@@ -127,7 +127,7 @@ RSpec.describe 'User changes password', type: :feature do
     let(:uppercase_range) { Regexp.escape('(A..Z)') }
     let(:lowercase_range) { Regexp.escape('(a..z)') }
     let(:numeric_range) { Regexp.escape('(0..9)') }
-    let(:special_range) { Regexp.escape("(!@\#$%^&*()_+-=[]{}|')") }
+    let(:special_range) { Regexp.escape("( !@\#$%^&*()_+-=[]{}|\"/\\.,`<>:;?~')") }
 
     context 'when new password is invalid' do
       let(:bad_password) { 'a' * 12 }
