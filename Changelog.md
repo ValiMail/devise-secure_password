@@ -1,6 +1,6 @@
 # Changelog: devise-secure_password
 
-## 1.1.1 / 2021-12-08
+## 2.0.2 / 2021-12-08
 
 * Implement support to additional special characters. #71
 
