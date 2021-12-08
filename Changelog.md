@@ -1,5 +1,9 @@
 # Changelog: devise-secure_password
 
+## 1.1.1 / 2021-12-08
+
+* Implement support to additional special characters. #71
+
 ## 1.1.0 / 2018-08-08
 
 With this release, the __devise-secure_password__ gem drops official support for Rails < 5.1. Supported versions are now
