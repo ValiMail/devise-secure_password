@@ -8,7 +8,7 @@ RSpec.describe Support::String::CharacterCounter do
   let(:lowercase_chars) { ('a'..'z').to_a }
   let(:number_chars) { ('0'..'9').to_a }
   let(:special_chars) { %W(\s ! @ # $ % ^ & * ( ) _ + - = [ ] { } | " / \\ ^ . , ` < > : ; ? ~ \') }
-  let(:unknown_chars) { %w(β Γ 𝛾) }
+  let(:unknown_chars) { %w(β) }
 
   describe 'attributes' do
     it { is_expected.to respond_to(:count_hash) }
