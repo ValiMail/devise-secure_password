@@ -88,3 +88,6 @@ Style/RedundantRegexpEscape:
   Enabled: true
 Style/SlicingWithRange:
   Enabled: true
+
+Gemspec/DevelopmentDependencies:
+  Enabled: no
