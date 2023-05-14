@@ -9,7 +9,7 @@ as well.
 
 ## Build Status
 
-| Service    | rails 6.1 |
+| Service    | rails 7.0 |
 |:-----------|:-----------:|
 | Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
 
@@ -32,7 +32,7 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Secure Password Extension__:
 
-- Ruby on Rails: __6.1.x__, __6.0.x__ (current and previous stable release)
+- Ruby on Rails: __7.0.x__, __6.1.x__ (current and previous stable release)
 - Ruby: __3.0.x__, __2.7.x__ (current and previous stable release)
 
 ### Updating to a New Rails Version

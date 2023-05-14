@@ -5,10 +5,10 @@
 version: 2.1
 aliases:
   - &current_rails_gemfile
-    gemfiles/rails_6_1.gemfile
+    gemfiles/rails_7_0.gemfile
 
   - &previous_rails_gemfile
-    gemfiles/rails_6_0.gemfile
+    gemfiles/rails_6_1.gemfile
 
   - &current_ruby_image
     cimg/ruby:2.7-browsers
