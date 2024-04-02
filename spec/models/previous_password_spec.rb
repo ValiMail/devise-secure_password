@@ -72,7 +72,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
 
     context 'when a password is not recent' do
       it 'returns false' do
-        previous_password.created_at = Time.zone.now - 1.day
+        previous_password.created_at = 1.day.ago
         expect(previous_password.fresh?(1.day)).to be false
       end
     end
@@ -93,7 +93,7 @@ RSpec.describe Devise::Models::PreviousPassword, type: :model do
 
     context 'when a password is old' do
       it 'returns true' do
-        previous_password.created_at = Time.zone.now - 1.day
+        previous_password.created_at = 1.day.ago
         expect(previous_password.stale?(1.day)).to be true
       end
     end
