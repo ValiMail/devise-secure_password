@@ -26,17 +26,6 @@ aliases:
       keys:
       - valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
 
-  - &step_install_root_dependencies
-    run:
-      name: install root dependencies
-      command: |
-        sudo apt-get update
-        sudo apt-get install software-properties-common
-        sudo apt-get -y install libsqlite3-dev
-        gem install bundler
-        bundle config set --local path 'vendor/bundle'
-        bundle install --jobs=4 --retry=3
-
   - &step_save_cache_app-gems-rails
     save_cache:
       paths:
@@ -83,13 +72,28 @@ aliases:
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
 
+commands:
+
+  install-root-dependencies:
+    steps:
+      - run:
+          name: install root dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install software-properties-common
+            sudo apt-get -y install libsqlite3-dev
+            gem install bundler
+            bundle config set --local path 'vendor/bundle'
+            bundle install --jobs=4 --retry=3
+
+
 jobs:
   code-quality-job:
     <<: *defaults
     steps:
       - checkout
       - *step_restore_root_cache
-      - *step_install_root_dependencies
+      - install-root-dependencies
       - *step_save_root_cache
       - run:
           name: run ruby linter (rubocop)
@@ -111,7 +115,7 @@ jobs:
       - checkout
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      - *step_install_root_dependencies
+      - install-root-dependencies
       - *step_make_test_output_directory
       - *step_run_rspec_tests
       - *step_store_test_results
