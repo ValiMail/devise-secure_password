@@ -7,19 +7,19 @@ aliases:
   - &rails_6_1_gemfile
     gemfiles/rails_6_1.gemfile
 
-  # - &previous_rails_gemfile
-  #  gemfiles/rails_6_0.gemfile
+  - &ruby_3_1_image
+    cimg/ruby:3.1-browsers
 
-  - &ruby_2_7_image
-    cimg/ruby:2.7-browsers
+  - &ruby_3_2_image
+    cimg/ruby:3.2-browsers
 
-  - &ruby_3_0_image
-    cimg/ruby:3.0-browsers
+  - &ruby_3_3_image
+    cimg/ruby:3.3-browsers
 
   - &defaults
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_7_image
+      - image: *ruby_3_1_image
 
   - &step_restore_root_cache
     restore_cache:
@@ -36,12 +36,6 @@ aliases:
         gem install bundler
         bundle config set --local path 'vendor/bundle'
         bundle install --jobs=4 --retry=3
-
-  - &step_save_cache_app-gems-rails
-    save_cache:
-      paths:
-        - ./vendor/bundle
-      key: valimail-secure-password-rails-app-gems-{{ arch }}-{{ .Environment.TARGET_GEMFILE_NAME }}-{{ checksum "gemfiles/rails-target.gemfile" }}
 
   - &step_save_root_cache
     save_cache:
@@ -101,10 +95,10 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  rails-6-1-and-ruby-2-7-job:
+  rails-6-1-and-ruby-3-1-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_2_7_image
+      - image: *ruby_3_1_image
         environment:
           BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: &rails_steps
@@ -119,44 +113,33 @@ jobs:
       - *step_store_coverage_artifacts
 
   # build current rails with previous version of ruby
-  rails-6-1-and-ruby-3-0-job:
+  rails-6-1-and-ruby-3-2-job:
     working_directory: ~/repo
     docker:
-      - image: *ruby_3_0_image
+      - image: *ruby_3_2_image
         environment:
           BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: *rails_steps
 
-  # previous_rails-current_ruby-job:
-  #  working_directory: ~/repo
-  #  docker:
-  #    - image: *ruby_2_7_image
-  #      environment:
-  #        BUNDLE_GEMFILE: *previous_rails_gemfile
-  #  steps: *rails_steps
-
-  # build previous rails with previous version of ruby
-  # previous_rails-previous_ruby-job:
-  #  working_directory: ~/repo
-  #  docker:
-  #    - image: *ruby_3_0_image
-  #      environment:
-  #        BUNDLE_GEMFILE: *previous_rails_gemfile
-  #  steps: *rails_steps
+  rails-6-1-and-ruby-3-3-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_3_3_image
+        environment:
+          BUNDLE_GEMFILE: *rails_6_1_gemfile
+    steps: *rails_steps
 
 workflows:
-  build-test_rails-6-1_ruby-2-7:
+  build-test_rails-6-1_ruby-3-1:
     jobs:
-      - rails-6-1-and-ruby-2-7-job
-      # - previous_rails-current_ruby-job:
-      #    requires:
-      #      - rails-6-1-and-ruby-2-7-job # let primary job fetch all dependencies first
+      - rails-6-1-and-ruby-3-1-job
       - code-quality-job:
           requires:
-            - rails-6-1-and-ruby-2-7-job # let primary job fetch all dependencies first
-  build-test_rails-6-1_ruby-3-0:
+            - rails-6-1-and-ruby-3-1-job # let primary job fetch all dependencies first
+  build-test_rails-6-1_ruby-3-2:
     jobs:
-      - rails-6-1-and-ruby-3-0-job
-      # - previous_rails-previous_ruby-job:
-      #    requires:
-      #      - rails-6-1-and-ruby-3-0-job
+      - rails-6-1-and-ruby-3-2-job
+
+  build-test_rails-6-1_ruby-3-3:
+    jobs:
+      - rails-6-1-and-ruby-3-3-job
