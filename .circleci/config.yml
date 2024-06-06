@@ -13,6 +13,9 @@ aliases:
   - &ruby_3_2_image
     cimg/ruby:3.2-browsers
 
+  - &ruby_3_3_image
+    cimg/ruby:3.3-browsers
+
   - &defaults
     working_directory: ~/repo
     docker:
@@ -118,6 +121,14 @@ jobs:
           BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: *rails_steps
 
+  rails-6-1-and-ruby-3-3-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_3_3_image
+        environment:
+          BUNDLE_GEMFILE: *rails_6_1_gemfile
+    steps: *rails_steps
+
 workflows:
   build-test_rails-6-1_ruby-3-1:
     jobs:
@@ -128,3 +139,7 @@ workflows:
   build-test_rails-6-1_ruby-3-2:
     jobs:
       - rails-6-1-and-ruby-3-2-job
+
+  build-test_rails-6-1_ruby-3-3:
+    jobs:
+      - rails-6-1-and-ruby-3-3-job
