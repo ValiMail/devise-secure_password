@@ -20,6 +20,10 @@ Rails/ApplicationRecord:
   Exclude:
     - 'lib/devise/secure_password/models/previous_password.rb'
 
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Exclude:
+    - 'lib/devise/secure_password/models/previous_password.rb'
+
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantConstantBase:
