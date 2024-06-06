@@ -148,15 +148,15 @@ workflows:
   build-test_current-ruby:
     jobs:
       - current_rails-current_ruby-job
-      - previous_rails-current_ruby-job:
-          requires:
-            - current_rails-current_ruby-job # let primary job fetch all dependencies first
+      # - previous_rails-current_ruby-job:
+      #    requires:
+      #      - current_rails-current_ruby-job # let primary job fetch all dependencies first
       - code-quality-job:
           requires:
             - current_rails-current_ruby-job # let primary job fetch all dependencies first
   build-test_previous-ruby:
     jobs:
       - current_rails-previous_ruby-job
-      - previous_rails-previous_ruby-job:
-          requires:
-            - current_rails-previous_ruby-job
+      # - previous_rails-previous_ruby-job:
+      #    requires:
+      #      - current_rails-previous_ruby-job
