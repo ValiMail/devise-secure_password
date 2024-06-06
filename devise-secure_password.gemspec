@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   }
 
   spec.executables   = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'devise', '>= 4.0.0', '< 5.0.0'

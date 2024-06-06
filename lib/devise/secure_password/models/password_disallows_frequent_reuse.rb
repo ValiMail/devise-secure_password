@@ -41,7 +41,7 @@ module Devise
       end
 
       def previous_password?(password)
-        salts = previous_passwords.select(:salt).map(&:salt)
+        salts = previous_passwords.pluck(:salt)
         pepper = self.class.pepper.presence || ''
 
         salts.each do |salt|
