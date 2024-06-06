@@ -37,15 +37,15 @@ module Devise
       def before_resource_initialized
         return if self.class.respond_to?(:password_previously_used_count)
 
-        raise ConfigurationError, <<-ERROR.strip_heredoc
+        raise ConfigurationError, <<~ERROR
 
-        The password_disallows_frequent_changes module depends on the
-        password_disallows_frequent_reuse module. Verify that you have
-        added both modules to your model, for example:
+          The password_disallows_frequent_changes module depends on the
+          password_disallows_frequent_reuse module. Verify that you have
+          added both modules to your model, for example:
 
-          devise :database_authenticatable, :registerable,
-            :password_disallows_frequent_reuse,
-            :password_disallows_frequent_changes
+            devise :database_authenticatable, :registerable,
+              :password_disallows_frequent_reuse,
+              :password_disallows_frequent_changes
         ERROR
       end
 
