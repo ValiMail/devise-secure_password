@@ -2,7 +2,7 @@ require 'benchmark'
 require 'support/string/character_counter'
 require 'spec_helper'
 
-character_counter = Support::String::CharacterCounter.new
+character_counter = ::Support::String::CharacterCounter.new
 categories = character_counter.count_hash.values.map(&:keys)
 dictionary = categories.flatten
 
@@ -22,7 +22,7 @@ total_seen = 0
 # benchmark the count method, the summarized count (reduce) will add minimal overhead
 Benchmark.bmbm(20) do |bm|
   bm.report('character_counter.count') do
-    total_seen = Support::String::CharacterCounter.new.count(string).values.map(&:values).flatten.reduce(0, :+)
+    total_seen = ::Support::String::CharacterCounter.new.count(string).values.map(&:values).flatten.reduce(0, :+)
   end
 end
 

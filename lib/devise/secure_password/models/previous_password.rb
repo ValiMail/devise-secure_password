@@ -1,6 +1,6 @@
 module Devise
   module Models
-    class PreviousPassword < ApplicationRecord
+    class PreviousPassword < ::ActiveRecord::Base
       self.table_name = 'previous_passwords'
       belongs_to :user
       default_scope -> { order(id: :desc) }
