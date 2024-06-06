@@ -11,7 +11,7 @@ aliases:
     gemfiles/rails_6_0.gemfile
 
   - &current_ruby_image
-    cimg/ruby:2.7-browsers
+    cimg/ruby:3.2.4-browsers
 
   - &previous_ruby_image
     cimg/ruby:3.0-browsers
