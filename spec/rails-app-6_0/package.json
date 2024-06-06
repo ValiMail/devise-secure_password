@@ -11,5 +11,8 @@
   "version": "0.1.0",
   "devDependencies": {
     "webpack-dev-server": "^3.11.2"
+  },
+  "resolutions": {
+    "@babel/traverse": "^7.24.7"
   }
 }
