@@ -81,7 +81,7 @@ aliases:
       destination: coverage
 
 orbs:
-  browser-tools: circleci/browser-tools@1.1.3
+  browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
   code-quality-job:
