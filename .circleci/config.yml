@@ -4,22 +4,22 @@
 #
 version: 2.1
 aliases:
-  - &current_rails_gemfile
+  - &rails_6_1_gemfile
     gemfiles/rails_6_1.gemfile
 
   # - &previous_rails_gemfile
   #  gemfiles/rails_6_0.gemfile
 
-  - &current_ruby_image
+  - &ruby_2_7_image
     cimg/ruby:2.7-browsers
 
-  - &previous_ruby_image
+  - &ruby_3_0_image
     cimg/ruby:3.0-browsers
 
   - &defaults
     working_directory: ~/repo
     docker:
-      - image: *current_ruby_image
+      - image: *ruby_2_7_image
 
   - &step_restore_root_cache
     restore_cache:
@@ -101,12 +101,12 @@ jobs:
           command: |
             bundle exec rake test:flay
 
-  current_rails-current_ruby-job:
+  rails-6-1-and-ruby-2-7-job:
     working_directory: ~/repo
     docker:
-      - image: *current_ruby_image
+      - image: *ruby_2_7_image
         environment:
-          BUNDLE_GEMFILE: *current_rails_gemfile
+          BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: &rails_steps
       - checkout
       - browser-tools/install-chrome
@@ -119,18 +119,18 @@ jobs:
       - *step_store_coverage_artifacts
 
   # build current rails with previous version of ruby
-  current_rails-previous_ruby-job:
+  rails-6-1-and-ruby-3-0-job:
     working_directory: ~/repo
     docker:
-      - image: *previous_ruby_image
+      - image: *ruby_3_0_image
         environment:
-          BUNDLE_GEMFILE: *current_rails_gemfile
+          BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: *rails_steps
 
   # previous_rails-current_ruby-job:
   #  working_directory: ~/repo
   #  docker:
-  #    - image: *current_ruby_image
+  #    - image: *ruby_2_7_image
   #      environment:
   #        BUNDLE_GEMFILE: *previous_rails_gemfile
   #  steps: *rails_steps
@@ -139,24 +139,24 @@ jobs:
   # previous_rails-previous_ruby-job:
   #  working_directory: ~/repo
   #  docker:
-  #    - image: *previous_ruby_image
+  #    - image: *ruby_3_0_image
   #      environment:
   #        BUNDLE_GEMFILE: *previous_rails_gemfile
   #  steps: *rails_steps
 
 workflows:
-  build-test_current-ruby:
+  build-test_rails-6-1_ruby-2-7:
     jobs:
-      - current_rails-current_ruby-job
+      - rails-6-1-and-ruby-2-7-job
       # - previous_rails-current_ruby-job:
       #    requires:
-      #      - current_rails-current_ruby-job # let primary job fetch all dependencies first
+      #      - rails-6-1-and-ruby-2-7-job # let primary job fetch all dependencies first
       - code-quality-job:
           requires:
-            - current_rails-current_ruby-job # let primary job fetch all dependencies first
-  build-test_previous-ruby:
+            - rails-6-1-and-ruby-2-7-job # let primary job fetch all dependencies first
+  build-test_rails-6-1_ruby-3-0:
     jobs:
-      - current_rails-previous_ruby-job
+      - rails-6-1-and-ruby-3-0-job
       # - previous_rails-previous_ruby-job:
       #    requires:
-      #      - current_rails-previous_ruby-job
+      #      - rails-6-1-and-ruby-3-0-job
