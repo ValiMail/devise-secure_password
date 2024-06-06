@@ -7,8 +7,8 @@ aliases:
   - &current_rails_gemfile
     gemfiles/rails_6_1.gemfile
 
-  - &previous_rails_gemfile
-    gemfiles/rails_6_0.gemfile
+  # - &previous_rails_gemfile
+  #  gemfiles/rails_6_0.gemfile
 
   - &current_ruby_image
     cimg/ruby:2.7-browsers
@@ -127,22 +127,22 @@ jobs:
           BUNDLE_GEMFILE: *current_rails_gemfile
     steps: *rails_steps
 
-  previous_rails-current_ruby-job:
-    working_directory: ~/repo
-    docker:
-      - image: *current_ruby_image
-        environment:
-          BUNDLE_GEMFILE: *previous_rails_gemfile
-    steps: *rails_steps
+  # previous_rails-current_ruby-job:
+  #  working_directory: ~/repo
+  #  docker:
+  #    - image: *current_ruby_image
+  #      environment:
+  #        BUNDLE_GEMFILE: *previous_rails_gemfile
+  #  steps: *rails_steps
 
   # build previous rails with previous version of ruby
-  previous_rails-previous_ruby-job:
-    working_directory: ~/repo
-    docker:
-      - image: *previous_ruby_image
-        environment:
-          BUNDLE_GEMFILE: *previous_rails_gemfile
-    steps: *rails_steps
+  # previous_rails-previous_ruby-job:
+  #  working_directory: ~/repo
+  #  docker:
+  #    - image: *previous_ruby_image
+  #      environment:
+  #        BUNDLE_GEMFILE: *previous_rails_gemfile
+  #  steps: *rails_steps
 
 workflows:
   build-test_current-ruby:
