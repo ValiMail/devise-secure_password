@@ -261,7 +261,7 @@ To determine the Ruby on Rails versions supported by this release, run the follo
 prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
-Available Rails targets: 5.1, 5.2
+Available Rails targets: 7.0, 6.1
 ```
 
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
