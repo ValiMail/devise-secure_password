@@ -32,8 +32,8 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Secure Password Extension__:
 
-- Ruby on Rails: __6.1.x__, __6.0.x__ (current and previous stable release)
-- Ruby: __3.0.x__, __2.7.x__ (current and previous stable release)
+- Ruby on Rails: __6.1.x__, __7.0.x__
+- Ruby: __3.1.x__, __3.2.x__, __3.3.x__
 
 ### Updating to a New Rails Version
 
