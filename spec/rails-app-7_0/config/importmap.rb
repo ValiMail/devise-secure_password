@@ -1,0 +1,1 @@
+pin "application", preload: true
