@@ -3,48 +3,52 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2.1
-aliases:
-  - &step_restore_root_cache
-    restore_cache:
-      keys:
-      - valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
-
-  - &step_install_root_dependencies
-    run:
-      name: install root dependencies
-      command: |
-        sudo apt-get update
-        sudo apt-get install software-properties-common
-        sudo apt-get -y install libsqlite3-dev
-        gem install bundler
-        bundle config set --local path 'vendor/bundle'
-        bundle install --jobs=4 --retry=3
-
-  - &step_save_root_cache
-    save_cache:
-      paths:
-        - ./vendor/bundle
-      key: valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
-
-  - &step_make_test_output_directory
-    run:
-      name: create test metadata directory
-      command: mkdir /tmp/test-results
-
-  - &step_run_rspec_tests
-    run:
-      name: run rspec with simplecov
-      command: |
-        TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-        COVERAGE=true bundle exec rspec \
-                          --format progress \
-                          --format RspecJunitFormatter \
-                          --out /tmp/test-results/rspec.xml \
-                          ${TEST_FILES}
 
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
+
+commands:
+  restore_root_cache:
+    steps:
+      - restore_cache:
+          keys:
+          - valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
+
+  install_root_dependencies:
+    steps:
+      - run:
+          command: |
+            sudo apt-get update
+            sudo apt-get install software-properties-common
+            sudo apt-get -y install libsqlite3-dev
+            gem install bundler
+            bundle config set --local path 'vendor/bundle'
+            bundle install --jobs=4 --retry=3
+
+  save_root_cache:
+    steps:
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: valimail-secure-password-gems-{{ arch }}-{{ checksum "devise-secure_password.gemspec" }}
+
+  make_test_output_directory:
+    steps:
+      - run:
+          name: create test metadata directory
+          command: mkdir /tmp/test-results
+
+  run_rspec_tests:
+    steps:
+      - run:
+          name: run rspec with simplecov
+          command: |
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+            COVERAGE=true bundle exec rspec \
+                              --format progress \
+                              --format RspecJunitFormatter \
+                              --out /tmp/test-results/rspec.xml \
+                              ${TEST_FILES}
 
 jobs:
   code-quality-job:
@@ -53,9 +57,9 @@ jobs:
       - image: cimg/ruby:3.1-browsers
     steps:
       - checkout
-      - *step_restore_root_cache
-      - *step_install_root_dependencies
-      - *step_save_root_cache
+      - restore_root_cache
+      - install_root_dependencies
+      - save_root_cache
       - run:
           name: run ruby linter (rubocop)
           command: |
@@ -80,9 +84,9 @@ jobs:
       - checkout
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      - *step_install_root_dependencies
-      - *step_make_test_output_directory
-      - *step_run_rspec_tests
+      - install_root_dependencies
+      - make_test_output_directory
+      - run_rspec_tests
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
