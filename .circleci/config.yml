@@ -7,6 +7,9 @@ aliases:
   - &rails_6_1_gemfile
     gemfiles/rails_6_1.gemfile
 
+  - &rails_7_0_gemfile
+    gemfiles/rails_7_0.gemfile
+
   - &ruby_3_1_image
     cimg/ruby:3.1-browsers
 
@@ -95,6 +98,7 @@ jobs:
           command: |
             bundle exec rake test:flay
 
+  # build rails 6.1
   rails-6-1-and-ruby-3-1-job:
     working_directory: ~/repo
     docker:
@@ -112,7 +116,6 @@ jobs:
       - *step_store_test_artifacts
       - *step_store_coverage_artifacts
 
-  # build current rails with previous version of ruby
   rails-6-1-and-ruby-3-2-job:
     working_directory: ~/repo
     docker:
@@ -129,6 +132,31 @@ jobs:
           BUNDLE_GEMFILE: *rails_6_1_gemfile
     steps: *rails_steps
 
+  # build rails 7.0
+  rails-7-0-and-ruby-3-1-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_3_1_image
+        environment:
+          BUNDLE_GEMFILE: *rails_7_0_gemfile
+    steps: *rails_steps
+
+  rails-7-0-and-ruby-3-2-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_3_2_image
+        environment:
+          BUNDLE_GEMFILE: *rails_7_0_gemfile
+    steps: *rails_steps
+
+  rails-7-0-and-ruby-3-3-job:
+    working_directory: ~/repo
+    docker:
+      - image: *ruby_3_3_image
+        environment:
+          BUNDLE_GEMFILE: *rails_7_0_gemfile
+    steps: *rails_steps
+
 workflows:
   build-test_rails-6-1_ruby-3-1:
     jobs:
@@ -143,3 +171,15 @@ workflows:
   build-test_rails-6-1_ruby-3-3:
     jobs:
       - rails-6-1-and-ruby-3-3-job
+
+  build-test_rails-7-0_ruby-3-1:
+    jobs:
+      - rails-7-0-and-ruby-3-1-job
+
+  build-test_rails-7-0_ruby-3-2:
+    jobs:
+      - rails-7-0-and-ruby-3-2-job
+
+  build-test_rails-7-0_ruby-3-3:
+    jobs:
+      - rails-7-0-and-ruby-3-3-job

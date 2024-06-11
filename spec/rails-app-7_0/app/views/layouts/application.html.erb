@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Devise Password Policy Extension - RailsApp</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <header>
+      <h1>Devise Password Policy Extension - RailsApp</h1>
+    </header>
+    <div>
+      <% if flash[:notice] %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+      <% if flash[:alert] %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+    </div>
+    <%= yield %>
+    <footer>
+      <ul class="auth_strip">
+        <% if user_signed_in? %>
+          <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
+        <% else %>
+          <li><%= link_to 'Login', new_user_session_path %></li>
+        <% end %>
+      </ul>
+    </footer>
+  </body>
+</html>
