@@ -1,8 +1,12 @@
 # Changelog: devise-secure_password
 
-## 2.0.2 / 2021-12-08
+## 2.1.0 / 2021-12-08
 
+* Various CircleCI updates.
+* Update README for (Rails, Ruby) versions tested.
+* Drop support for old Ruby and Rails; add support for Rails 7.0.
 * Implement support to additional special characters. #71
+* several years worth of dependabot updates
 
 ## 1.1.0 / 2018-08-08
 
