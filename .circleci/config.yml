@@ -97,7 +97,7 @@ jobs:
           destination: coverage
 
 workflows:
-  whatisthematrix:
+  testy_mc_testerson:
     jobs:
       - test-all-the-things:
           matrix:
