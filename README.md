@@ -7,12 +7,6 @@ added to a Rails project to enforce password policies. The gem is implemented as
 [devise](https://github.com/plataformatec/devise) authentication solution gem and requires that __devise__ is installed
 as well.
 
-## Build Status
-
-| Service    | rails 6.1 |
-|:-----------|:-----------:|
-| Circle CI  | [![Circle CI](https://circleci.com/gh/ValiMail/devise-secure_password/tree/master.svg?style=shield&circle-token=cd173d5f9d2944a9b14737c2d4339b20b08565cf)]() |
-
 ## Overview
 
 The __Devise Secure Password Extension__ is composed of the following modules:
