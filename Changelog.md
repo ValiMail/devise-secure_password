@@ -1,6 +1,6 @@
 # Changelog: devise-secure_password
 
-## 2.1.0 / 2021-12-08
+## 2.1.0 / 2024-06-02
 
 * Various CircleCI updates.
 * Update README for (Rails, Ruby) versions tested.
