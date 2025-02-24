@@ -26,7 +26,7 @@ en:
     password_disallows_frequent_changes:
       errors:
         messages:
-          password_is_recent: "Password cannot be changed more than once per %{timeframe}"
+          password_is_recent: "cannot be changed more than once per %{timeframe}"
     password_requires_regular_updates:
       alerts:
         messages:
