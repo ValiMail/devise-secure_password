@@ -22,7 +22,7 @@ en:
     password_disallows_frequent_reuse:
       errors:
         messages:
-          password_is_recent: "Last %{count} passwords may not be reused"
+          password_is_recent: "must not be reused from the last %{count} passwords."
     password_disallows_frequent_changes:
       errors:
         messages:
