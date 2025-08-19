@@ -27,7 +27,7 @@ module Devise
           errors.add(:base, error_string)
         end
 
-        errors.count.zero?
+        errors.none?
       end
 
       protected

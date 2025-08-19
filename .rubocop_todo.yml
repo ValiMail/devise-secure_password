@@ -29,3 +29,6 @@ Rails/RedundantPresenceValidationOnBelongsTo:
 Style/RedundantConstantBase:
   Exclude:
     - 'spec/benchmarks/character_counter.rb'
+
+Naming/PredicateMethod:
+  Enabled: false

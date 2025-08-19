@@ -17,7 +17,7 @@ module Devise
         self.password ||= ''
         errors.delete(:password)
         validate_password_content_for(:password)
-        errors[:password].count.zero?
+        errors[:password].none?
       end
 
       def validate_password_confirmation_content
@@ -25,7 +25,7 @@ module Devise
 
         errors.delete(:password_confirmation)
         validate_password_content_for(:password_confirmation)
-        errors[:password_confirmation].count.zero?
+        errors[:password_confirmation].none?
       end
 
       def validate_password_confirmation
@@ -35,7 +35,7 @@ module Devise
           human_attribute_name = self.class.human_attribute_name(:password)
           errors.add(:password_confirmation, :confirmation, attribute: human_attribute_name)
         end
-        errors[:password_confirmation].count.zero?
+        errors[:password_confirmation].none?
       end
 
       def validate_password_content_for(attr)
