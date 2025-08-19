@@ -56,7 +56,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentChanges, type: :model do
           'secure_password.password_disallows_frequent_changes.errors.messages.password_is_recent',
           timeframe: precise_distance_of_time_in_words(user.class.password_minimum_age)
         )
-        expect(user.errors.full_messages).to include error_string
+        expect(user.errors.full_messages).to include "Password #{error_string}"
       end
     end
 

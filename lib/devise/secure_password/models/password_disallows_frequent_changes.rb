@@ -21,7 +21,7 @@ module Devise
             'secure_password.password_disallows_frequent_changes.errors.messages.password_is_recent',
             timeframe: precise_distance_of_time_in_words(self.class.password_minimum_age)
           )
-          errors.add(:base, error_string)
+          errors.add(:password, error_string)
         end
 
         errors.none?

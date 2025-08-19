@@ -24,7 +24,7 @@ module Devise
             'secure_password.password_disallows_frequent_reuse.errors.messages.password_is_recent',
             count: self.class.password_previously_used_count
           )
-          errors.add(:base, error_string)
+          errors.add(:password, error_string)
         end
 
         errors.none?

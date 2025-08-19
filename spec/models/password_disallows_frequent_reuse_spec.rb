@@ -43,7 +43,8 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
           'secure_password.password_disallows_frequent_reuse.errors.messages.password_is_recent',
           count: user.class.password_previously_used_count
         )
-        expect(user.errors.full_messages).to include error_string
+        expect(user.errors[:password]).to be_present
+        expect(user.errors.full_messages).to include "Password #{error_string}"
       end
 
       context 'and it is a different user' do
