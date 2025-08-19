@@ -1,6 +1,6 @@
 # Changelog: devise-secure_password
 
-## 2.1.0 / 2025-08-19
+## 2.2.0 / 2025-08-19
 * Adds support to Rails 8.0 and ruby 3.4
 * Drop support Rails 6.1 and ruby 3.1
 
