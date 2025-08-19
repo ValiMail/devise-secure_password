@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
-ENV['RAILS_TARGET'] ||= '6.1'
+ENV['RAILS_TARGET'] ||= '7.0'
 
 #
 # Simplecov configuration (COVERAGE=true bundle exec rspec spec/)
@@ -38,14 +38,18 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "#{rails_dummy}/config/environment"
 require 'rspec/rails'
 require 'devise/secure_password'
-require 'orm/active_record'
+# require 'orm/active_record'
 require 'database_cleaner'
 
 # Load all support files including custom matchers and helpers.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 
-# Checks for pending migrations before tests are run.
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+
+if ActiveRecord::Base.connection_pool.respond_to?(:migration_context) &&
+   ActiveRecord::Base.connection_pool.migration_context.needs_migration?
+  raise ActiveRecord::PendingMigrationError,
+        "Migrations are pending. Run `rails db:migrate`."
+end
 
 RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller

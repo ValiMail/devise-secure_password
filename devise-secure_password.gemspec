@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'devise',                  '~> 4.0'
   spec.add_development_dependency 'flay',                    '>= 2.10.0'
   spec.add_development_dependency 'launchy',                 '>= 2.4.3'
-  spec.add_development_dependency 'rails',                   '>= 6.1.0'
+  spec.add_development_dependency 'rails',                   '>= 7.0'
   spec.add_development_dependency 'rake',                    '>= 12.3'
   spec.add_development_dependency 'rspec',                   '>= 3.7'
   spec.add_development_dependency 'rspec_junit_formatter',   '>= 0.3'
