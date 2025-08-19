@@ -16,8 +16,8 @@ puts "-> creating User with #{max_count} previous passwords\n\n"
 
 # save user and populate previous_passwords with max_count passwords
 Devise.stretches = bcrypt_cost
-passwords = (0..max_count - 1).map { |c| user.password + c.to_s }
-passwords[0..max_count - 1].each do |p|
+passwords = (0..(max_count - 1)).map { |c| user.password + c.to_s }
+passwords[0..(max_count - 1)].each do |p|
   user.password = user.password_confirmation = p
   user.save!
 end

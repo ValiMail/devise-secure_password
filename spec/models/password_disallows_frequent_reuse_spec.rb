@@ -92,7 +92,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
 
     context 'when maximum number of passwords has not been reached' do
       before do
-        passwords[0..max_count - 1].each do |password|
+        passwords[0..(max_count - 1)].each do |password|
           user.password = user.password_confirmation = password
           user.save!
         end
@@ -115,7 +115,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
 
       before do
         # add passwords for the target user
-        passwords[0..max_count - 1].each_with_index do |password, index|
+        passwords[0..(max_count - 1)].each_with_index do |password, index|
           user.password = user.password_confirmation = password
           user.save!
           previous_password = user.previous_passwords.first
@@ -126,7 +126,7 @@ RSpec.describe Devise::Models::PasswordDisallowsFrequentReuse, type: :model do
         # then add passwords for the other_user, these will appear in the db
         # most-recently based on id, which is what default_scope currently uses
         # to sort results.
-        passwords[0..max_count - 1].each_with_index do |password, index|
+        passwords[0..(max_count - 1)].each_with_index do |password, index|
           other_user.password = other_user.password_confirmation = password
           other_user.save!
           previous_password = other_user.previous_passwords.first

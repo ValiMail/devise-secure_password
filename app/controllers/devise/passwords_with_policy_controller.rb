@@ -63,7 +63,7 @@ module Devise
 
       # do what devise would do under normal circumstances but also be aware of
       # secure_password or other validators that would be ignored by devise.
-      result = if resource.errors.count.zero?
+      result = if resource.errors.none?
                  resource.update(params)
                else
                  false

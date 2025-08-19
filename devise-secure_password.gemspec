@@ -32,8 +32,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'devise', '>= 4.0.0', '< 5.0.0'
-  spec.add_runtime_dependency 'railties', '>= 5.0.0', '< 8.0.0'
+  spec.add_dependency 'devise', '>= 4.0.0', '< 5.0.0'
+  spec.add_dependency 'railties', '>= 5.0.0', '< 9.0.0'
 
   spec.add_development_dependency 'bundler',                 '>= 2.2.14'
   spec.add_development_dependency 'capybara',                '>= 3.35.3'
@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'devise',                  '~> 4.0'
   spec.add_development_dependency 'flay',                    '>= 2.10.0'
   spec.add_development_dependency 'launchy',                 '>= 2.4.3'
-  spec.add_development_dependency 'rails',                   '>= 6.1.0'
+  spec.add_development_dependency 'rails',                   '>= 7.0'
   spec.add_development_dependency 'rake',                    '>= 12.3'
   spec.add_development_dependency 'rspec',                   '>= 3.7'
   spec.add_development_dependency 'rspec_junit_formatter',   '>= 0.3'
@@ -56,5 +56,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov-console',       '>= 0.4.2'
   spec.add_development_dependency 'sqlite3',                 '>= 1.7.0'
 
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.2'
 end

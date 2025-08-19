@@ -68,7 +68,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it 'redirects with alert flash' do
         expect(controller).to have_received(:redirect_to).with \
-          :edit_user_password_with_policy, \
+          :edit_user_password_with_policy,
           alert: 'Your password has expired. Passwords must be changed every 6 months.'
       end
     end

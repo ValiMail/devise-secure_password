@@ -26,28 +26,28 @@ The goal of this project is to provide compatibility for officially supported st
 and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
 are currently supported by the __Devise Secure Password Extension__:
 
-- Ruby on Rails: __6.1.x__, __7.0.x__
-- Ruby: __3.1.x__, __3.2.x__, __3.3.x__
+- Ruby on Rails: __7.0.x__, __8.0.x__
+- Ruby: __3.2.x__, __3.3.x__, __3.4.x__
 
 ### Updating to a New Rails Version
 
 This gem uses so-called "dummy" apps in the specs to verify compatibility with a major/minor version of Rails.  Adding a new major/minor version of Rails requires us to add a new "dummy" app in the spec folder, and a corresponding Gemfile in the gemfiles directory.  While manual, this process is relatively straightforward:
 
-1. Create a new Rails app in the directory `spec/rails_<major>_<minor>` by using the Rails generator for that version, ensuring you skip Git setup.  (e.g. `cd spec; rails _6.0.3.6_ new rails-app-6_0 --skip-git`)
-2. Move the Gemfile from the newly created app to the `gemfiles` directory and rename it with the major/minor version (e.g. `mv spec/rails_6_1/Gemfile gemfiles/rails_6_1.gemfile`)
+1. Create a new Rails app in the directory `spec/rails_<major>_<minor>` by using the Rails generator for that version, ensuring you skip Git setup.  (e.g. `cd spec; rails _7.2.2.2_ new rails-app-7_0 --skip-git`)
+2. Move the Gemfile from the newly created app to the `gemfiles` directory and rename it with the major/minor version (e.g. `mv spec/rails_7_0/Gemfile gemfiles/rails_7_0.gemfile`)
 3. Update the Gemfile to include the Rails target and gemspec immediately beneath the source declarations, like this:
 
 ```ruby
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ENV['RAILS_TARGET'] ||= '6.1'
+ENV['RAILS_TARGET'] ||= '7.0'
 
 gemspec path: '../'
 ```
 
 4. Add `gem 'shoulda-matchers'` under the test group in the new Gemfile
-5. Ensure you can bundle by running `bundle` with the `BUNDLE_GEMFILE` variable set to the new Gemfile (i.e. `BUNDLE_GEMFILE=gemfiles/rails_6_1.gemfile bundle`).  This should run successfully - fix as needed.
+5. Ensure you can bundle by running `bundle` with the `BUNDLE_GEMFILE` variable set to the new Gemfile (i.e. `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle`).  This should run successfully - fix as needed.
 6. Copy the file `config/initializers/devise.rb` from an existing "dummy" app to the same location in the new app.
 7. Copy the file `config/routes.rb` from an existing "dummy" app to the same location in the new app.
 8. Copy the contents of the `db/migrate` directory from an existing "dummy" app to the same location in the new app.  Copy the `db/schema.rb` and `db/test.sqlite3` as well
@@ -56,7 +56,7 @@ gemspec path: '../'
 11. Copy the `app/views/static_pages` directory from an existing "dummy" app to the same location in the new app.
 12. Update the `app/views/layouts/application.html.erb` in the new app to have the same `<body>` content and `<title>` as the same file in an existing "dummy" app.
 13. At this point you should be able to run specs.  (i.e. `BUNDLE_GEMFILE=gemfiles/rails_6_1.gemfile bundle exec rake`).  Run specs and fix version specific issues, taking care to maintain backwards compatibility with supported versions.
-14. You should also run Rubocop (i.e. `BUNDLE_GEMFILE=gemfiles/rails_6_1.gemfile bundle exec rubocop`) and fix whatever issues are reported (again, maintaining backwards compatibility)
+14. You should also run Rubocop (i.e. `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rubocop`) and fix whatever issues are reported (again, maintaining backwards compatibility)
 15. In the `.circleci/config.yml` file update the `current_rails_gemfile` and `previous_rails_gemfile` to reference the new version and the previous version of Rails to be supported
 16. Delete any files for old Rails versions that are no longer supported - "dummy" apps and the corresponding `gemfiles` Gemfile.
 17. Update the Circle CI badge label in this README to reflect the newly supported Rails version.
@@ -183,7 +183,7 @@ Edit the resulting file to disallow null values for the hash,add indexes for bot
 add the timestamp (created_at, updated_at) fields:
 
 ```ruby
-class CreatePreviousPasswords < ActiveRecord::Migration[5.1]
+class CreatePreviousPasswords < ActiveRecord::Migration[7.0]
   def change
     create_table :previous_passwords do |t|
       t.string :salt, null: false
@@ -255,7 +255,7 @@ To determine the Ruby on Rails versions supported by this release, run the follo
 prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
-Available Rails targets: 7.0, 6.1
+Available Rails targets: 7.0, 8.0
 ```
 
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:

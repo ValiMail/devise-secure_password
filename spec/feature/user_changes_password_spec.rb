@@ -25,7 +25,7 @@ RSpec.describe 'User changes password', type: :feature do
       fill_in 'user_current_password', with: current_password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password_confirmation
-      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+      find(:xpath, ".//input[@type='submit' and @name='commit']", wait: 5).click
 
       expect(page).to have_content(/Change your password/i)
       within '#error_explanation' do
@@ -46,7 +46,7 @@ RSpec.describe 'User changes password', type: :feature do
       fill_in 'user_current_password', with: current_password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password_confirmation
-      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+      find(:xpath, ".//input[@type='submit' and @name='commit']", wait: 5).click
 
       expect(page).to have_content(/Change your password/i)
       within '#error_explanation' do
@@ -67,7 +67,7 @@ RSpec.describe 'User changes password', type: :feature do
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: bad_password
       fill_in 'user_password_confirmation', with: bad_password
-      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+      find(:xpath, ".//input[@type='submit' and @name='commit']", wait: 5).click
 
       expect(page).to have_content(/Change your password/i)
       within '#error_explanation' do
@@ -102,7 +102,7 @@ RSpec.describe 'User changes password', type: :feature do
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password
-      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+      find(:xpath, ".//input[@type='submit' and @name='commit']", wait: 5).click
 
       expect(page).to have_content(/Change your password/i)
       within '#error_explanation' do
@@ -170,7 +170,7 @@ RSpec.describe 'User changes password', type: :feature do
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password
-      find(:xpath, ".//input[@type='submit' and @name='commit']").click
+      find(:xpath, ".//input[@type='submit' and @name='commit']", wait: 5).click
 
       expect(page).to have_content(/Your password has been updated/i)
       expect(page).not_to have_selector('#error_explanation')
