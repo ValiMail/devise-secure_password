@@ -54,7 +54,7 @@ jobs:
   code-quality-job:
     working_directory: ~/repo
     docker:
-      - image: cimg/ruby:3.1-browsers
+      - image: cimg/ruby:3.2-browsers
     steps:
       - checkout
       - restore_root_cache
@@ -102,8 +102,8 @@ workflows:
       - test-all-the-things:
           matrix:
             parameters:
-              ruby-version: ["3.1", "3.2", "3.3"]
-              rails-version-with-underscores: ["6_1", "7_0", "8_0"]
+              ruby-version: ["3.2", "3.3", "3.4"]
+              rails-version-with-underscores: ["7_0", "8_0"]
       - code-quality-job:
           requires:
             - test-all-the-things
