@@ -43,20 +43,20 @@ gem 'devise-secure_password', '~> 2.2'
 
 And then execute:
 
-```shell
-prompt> bundle
+```bash
+bundle install
 ```
 
 Or install it yourself as:
 
-```shell
-prompt> gem install devise-secure_password
+```bash
+gem install devise-secure_password
 ```
 
 Finally, run the generator:
 
-```shell
-prompt> rails generate devise:secure_password:install
+```bash
+rails generate devise:secure_password:install
 ```
 
 ## Usage
@@ -145,8 +145,8 @@ previous passwords memorization implemented by the `:password_disallows_frequent
 
 The following database migration needs to be applied:
 
-```shell
-prompt> rails generate migration create_previous_passwords salt:string encrypted_password:string user:references
+```bash
+rails generate migration create_previous_passwords salt:string encrypted_password:string user:references
 ```
 
 Edit the resulting file to disallow null values for the hash, add indexes for both hash and user_id fields, and to also
@@ -172,8 +172,8 @@ end
 
 And then:
 
-```shell
-prompt> bundle exec rake db:migrate
+```bash
+bundle exec rake db:migrate
 ```
 
 ### Displaying errors
@@ -234,8 +234,8 @@ This document assumes that you already have a [functioning ruby install](https:/
 To configure and test the default target (the most-recent supported Rails release):
 
 ```bash
-prompt> bundle
-prompt> bundle exec rake
+bundle
+bundle exec rake
 ```
 
 ### Selecting an alternate Rails target
@@ -243,17 +243,19 @@ prompt> bundle exec rake
 To determine the Ruby on Rails versions supported by this release, run the following commands:
 
 ```bash
-prompt> gem install flay ruby2ruby rubocop rspec
-prompt> rake test:spec:targets
+gem install flay ruby2ruby rubocop rspec
+rake test:spec:targets
 
 Available Rails targets: 8.0, 7.0
 ```
 
+For additional Rails versions support, please follow this [guideline](https://github.com/valimail/devise-secure_password/blob/main/docs/upgrading_to_new_rails_version.md)
+
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
 
 ```bash
-prompt> BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle
-prompt> BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
 The only time you need to define the `BUNDLE_GEMFILE` environment variable is when testing a non-default target.
@@ -263,7 +265,7 @@ The only time you need to define the `BUNDLE_GEMFILE` environment variable is wh
 SimpleCov tests are enabled by defining the `test:spec:coverage` rake task:
 
 ```bash
-prompt> bundle exec rake test:spec:coverage
+bundle exec rake test:spec:coverage
 ```
 
 A brief summary will be output at the end of the run but a more extensive eport will be saved in the `coverage`
@@ -275,7 +277,7 @@ You will need to install the [ChromeDriver >= v2.3.4](https://sites.google.com/a
 for testing.
 
 ```bash
-prompt> brew install chromedriver
+brew install chromedriver
 ```
 
 You can always install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/) by downloading and then
@@ -301,9 +303,9 @@ To debug from inside of the dummy rails-app you will need to first install the r
 migration:
 
 ```bash
-prompt> cd spec/rails-app-X_y_z
-prompt> rake app:update:bin
-prompt> RAILS_ENV=development bundle exec rake db:migrate
+cd spec/rails-app-X_y_z
+rake app:update:bin
+RAILS_ENV=development bundle exec rake db:migrate
 ```
 
 Remember, the dummy app is not meant to be a full featured rails app: there is just enough functionality to test the
@@ -314,7 +316,7 @@ gem feature set.
 Available benchmarks can be run as follows:
 
 ```bash
-prompt> bundle exec rake test:benchmark
+bundle exec rake test:benchmark
 ```
 
 Benchmarks are run within an RSpec context but are not run along with other tests as benchmarks merely seek to measure
@@ -337,8 +339,8 @@ using [Docker](https://www.docker.com/).
 To start the container simply build and launch the image:
 
 ```bash
-prompt> docker build -t secure-password-dev .
-prompt> docker run -it --rm secure-password-dev /bin/bash
+docker build -t secure-password-dev .
+docker run -it --rm secure-password-dev /bin/bash
 ```
 
 The above `docker run` command will start the container, connect you to the command line within the project home
@@ -352,7 +354,7 @@ critical that you update the bundler inside of the Docker image as the `circleci
 initiating any development work including tests.
 
 ```bash
-prompt> gem update bundler
+gem update bundler
 ```
 
 #### Updating test.sqlite3.db
@@ -360,10 +362,10 @@ prompt> gem update bundler
 To update or generate a `db/test/sqlite3.db` database file:
 
 ```bash
-prompt> cd spec/rails-app-X_y_z
-prompt> bundle install
-prompt> rake app:update:bin
-prompt> RAILS_ENV=test bundle exec rake db:migrate
+cd spec/rails-app-X_y_z
+bundle install
+rake app:update:bin
+RAILS_ENV=test bundle exec rake db:migrate
 ```
 
 ## License
@@ -373,4 +375,4 @@ The __Devise Secure Password Extension__ gem is available as open source under t
 ## Code of Conduct
 
 Everyone interacting in the __Devise Secure Password Extension__ project’s codebases and issue trackers is expected to
-follow the [code of conduct](https://github.com/valimail/devise-secure_password/blob/master/CODE_OF_CONDUCT.md).
+follow the [code of conduct](https://github.com/valimail/devise-secure_password/blob/main/CODE_OF_CONDUCT.md).
