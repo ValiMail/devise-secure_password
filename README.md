@@ -1,4 +1,4 @@
-![Devise Logo](https://raw.github.com/ValiMail/devise-secure_password/main/devise_security_password.png)
+![Devise Security Password Logo](https://raw.github.com/ValiMail/devise-secure_password/main/devise_security_password.png)
 
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
