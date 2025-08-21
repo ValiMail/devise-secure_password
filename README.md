@@ -1,6 +1,7 @@
 ![Devise Security Password Logo](https://raw.github.com/ValiMail/devise-secure_password/main/devise_security_password.png)
 
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/ValiMail/devise-secure_password/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/ValiMail/devise-secure_password/tree/main)
 
 The __Devise Secure Password Extension__ is a user account password policy enforcement gem that can be
 added to a Rails project to enforce password policies.
