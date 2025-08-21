@@ -1,74 +1,44 @@
-# Devise Secure Password Extension
+![Devise Security Password Logo](https://raw.github.com/ValiMail/devise-secure_password/main/devise_security_password.png)
 
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 The __Devise Secure Password Extension__ is a user account password policy enforcement gem that can be
-added to a Rails project to enforce password policies. The gem is implemented as an extension to the Rails
+added to a Rails project to enforce password policies.
+
+The gem is implemented as an extension to the Rails
 [devise](https://github.com/plataformatec/devise) authentication solution gem and requires that __devise__ is installed
 as well.
 
 ## Overview
 
-The __Devise Secure Password Extension__ is composed of the following modules:
+It's composed of the following modules:
 
-- __password_has_required_content__: require that passwords consist of a specific number (configurable) of letters,
+* __password_has_required_content__: require that passwords consist of a specific number (configurable) of letters,
   numbers, and special characters (symbols)
-- __password_disallows_frequent_reuse__: prevent the reuse of a number (configurable) of previous passwords when a user
+* __password_disallows_frequent_reuse__: prevent the reuse of a number (configurable) of previous passwords when a user
   changes their password
-- __password_disallows_frequent_changes__: prevent the user from changing their password more than once within a time
+* __password_disallows_frequent_changes__: prevent the user from changing their password more than once within a time
   duration (configurable)
-- __password_requires_regular_updates__: require that a user change their password following a time duration
+* __password_requires_regular_updates__: require that a user change their password following a time duration
   (configurable)
 
 ## Compatibility
 
-The goal of this project is to provide compatibility for officially supported stable releases of [Ruby](https://www.ruby-lang.org/en/downloads/)
-and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html). More specifically, the following releases
-are currently supported by the __Devise Secure Password Extension__:
+We provide compatibility for officially and recent stable releases of [Ruby](https://www.ruby-lang.org/en/downloads/)
+and [Ruby on Rails](http://guides.rubyonrails.org/maintenance_policy.html).
 
-- Ruby on Rails: __7.0.x__, __8.0.x__
-- Ruby: __3.2.x__, __3.3.x__, __3.4.x__
+Following releases are currently supported:
 
-### Updating to a New Rails Version
-
-This gem uses so-called "dummy" apps in the specs to verify compatibility with a major/minor version of Rails.  Adding a new major/minor version of Rails requires us to add a new "dummy" app in the spec folder, and a corresponding Gemfile in the gemfiles directory.  While manual, this process is relatively straightforward:
-
-1. Create a new Rails app in the directory `spec/rails_<major>_<minor>` by using the Rails generator for that version, ensuring you skip Git setup.  (e.g. `cd spec; rails _7.2.2.2_ new rails-app-7_0 --skip-git`)
-2. Move the Gemfile from the newly created app to the `gemfiles` directory and rename it with the major/minor version (e.g. `mv spec/rails_7_0/Gemfile gemfiles/rails_7_0.gemfile`)
-3. Update the Gemfile to include the Rails target and gemspec immediately beneath the source declarations, like this:
-
-```ruby
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
-ENV['RAILS_TARGET'] ||= '7.0'
-
-gemspec path: '../'
-```
-
-4. Add `gem 'shoulda-matchers'` under the test group in the new Gemfile
-5. Ensure you can bundle by running `bundle` with the `BUNDLE_GEMFILE` variable set to the new Gemfile (i.e. `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle`).  This should run successfully - fix as needed.
-6. Copy the file `config/initializers/devise.rb` from an existing "dummy" app to the same location in the new app.
-7. Copy the file `config/routes.rb` from an existing "dummy" app to the same location in the new app.
-8. Copy the contents of the `db/migrate` directory from an existing "dummy" app to the same location in the new app.  Copy the `db/schema.rb` and `db/test.sqlite3` as well
-9. Copy the `app/controllers/static_pages_controller.rb` from an existing "dummy" app to the same location in the new app.
-10. Copy the `app/models/isolated` directory and the `app/models/user.rb` file from an existing "dummy" app to the same location in the new app.
-11. Copy the `app/views/static_pages` directory from an existing "dummy" app to the same location in the new app.
-12. Update the `app/views/layouts/application.html.erb` in the new app to have the same `<body>` content and `<title>` as the same file in an existing "dummy" app.
-13. At this point you should be able to run specs.  (i.e. `BUNDLE_GEMFILE=gemfiles/rails_6_1.gemfile bundle exec rake`).  Run specs and fix version specific issues, taking care to maintain backwards compatibility with supported versions.
-14. You should also run Rubocop (i.e. `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rubocop`) and fix whatever issues are reported (again, maintaining backwards compatibility)
-15. In the `.circleci/config.yml` file update the `current_rails_gemfile` and `previous_rails_gemfile` to reference the new version and the previous version of Rails to be supported
-16. Delete any files for old Rails versions that are no longer supported - "dummy" apps and the corresponding `gemfiles` Gemfile.
-17. Update the Circle CI badge label in this README to reflect the newly supported Rails version.
-
+- Ruby on Rails: __8.0.x__, __7.0.x__
+- Ruby: __3.4.x__, __3.3.x__, __3.2.x__ (minimal ruby version required)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise',                 '~> 4.8'
-gem 'devise-secure_password', '~> 2.0'
+gem 'devise',                 '~> 4.9'
+gem 'devise-secure_password', '~> 2.2'
 ```
 
 And then execute:
@@ -93,7 +63,7 @@ prompt> rails generate devise:secure_password:install
 
 ### Configuration
 
-The __Devise Secure Password Extension__ exposes configuration parameters as outlined below. Commented out configuration
+The extension exposes configuration parameters as outlined below. Commented out configuration
 parameters reflect the default settings.
 
 ```ruby
@@ -179,11 +149,11 @@ The following database migration needs to be applied:
 prompt> rails generate migration create_previous_passwords salt:string encrypted_password:string user:references
 ```
 
-Edit the resulting file to disallow null values for the hash,add indexes for both hash and user_id fields, and to also
+Edit the resulting file to disallow null values for the hash, add indexes for both hash and user_id fields, and to also
 add the timestamp (created_at, updated_at) fields:
 
 ```ruby
-class CreatePreviousPasswords < ActiveRecord::Migration[7.0]
+class CreatePreviousPasswords < ActiveRecord::Migration[8.0]
   def change
     create_table :previous_passwords do |t|
       t.string :salt, null: false
@@ -231,6 +201,28 @@ and is taken from the default password `edit.html.erb` page:
 <% end %>
 ```
 
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/valimail/devise-secure_password. This project
+is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the
+[Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+### Basic guidelines for contributors
+
+1. Fork it
+
+2. Create your feature branch (`git checkout -b my-new-feature`)
+
+3. Commit your changes (`git commit -am 'Add some feature'`)
+
+4. Push to the branch (`git push origin my-new-feature`)
+
+5. Create new Pull Request
+
+>NOTE: Contributions should always be based on the `main` branch. You may be asked to [rebase](https://git-scm.com/docs/git-rebase)
+your contributions on the tip of the `main` branch, this is normal and is to be expected if the `main` branch has
+moved ahead since your pull request was opened, discussed, and accepted.
+
 <a name="running-tests"></a>
 
 ## Running Tests
@@ -239,8 +231,7 @@ This document assumes that you already have a [functioning ruby install](https:/
 
 ### Default Rails target
 
-The __Devise Secure Password Extension__ provides compatibility for officially supported stable releases of Ruby on
-Rails. To configure and test the default target (the most-recent supported Rails release):
+To configure and test the default target (the most-recent supported Rails release):
 
 ```bash
 prompt> bundle
@@ -255,7 +246,7 @@ To determine the Ruby on Rails versions supported by this release, run the follo
 prompt> gem install flay ruby2ruby rubocop rspec
 prompt> rake test:spec:targets
 
-Available Rails targets: 7.0, 8.0
+Available Rails targets: 8.0, 7.0
 ```
 
 Reconfigure the project by specifying the correct Gemfile when running bundler, followed by running tests:
@@ -356,7 +347,7 @@ the shell, the container will be removed.
 
 ### Running tests in a Docker container
 
-The Docker container is derived from the latest [circleci/ruby](https://hub.docker.com/r/circleci/ruby/) image. It is
+The Docker container is derived from the latest [cimg/ruby](https://circleci.com/developer/images/image/cimg/ruby) image. It is
 critical that you update the bundler inside of the Docker image as the `circleci` user (i.e. the default user) before
 initiating any development work including tests.
 
@@ -374,28 +365,6 @@ prompt> bundle install
 prompt> rake app:update:bin
 prompt> RAILS_ENV=test bundle exec rake db:migrate
 ```
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/valimail/devise-secure_password. This project
-is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the
-[Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-### Basic guidelines for contributors
-
-1 Fork it
-
-2 Create your feature branch (`git checkout -b my-new-feature`)
-
-3 Commit your changes (`git commit -am 'Add some feature'`)
-
-4 Push to the branch (`git push origin my-new-feature`)
-
-5 Create new Pull Request
-
->NOTE: Contributions should always be based on the `master` branch. You may be asked to [rebase](https://git-scm.com/docs/git-rebase)
-your contributions on the tip of the `master` branch, this is normal and is to be expected if the `master` branch has
-moved ahead since your pull request was opened, discussed, and accepted.
 
 ## License
 

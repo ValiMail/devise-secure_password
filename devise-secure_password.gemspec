@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.version       = Devise::SecurePassword::VERSION.dup
   spec.platform      = Gem::Platform::RUBY
 
-  spec.authors       = ['Mark Eissler']
-  spec.email         = ['mark.eissler@valimail.com']
+  spec.authors       = ['Valimail Engineering']
+  spec.email         = ['engineering@valimail.com']
 
   spec.summary       = 'A devise password policy enforcement extension.'
   spec.description   = 'Adds configurable password policy enforcement to devise.'
