@@ -32,14 +32,14 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'devise', '>= 4.0.0', '< 5.0.0'
+  spec.add_dependency 'devise', '>= 4.0.0', '< 6.0.0'
   spec.add_dependency 'railties', '>= 5.0.0', '< 9.0.0'
 
   spec.add_development_dependency 'bundler',                 '>= 2.2.14'
   spec.add_development_dependency 'capybara',                '>= 3.35.3'
   spec.add_development_dependency 'capybara-screenshot',     '>= 1.0.18'
   spec.add_development_dependency 'database_cleaner',        '>= 2.0.1'
-  spec.add_development_dependency 'devise',                  '~> 4.0'
+  spec.add_development_dependency 'devise',                  '>= 4.0.0', '< 6.0.0'
   spec.add_development_dependency 'flay',                    '>= 2.10.0'
   spec.add_development_dependency 'launchy',                 '>= 2.4.3'
   spec.add_development_dependency 'rails',                   '>= 7.0'
