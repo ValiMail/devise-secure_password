@@ -39,7 +39,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'devise',                 '~> 5.0.3'
-gem 'devise-secure_password', '~> 2.2.2'
+gem 'devise-secure_password', '~> 2.2.3'
 ```
 
 And then execute:
