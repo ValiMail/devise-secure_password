@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'capybara',                '>= 3.35.3'
   spec.add_development_dependency 'capybara-screenshot',     '>= 1.0.18'
   spec.add_development_dependency 'database_cleaner',        '>= 2.0.1'
-  spec.add_development_dependency 'devise',                  '>= 4.0.0', '< 6.0.0'
+  spec.add_development_dependency 'devise',                  '>= 5.0.3', '< 6.0.0'
   spec.add_development_dependency 'flay',                    '>= 2.10.0'
   spec.add_development_dependency 'launchy',                 '>= 2.4.3'
   spec.add_development_dependency 'rails',                   '>= 7.0'

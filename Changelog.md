@@ -1,5 +1,8 @@
 # Changelog: devise-secure_password
 
+## 2.2.3 / 2026-03-18
+* Upgrade devise version for the development dependency to version 5.0.3
+
 ## 2.2.2 / 2026-03-18
 * Upgrade devise to version 5.0.3 because of GHSA-57hq-95w6-v4fc
 
