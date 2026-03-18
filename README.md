@@ -38,8 +38,8 @@ Following releases are currently supported:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise',                 '~> 4.9'
-gem 'devise-secure_password', '~> 2.2'
+gem 'devise',                 '~> 5.0.3'
+gem 'devise-secure_password', '~> 2.2.2'
 ```
 
 And then execute:
