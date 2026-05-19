@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ruby: "3.2"
+            rails: "7.0"
+            gemfile: gemfiles/rails_7_0.gemfile
+          - ruby: "3.2"
+            rails: "8.0"
+            gemfile: gemfiles/rails_8_0.gemfile
+          - ruby: "3.3"
+            rails: "7.0"
+            gemfile: gemfiles/rails_7_0.gemfile
+          - ruby: "3.3"
+            rails: "8.0"
+            gemfile: gemfiles/rails_8_0.gemfile
+          - ruby: "3.4"
+            rails: "7.0"
+            gemfile: gemfiles/rails_7_0.gemfile
+          - ruby: "3.4"
+            rails: "8.0"
+            gemfile: gemfiles/rails_8_0.gemfile
+
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      RAILS_TARGET: ${{ matrix.rails }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libsqlite3-dev
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Run RSpec
+        run: |
+          mkdir -p tmp/test-results
+          COVERAGE=true bundle exec rspec \
+            --format progress \
+            --format RspecJunitFormatter \
+            --out tmp/test-results/rspec.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}
+          path: tmp/test-results
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}
+          path: coverage
+          if-no-files-found: ignore
+
+  code-quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libsqlite3-dev
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+      - name: Run Flay
+        run: bundle exec rake test:flay
