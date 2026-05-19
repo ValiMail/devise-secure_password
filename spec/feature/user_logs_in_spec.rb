@@ -23,7 +23,7 @@ RSpec.describe 'User logs in', type: :feature do
     find(:xpath, ".//input[@type='submit' and @name='commit']").click
   end
 
-  context 'with a password older than password_maximum_age', js: true do
+  context 'with a password older than password_maximum_age' do
     before do
       Devise.setup { |config| config.password_maximum_age = 60.days }
       expire_user_password
@@ -88,7 +88,7 @@ RSpec.describe 'User logs in', type: :feature do
     end
   end
 
-  context 'with a password newer than password_maximum_age', js: true do
+  context 'with a password newer than password_maximum_age' do
     before do
       visit '/users/sign_in'
     end
