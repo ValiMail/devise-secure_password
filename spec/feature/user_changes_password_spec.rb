@@ -20,7 +20,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'remains on page and displays error messages', js: true do
+    it 'remains on page and displays error messages' do
       expect(page).to have_content(/Change your password/i)
       fill_in 'user_current_password', with: current_password
       fill_in 'user_password', with: new_password
@@ -41,7 +41,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'remains on page and displays error messages', js: true do
+    it 'remains on page and displays error messages' do
       expect(page).to have_content(/Change your password/i)
       fill_in 'user_current_password', with: current_password
       fill_in 'user_password', with: new_password
@@ -62,7 +62,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'remains on page and displays error messages', js: true do
+    it 'remains on page and displays error messages' do
       expect(page).to have_content(/Change your password/i)
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: bad_password
@@ -97,7 +97,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'remains on page and displays recently changed error message', js: true do
+    it 'remains on page and displays recently changed error message' do
       expect(page).to have_content(/Change your password/i)
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: new_password
@@ -166,7 +166,7 @@ RSpec.describe 'User changes password', type: :feature do
       visit '/users/change_password/edit'
     end
 
-    it 'redirects to home page and displays success message', js: true do
+    it 'redirects to home page and displays success message' do
       fill_in 'user_current_password', with: password
       fill_in 'user_password', with: new_password
       fill_in 'user_password_confirmation', with: new_password

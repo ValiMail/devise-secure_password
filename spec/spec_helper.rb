@@ -9,25 +9,20 @@ if ENV['COVERAGE'] && Gem::Specification.find_all_by_name('simplecov').any?
   require 'simplecov-console'
   SimpleCov.start
 
-  if ENV['CI'] == 'true'
-    require 'codecov'
-    SimpleCov.formatter = SimpleCov::Formatter::Codecov
-  else
-    SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
-      [
-        SimpleCov::Formatter::HTMLFormatter,
-        SimpleCov::Formatter::Console
-      ]
-    )
-    root_dir = File.expand_path('..', __dir__)
-    SimpleCov.coverage_dir(File.join(root_dir, 'coverage'))
+  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
+    [
+      SimpleCov::Formatter::HTMLFormatter,
+      SimpleCov::Formatter::Console
+    ]
+  )
+  root_dir = File.expand_path('..', __dir__)
+  SimpleCov.coverage_dir(File.join(root_dir, 'coverage'))
 
-    SimpleCov.add_filter do |f|
-      !f.filename.match? %r{lib/devise/secure_password|lib/support}
-    end
-    SimpleCov.add_group 'secure_password', 'lib/devise/secure_password'
-    SimpleCov.add_group 'support', 'lib/support'
+  SimpleCov.add_filter do |f|
+    !f.filename.match? %r{lib/devise/secure_password|lib/support}
   end
+  SimpleCov.add_group 'secure_password', 'lib/devise/secure_password'
+  SimpleCov.add_group 'support', 'lib/support'
 end
 
 rails_dummy = "rails-app-#{ENV['RAILS_TARGET'].tr('.', '_')}"
@@ -113,9 +108,17 @@ require 'selenium-webdriver'
 Capybara.server = :webrick
 
 Capybara.register_driver :selenium_chrome_headless do |app|
-  chrome_args = %w(headless disable-gpu window-size=1024,768)
+  chrome_args = %w(
+    --headless=new
+    --disable-gpu
+    --window-size=1024,768
+    --no-sandbox
+    --disable-dev-shm-usage
+  )
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: Selenium::WebDriver::Chrome::Options.new(args: chrome_args))
+  chrome_options = Selenium::WebDriver::Chrome::Options.new(args: chrome_args)
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: chrome_options)
 end
 Capybara.javascript_driver = :selenium_chrome_headless
 
