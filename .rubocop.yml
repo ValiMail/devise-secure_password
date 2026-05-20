@@ -10,7 +10,7 @@ AllCops:
     - 'spec/rails-app*/**/*'
     - 'vendor/bundle/**/*'
   NewCops: enable
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
 
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
