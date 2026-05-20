@@ -1,0 +1,20 @@
+services:
+  gem:
+    build:
+      context: .
+      args:
+        BUNDLER_VERSION: 4.0.10
+    image: devise-secure-password-dev
+    environment:
+      BUNDLE_GEMFILE: ${BUNDLE_GEMFILE:-gemfiles/rails_8_0.gemfile}
+      RAILS_ENV: test
+      RAILS_TARGET: ${RAILS_TARGET:-8.0}
+    volumes:
+      - .:/secure-password-gem
+      - bundle:/usr/local/bundle
+    working_dir: /secure-password-gem
+    stdin_open: true
+    tty: true
+
+volumes:
+  bundle:
