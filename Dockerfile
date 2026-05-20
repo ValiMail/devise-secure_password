@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ruby:3.4-bookworm
+FROM ruby:3.4-slim-bookworm
 
 LABEL maintainer="Valimail Engineering <engineering@valimail.com>"
 
@@ -17,12 +17,14 @@ ENV BUILD_HOME=/secure-password-gem \
     RAILS_ENV=test
 
 RUN apt-get update -qq && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
       build-essential \
       chromium \
       chromium-driver \
       git \
       libsqlite3-dev \
+      libyaml-dev \
       pkg-config \
       sqlite3 \
       xvfb && \
