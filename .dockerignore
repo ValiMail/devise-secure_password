@@ -49,7 +49,6 @@
 .DS_Store?
 
 # Ignore files that could cause trouble when deploying gems
-Gemfile.lock
 .ruby-version
 .ruby-gemset
 

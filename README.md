@@ -337,25 +337,46 @@ The snapshot directory will be pruned automatically between runs.
 This repository includes a [Dockerfile](https://docs.docker.com/engine/reference/builder/) to facilitate testing in and
 using [Docker](https://www.docker.com/).
 
-To start the container simply build and launch the image:
+The image uses Ruby 3.4, Bundler 4.0.10, sqlite development libraries, Chromium, ChromeDriver, and Xvfb so it matches
+the current gem and test-suite requirements. By default it bundles against the Rails 8 test Gemfile
+(`gemfiles/rails_8_0.gemfile`), which is the default Rails target for this project.
+
+To build and launch the image directly:
 
 ```bash
-docker build -t secure-password-dev .
-docker run -it --rm secure-password-dev /bin/bash
+docker build -t devise-secure-password-dev .
+docker run -it --rm devise-secure-password-dev /bin/bash
 ```
 
-The above `docker run` command will start the container, connect you to the command line within the project home
-directory where you can issue the tests as documented in the [Running Tests](#running-tests) section above. When you exit
-the shell, the container will be removed.
+### Docker Compose
 
-### Running tests in a Docker container
+Docker Compose is the preferred local workflow because it bind-mounts the repository and keeps installed gems in a named
+volume between runs.
 
-The Docker container is derived from the latest [cimg/ruby](https://circleci.com/developer/images/image/cimg/ruby) image. It is
-critical that you update the bundler inside of the Docker image as the `circleci` user (i.e. the default user) before
-initiating any development work including tests.
+Build the image and install gems:
 
 ```bash
-gem update bundler
+docker compose build
+docker compose run --rm gem bundle install
+```
+
+Run the default Rails target:
+
+```bash
+docker compose run --rm gem bundle exec rake
+```
+
+Run a specific Rails target:
+
+```bash
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile RAILS_TARGET=7.0 docker compose run --rm gem bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile RAILS_TARGET=7.0 docker compose run --rm gem bundle exec rake
+```
+
+Open a shell in the container:
+
+```bash
+docker compose run --rm gem /bin/bash
 ```
 
 #### Updating test.sqlite3.db
@@ -363,9 +384,9 @@ gem update bundler
 To update or generate a `db/test/sqlite3.db` database file:
 
 ```bash
+docker compose run --rm gem /bin/bash
 cd spec/rails-app-X_y_z
-bundle install
-rake app:update:bin
+bundle exec rake app:update:bin
 RAILS_ENV=test bundle exec rake db:migrate
 ```
 

@@ -1,44 +1,51 @@
-#
-# Dockerfile for devise-secure_password
-#
-# prompt> docker build -t secure-password-dev .
-# prompt> docker run -it secure-password-dev /bin/bash
-# prompt> pushd . && cd spec/rails-app-X_y_z
-# prompt> gem install bundler && RAILS_TARGET=X.y.z bundle install --jobs 20 --retry 5
-# prompt> RAILS_ENV='test' bundle exec rake db:migrate
-# prompt> popd
-# prompt> gem install bundler && RAILS_TARGET=X.y.z bundle install --jobs 20 --retry 5
-# prompt> RAILS_TARGET=X.y.z bundle exec rake test:spec
-#
-# NOTE: The order in which you run 'bundle install' in spec/rails and then in
-# the top directory is important.
-#
-FROM circleci/ruby:2.5.1-browsers
-LABEL maintainer="Mark Eissler <mark.eissler@valimail.com>"
+# syntax=docker/dockerfile:1
 
-ENV BUILD_HOME='/secure-password-gem'
+FROM ruby:3.4-slim-bookworm
 
-# Configure the main working directory. This is the base directory used in any
-# further RUN, COPY, and ENTRYPOINT commands.
-RUN sudo mkdir -p ${BUILD_HOME}
+LABEL maintainer="Valimail Engineering <engineering@valimail.com>"
+
+ARG BUNDLER_VERSION=4.0.10
+ARG APP_UID=1000
+ARG APP_GID=1000
+
+ENV BUILD_HOME=/secure-password-gem \
+    BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile \
+    BUNDLE_JOBS=4 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_RETRY=5 \
+    DISPLAY=:99 \
+    RAILS_ENV=test
+
+RUN apt-get update -qq && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+      build-essential \
+      chromium \
+      chromium-driver \
+      git \
+      libsqlite3-dev \
+      libyaml-dev \
+      pkg-config \
+      sqlite3 \
+      xvfb && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN groupadd --gid "${APP_GID}" app && \
+    useradd --uid "${APP_UID}" --gid app --create-home --shell /bin/bash app
+
+RUN gem install bundler -v "${BUNDLER_VERSION}" && \
+    mkdir -p "${BUILD_HOME}" "${BUNDLE_PATH}" && \
+    chown -R app:app "${BUILD_HOME}" "${BUNDLE_PATH}"
+
 WORKDIR ${BUILD_HOME}
 
-# Copy main application
-COPY . ./
+COPY --chown=app:app . ./
 
-# Fix permissions on /gem directory
-RUN set -x \
-    && sudo chown -R circleci:circleci ${BUILD_HOME}
+RUN chmod 755 docker-entrypoint.sh
 
-# Start xvfb automatically
-ENV DISPLAY :99
+USER app
 
-# Update docker-entrypoint.sh
-RUN set -x \
-    && cp docker-entrypoint.sh /docker-entrypoint.sh \
-    && chmod 755 /docker-entrypoint.sh \
-    && chown circleci:circleci /docker-entrypoint.sh
+RUN bundle install
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["/bin/bash"]
